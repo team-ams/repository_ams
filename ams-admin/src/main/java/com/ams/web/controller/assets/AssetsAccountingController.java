@@ -46,14 +46,14 @@ public class AssetsAccountingController extends BaseController
     @Autowired
     private SysPasswordService passwordService;
 
-    @RequiresPermissions("system:user:view")
+    @RequiresPermissions("assets:accounting:view")
     @GetMapping()
     public String user()
     {
         return prefix + "/accounting";
     }
 
-    @RequiresPermissions("system:user:list")
+    @RequiresPermissions("assets:accounting:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(SysUser user)
@@ -64,7 +64,7 @@ public class AssetsAccountingController extends BaseController
     }
 
     @Log(title = "用户管理", businessType = BusinessType.EXPORT)
-    @RequiresPermissions("system:user:export")
+    @RequiresPermissions("assets:accounting:export")
     @PostMapping("/export")
     @ResponseBody
     public AjaxResult export(SysUser user)
@@ -75,7 +75,7 @@ public class AssetsAccountingController extends BaseController
     }
 
     @Log(title = "用户管理", businessType = BusinessType.IMPORT)
-    @RequiresPermissions("system:user:import")
+    @RequiresPermissions("assets:accounting:import")
     @PostMapping("/importData")
     @ResponseBody
     public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception
@@ -87,7 +87,7 @@ public class AssetsAccountingController extends BaseController
         return AjaxResult.success(message);
     }
 
-    @RequiresPermissions("system:user:view")
+    @RequiresPermissions("assets:accounting:view")
     @GetMapping("/importTemplate")
     @ResponseBody
     public AjaxResult importTemplate()
@@ -110,7 +110,7 @@ public class AssetsAccountingController extends BaseController
     /**
      * 新增保存用户
      */
-    @RequiresPermissions("system:user:add")
+    @RequiresPermissions("assets:accounting:add")
     @Log(title = "用户管理", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -149,7 +149,7 @@ public class AssetsAccountingController extends BaseController
     /**
      * 修改保存用户
      */
-    @RequiresPermissions("system:user:edit")
+    @RequiresPermissions("assets:accounting:edit")
     @Log(title = "用户管理", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -168,7 +168,7 @@ public class AssetsAccountingController extends BaseController
         return toAjax(userService.updateUser(user));
     }
 
-    @RequiresPermissions("system:user:resetPwd")
+    @RequiresPermissions("assets:accounting:resetPwd")
     @Log(title = "重置密码", businessType = BusinessType.UPDATE)
     @GetMapping("/resetPwd/{userId}")
     public String resetPwd(@PathVariable("userId") Long userId, ModelMap mmap)
@@ -177,7 +177,7 @@ public class AssetsAccountingController extends BaseController
         return prefix + "/resetPwd";
     }
 
-    @RequiresPermissions("system:user:resetPwd")
+    @RequiresPermissions("assets:accounting:resetPwd")
     @Log(title = "重置密码", businessType = BusinessType.UPDATE)
     @PostMapping("/resetPwd")
     @ResponseBody
@@ -197,7 +197,7 @@ public class AssetsAccountingController extends BaseController
         return error();
     }
 
-    @RequiresPermissions("system:user:remove")
+    @RequiresPermissions("assets:accounting:remove")
     @Log(title = "用户管理", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody
@@ -247,7 +247,7 @@ public class AssetsAccountingController extends BaseController
      * 用户状态修改
      */
     @Log(title = "用户管理", businessType = BusinessType.UPDATE)
-    @RequiresPermissions("system:user:edit")
+    @RequiresPermissions("assets:accounting:edit")
     @PostMapping("/changeStatus")
     @ResponseBody
     public AjaxResult changeStatus(SysUser user)
