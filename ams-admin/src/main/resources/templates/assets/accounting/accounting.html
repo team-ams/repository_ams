@@ -59,7 +59,7 @@
                    shiro:hasPermission="system:user:remove">
                     <i class="fa fa-remove"></i> 删除
                 </a>
-                <a class="btn btn-info" onclick="$.table.importExcel()" shiro:hasPermission="system:user:import">
+                <a class="btn btn-info" onclick="$.table.importExcel()" shiro:hasPermission="assets:accounting:import">
                     <i class="fa fa-upload"></i> 导入
                 </a>
                 <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:user:export">
@@ -102,7 +102,7 @@
             importTemplateUrl: prefix + "/importTemplate",
             sortName: "createTime",
             sortOrder: "desc",
-            modalName: "用户",
+            modalName: "资产",
             columns: [{
                 checkbox: true
             },

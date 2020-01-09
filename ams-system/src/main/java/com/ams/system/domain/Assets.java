@@ -1,5 +1,7 @@
 package com.ams.system.domain;
 
+import com.ams.common.annotation.Excel;
+import com.ams.common.annotation.Excels;
 import com.ams.common.core.domain.BaseEntity;
 import lombok.Data;
 
@@ -12,16 +14,21 @@ import lombok.Data;
 public class Assets extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
+
     /**资产ID*/
+    @Excel(name = "资产序号",cellType = Excel.ColumnType.NUMERIC)
     private Long assetsId;
 
     /**资产编号*/
+    @Excel(name = "资产编号",cellType = Excel.ColumnType.NUMERIC)
     private String assetsNumber;
 
     /**资产名称*/
+    @Excel(name = "资产名称")
     private String assetsName;
 
     /**资产性质*/
+    
     private String assetsNature;
 
     /**资产类别*/
