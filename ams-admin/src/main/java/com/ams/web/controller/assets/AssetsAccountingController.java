@@ -9,6 +9,7 @@ import com.ams.common.enums.BusinessType;
 import com.ams.common.utils.poi.ExcelUtil;
 import com.ams.framework.shiro.service.SysPasswordService;
 import com.ams.framework.util.ShiroUtils;
+import com.ams.system.domain.Assets;
 import com.ams.system.domain.SysUser;
 import com.ams.system.service.ISysPostService;
 import com.ams.system.service.ISysRoleService;
@@ -80,8 +81,8 @@ public class AssetsAccountingController extends BaseController
     @ResponseBody
     public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception
     {
-        ExcelUtil<SysUser> util = new ExcelUtil<SysUser>(SysUser.class);
-        List<SysUser> userList = util.importExcel(file.getInputStream());
+        ExcelUtil<Assets> util = new ExcelUtil<Assets>(Assets.class);
+        List<Assets> userList = util.importExcel(file.getInputStream());
         String operName = ShiroUtils.getSysUser().getLoginName();
         String message = userService.importUser(userList, updateSupport, operName);
         return AjaxResult.success(message);
