@@ -1,6 +1,5 @@
 package com.ams.system.service;
 
-import com.ams.system.domain.Assets;
 import com.ams.system.domain.SysUser;
 
 import java.util.List;
@@ -173,14 +172,6 @@ public interface ISysUserService {
      */
     public String importUser(List<SysUser> userList, Boolean isUpdateSupport, String operName);
 
-    /**
-     * 导入资产数据
-     *
-     * @param assetsList
-     * @param isUpdateSupport
-     * @return
-     */
-    public String importAssets(List<Assets> assetsList, Boolean isUpdateSupport);
 
     /**
      * 用户状态修改

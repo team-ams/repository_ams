@@ -11,6 +11,7 @@ import com.ams.framework.shiro.service.SysPasswordService;
 import com.ams.framework.util.ShiroUtils;
 import com.ams.system.domain.Assets;
 import com.ams.system.domain.SysUser;
+import com.ams.system.service.IAssetsAccountingService;
 import com.ams.system.service.ISysPostService;
 import com.ams.system.service.ISysRoleService;
 import com.ams.system.service.ISysUserService;
@@ -37,6 +38,9 @@ public class AssetsAccountingController extends BaseController
 
     @Autowired
     private ISysUserService userService;
+
+    @Autowired
+    private IAssetsAccountingService accountingService;
 
     @Autowired
     private ISysRoleService roleService;
@@ -84,7 +88,7 @@ public class AssetsAccountingController extends BaseController
         ExcelUtil<Assets> util = new ExcelUtil<Assets>(Assets.class);
         List<Assets> userList = util.importExcel(file.getInputStream());
         String operName = ShiroUtils.getSysUser().getLoginName();
-        String message = userService.importUser(userList, updateSupport, operName);
+        String message = accountingService.importAssets(userList,updateSupport,operName);
         return AjaxResult.success(message);
     }
 

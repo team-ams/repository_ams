@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ams.system.mapper.AssetsAccountingMapper">
+
+    <resultMap type="com.ams.system.domain.Assets" id="AssetsResult">
+        <id property="assetsId" column="assets_id"/>
+        <result property="assetsNumber" column="assets_number"/>
+        <result property="assetsName" column="assets_name"/>
+        <result property="assetsNature" column="assets_nature"/>
+        <result property="assetsType" column="assets_type"/>
+        <result property="assetsAmount" column="assets_amount"/>
+        <result property="measuringUnit" column="measuring_unit"/>
+        <result property="assets_price" column="assets_price"/>
+        <result property="storageUnit" column="storage_unit"/>
+        <result property="storageDepartment" column="storage_department"/>
+        <result property="custodian" column="custodian"/>
+        <result property="user" column="user"/>
+        <result property="storageAddr" column="storage_addr"/>
+        <result property="useStatus" column="use_status"/>
+        <result property="assetsSource" column="assets_source"/>
+        <result property="usefulLife" column="useful_life"/>
+        <result property="residualRate" column="residual_rate"/>
+        <result property="checkStatus" column="check_status"/>
+        <result property="assetsFormat" column="assets_format"/>
+        <result property="assetsModel" column="assets_model"/>
+        <result property="assetsBrand" column="assets_brand"/>
+        <result property="purchaseDate" column="purchase_date"/>
+        <result property="manufactureDate" column="manufacture_date"/>
+        <result property="warrantyDate" column="warranty_date"/>
+        <result property="mark" column="mark"/>
+        <result property="createTime" column="createTime"/>
+        <result property="updateTime" column="updateTime"/>
+    </resultMap>
+
+    <sql id="selectAssetsVo">
+        select a.assets_id,
+               a.assets_number,
+               a.assets_name,
+               a.assets_nature,
+               a.assets_type,
+               a.assets_amount,
+               a.measuring_unit,
+               a.assets_price,
+               a.storage_unit,
+               a.storage_department,
+               a.custodian,
+               a.user,
+               a.storage_addr,
+               a.use_status,
+               a.assets_source,
+               a.useful_life,
+               a.residual_rate,
+               a.check_status,
+               a.assets_format,
+               a.assets_model,
+               a.assets_brand,
+               a.purchase_date,
+               a.manufacture_date,
+               a.warranty_date,
+               a.createTime,
+               a.updateTime
+        from assets_accounting a
+    </sql>
+
+
+    <select id="getAssetsByAssetsNumber" parameterType="String" resultMap="AssetsResult">
+        <include refid="selectAssetsVo"/>
+        where a.assets_number = #{assetsNumber}
+    </select>
+
+    <insert id="insertAssets" parameterType="com.ams.system.domain.Assets" useGeneratedKeys="true"
+            keyProperty="assetsId">
+        insert into assets_accounting(
+        <if test="assetsId != null and assetsId != 0">assets_id,</if>
+        <if test="assetsNumber != null and assetsNumber != ''">assets_number,</if>
+        <if test="assetsName != null and assetsName!= ''">assets_name,</if>
+        <if test="assetsNature != null and assetsNature != ''">assets_nature,</if>
+        <if test="assetsType != null and assetsType != ''">assets_type,</if>
+        <if test="assetsAmount != null and assetsAmount != 0">assets_amount,</if>
+        <if test="measuringUnit != null and measuringUnit != ''">measuring_unit,</if>
+        <if test="assets_price != null and assets_price != ''">assets_price,</if>
+        <if test="storageUnit != null and storageUnit != ''">storage_unit,</if>
+        <if test="storageDepartment != null and storageDepartment != ''">storage_department,</if>
+        <if test="custodian != null and custodian != ''">custodian,</if>
+        <if test="user != null and user != ''">user,</if>
+        <if test="storageAddr != null and storageAddr != ''">storage_addr,</if>
+        <if test="useStatus != null and useStatus != ''">use_status,</if>
+        <if test="assetsSource != null and assetsSource != ''">assets_source,</if>
+        <if test="usefulLife != null and usefulLife != ''">useful_life,</if>
+        <if test="residualRate != null and residualRate != 0">residual_rate,</if>
+        <if test="checkStatus != null and checkStatus != ''">check_status,</if>
+        <if test="assetsFormat != null and assetsFormat != ''">assets_format,</if>
+        <if test="assetsModel != null and assetsModel != ''">assets_model,</if>
+        <if test="assetsBrand != null and assetsBrand != ''">assets_brand,</if>
+        <if test="purchaseDate != null and purchaseDate != ''">purchase_date,</if>
+        <if test="manufactureDate != null and manufactureDate != ''">manufacture_date,</if>
+        <if test="warrantyDate != null and warrantyDate != ''">warranty_date,</if>
+        <if test="mark != null and mark != ''">mark,</if>
+        createTime
+        )values(
+        <if test="assetsId != null and assetsId != 0">#{assetsId},</if>
+        <if test="assetsNumber != null and assetsNumber != ''">#{assetsNumber},</if>
+        <if test="assetsName != null and assetsName!= ''">#{assetsName},</if>
+        <if test="assetsNature != null and assetsNature != ''">#{assetsNature},</if>
+        <if test="assetsType != null and assetsType != ''">#{assetsType},</if>
+        <if test="assetsAmount != null and assetsAmount != 0">#{assetsAmount},</if>
+        <if test="measuringUnit != null and measuringUnit != ''">#{measuringUnit},</if>
+        <if test="assets_price != null and assets_price != ''">#{assets_price},</if>
+        <if test="storageUnit != null and storageUnit != ''">#{storageUnit},</if>
+        <if test="storageDepartment != null and storageDepartment != ''">#{storageDepartment},</if>
+        <if test="custodian != null and custodian != ''">#{custodian},</if>
+        <if test="user != null and user != ''">#{user},</if>
+        <if test="storageAddr != null and storageAddr != ''">#{storageAddr},</if>
+        <if test="useStatus != null and useStatus != ''">#{useStatus},</if>
+        <if test="assetsSource != null and assetsSource != ''">#{assetsSource},</if>
+        <if test="usefulLife != null and usefulLife != ''">#{usefulLife},</if>
+        <if test="residualRate != null and residualRate != 0">#{residualRate},</if>
+        <if test="checkStatus != null and checkStatus != ''">#{checkStatus},</if>
+        <if test="assetsFormat != null and assetsFormat != ''">#{assetsFormat},</if>
+        <if test="assetsModel != null and assetsModel != ''">#{assetsModel},</if>
+        <if test="assetsBrand != null and assetsBrand != ''">#{assetsBrand},</if>
+        <if test="purchaseDate != null and purchaseDate != ''">#{purchaseDate},</if>
+        <if test="manufactureDate != null and manufactureDate != ''">#{manufactureDate},</if>
+        <if test="warrantyDate != null and warrantyDate != ''">#{warrantyDate},</if>
+        <if test="mark != null and mark != ''">#{mark},</if>
+        sysdate()
+        )
+    </insert>
+
+
+    <update id="updateAssets" parameterType="com.ams.system.domain.Assets">
+        update assets_accounting
+        <set>
+            <if test="assetsNumber != null and assetsNumber != ''">assetsNumber=#{assetsNumber},</if>
+            <if test="assetsName != null and assetsName!= ''">assetsName=#{assetsName},</if>
+            <if test="assetsNature != null and assetsNature != ''">assetsNature=#{assetsNature},</if>
+            <if test="assetsType != null and assetsType != ''">assetsType=#{assetsType},</if>
+            <if test="assetsAmount != null and assetsAmount != 0">assetsAmount=#{assetsAmount},</if>
+            <if test="measuringUnit != null and measuringUnit != ''">measuringUnit=#{measuringUnit},</if>
+            <if test="assets_price != null and assets_price != ''">assets_price=#{assets_price},</if>
+            <if test="storageUnit != null and storageUnit != ''">storageUnit=#{storageUnit},</if>
+            <if test="storageDepartment != null and storageDepartment != ''">storageDepartment=#{storageDepartment},
+            </if>
+            <if test="custodian != null and custodian != ''">custodian=#{custodian},</if>
+            <if test="user != null and user != ''">user=#{user},</if>
+            <if test="storageAddr != null and storageAddr != ''">storageAddr=#{storageAddr},</if>
+            <if test="useStatus != null and useStatus != ''">useStatus=#{useStatus},</if>
+            <if test="assetsSource != null and assetsSource != ''">assetsSource=#{assetsSource},</if>
+            <if test="usefulLife != null and usefulLife != ''">usefulLife=#{usefulLife},</if>
+            <if test="residualRate != null and residualRate != 0">residualRate=#{residualRate},</if>
+            <if test="checkStatus != null and checkStatus != ''">checkStatus=#{checkStatus},</if>
+            <if test="assetsFormat != null and assetsFormat != ''">assetsFormat=#{assetsFormat},</if>
+            <if test="assetsModel != null and assetsModel != ''">assetsModel=#{assetsModel},</if>
+            <if test="assetsBrand != null and assetsBrand != ''">assetsBrand=#{assetsBrand},</if>
+            <if test="purchaseDate != null and purchaseDate != ''">purchaseDate=#{purchaseDate},</if>
+            <if test="manufactureDate != null and manufactureDate != ''">manufactureDate=#{manufactureDate},</if>
+            <if test="warrantyDate != null and warrantyDate != ''">warrantyDate=#{warrantyDate},</if>
+            <if test="mark != null and mark != ''">mark=#{mark},</if>
+            update_time = sysdate()
+        </set>
+        where assets_id = #{assetsId}
+    </update>
+
+
+    <select id="getAssetsList" parameterType="com.ams.system.domain.Assets" resultMap="AssetsResult">
+        <include refid="selectAssetsVo"/>
+        where u.del_flag = '0'
+        <if test="loginName != null and loginName != ''">
+            AND u.login_name like concat('%', #{loginName}, '%')
+        </if>
+        <if test="status != null and status != ''">
+            AND u.status = #{status}
+        </if>
+        <if test="phonenumber != null and phonenumber != ''">
+            AND u.phonenumber like concat('%', #{phonenumber}, '%')
+        </if>
+        <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+            AND date_format(u.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+        </if>
+        <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+            AND date_format(u.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+        </if>
+        <if test="deptId != null and deptId != 0">
+            AND (u.dept_id = #{deptId} OR u.dept_id IN ( SELECT t.dept_id FROM sys_dept t WHERE FIND_IN_SET
+            (#{deptId},ancestors) ))
+        </if>
+        <!-- 数据范围过滤 -->
+        ${params.dataScope}
+    </select>
+
+</mapper> 
