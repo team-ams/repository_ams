@@ -158,7 +158,7 @@
             <if test="manufactureDate != null and manufactureDate != ''">manufactureDate=#{manufactureDate},</if>
             <if test="warrantyDate != null and warrantyDate != ''">warrantyDate=#{warrantyDate},</if>
             <if test="mark != null and mark != ''">mark=#{mark},</if>
-            update_time = sysdate()
+            updateTime = sysdate()
         </set>
         where assets_id = #{assetsId}
     </update>
@@ -166,28 +166,23 @@
 
     <select id="getAssetsList" parameterType="com.ams.system.domain.Assets" resultMap="AssetsResult">
         <include refid="selectAssetsVo"/>
-        where u.del_flag = '0'
-        <if test="loginName != null and loginName != ''">
-            AND u.login_name like concat('%', #{loginName}, '%')
-        </if>
-        <if test="status != null and status != ''">
-            AND u.status = #{status}
-        </if>
-        <if test="phonenumber != null and phonenumber != ''">
-            AND u.phonenumber like concat('%', #{phonenumber}, '%')
-        </if>
-        <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
-            AND date_format(u.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
-        </if>
-        <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
-            AND date_format(u.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
-        </if>
-        <if test="deptId != null and deptId != 0">
-            AND (u.dept_id = #{deptId} OR u.dept_id IN ( SELECT t.dept_id FROM sys_dept t WHERE FIND_IN_SET
-            (#{deptId},ancestors) ))
-        </if>
-        <!-- 数据范围过滤 -->
-        ${params.dataScope}
+        <where>
+            <if test="assetsNumber != null and assetsNumber != ''">
+                AND a.assets_number like concat('%', #{assetsNumber}, '%')
+            </if>
+            <if test="useStatus != null and useStatus != ''">
+                AND a.use_status = #{use_status}
+            </if>
+            <if test="storageAddr != null and storageAddr != ''">
+                AND a.storage_addr like concat('%', #{storageAddr}, '%')
+            </if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(a.createTime,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(a.createTime,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+        </where>
     </select>
 
 </mapper> 

@@ -61,11 +61,11 @@ public class AssetsAccountingController extends BaseController
     @RequiresPermissions("assets:accounting:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(SysUser user)
+    public TableDataInfo list(Assets assets)
     {
         startPage();
-        List<SysUser> list = userService.selectUserList(user);
-        return getDataTable(list);
+        List<Assets> assetsList = accountingService.getAssetsList(assets);
+        return getDataTable(assetsList);
     }
 
     @Log(title = "用户管理", businessType = BusinessType.EXPORT)

@@ -82,6 +82,6 @@ public class AssetsAccountingServiceImpl implements IAssetsAccountingService {
 
     @Override
     public List<Assets> getAssetsList(Assets assets) {
-        return null;
+        return assetsAccountingMapper.getAssetsList(assets);
     }
 }
