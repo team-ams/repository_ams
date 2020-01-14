@@ -44,7 +44,7 @@ public class Assets extends BaseEntity {
 
     /**单价*/
     @Excel(name = "单价")
-    private float assets_price;
+    private float assetsPrice;
 
     /**保管单位*/
     @Excel(name = "保管单位")

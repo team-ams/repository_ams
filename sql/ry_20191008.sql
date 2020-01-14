@@ -734,8 +734,8 @@ create table assets_accounting(
     manufacture_date        varchar(10)         default ''          comment '出厂日期',
     warranty_date           varchar(10)         default ''          comment '保修日期',
     mark                    text                                    comment '备注' ,
-    createTime              timestamp           not null default current_timestamp      comment '创建时间/登记时间',
-    updateTime              timestamp           not null default current_timestamp on update current_timestamp      comment '更新时间',
+    create_time              timestamp           not null default current_timestamp      comment '创建时间/登记时间',
+    update_time              timestamp           not null default current_timestamp on update current_timestamp      comment '更新时间',
     primary key (assets_id),
     unique key (assets_number)
 )engine = innodb default charset utf8 comment '资产导入表'

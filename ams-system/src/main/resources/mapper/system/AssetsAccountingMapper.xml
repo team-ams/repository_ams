@@ -12,7 +12,7 @@
         <result property="assetsType" column="assets_type"/>
         <result property="assetsAmount" column="assets_amount"/>
         <result property="measuringUnit" column="measuring_unit"/>
-        <result property="assets_price" column="assets_price"/>
+        <result property="assetsPrice" column="assets_price"/>
         <result property="storageUnit" column="storage_unit"/>
         <result property="storageDepartment" column="storage_department"/>
         <result property="custodian" column="custodian"/>
@@ -30,8 +30,8 @@
         <result property="manufactureDate" column="manufacture_date"/>
         <result property="warrantyDate" column="warranty_date"/>
         <result property="mark" column="mark"/>
-        <result property="createTime" column="createTime"/>
-        <result property="updateTime" column="updateTime"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
     </resultMap>
 
     <sql id="selectAssetsVo">
@@ -59,8 +59,8 @@
                a.purchase_date,
                a.manufacture_date,
                a.warranty_date,
-               a.createTime,
-               a.updateTime
+               a.create_time,
+               a.update_time
         from assets_accounting a
     </sql>
 
@@ -80,7 +80,7 @@
         <if test="assetsType != null and assetsType != ''">assets_type,</if>
         <if test="assetsAmount != null and assetsAmount != 0">assets_amount,</if>
         <if test="measuringUnit != null and measuringUnit != ''">measuring_unit,</if>
-        <if test="assets_price != null and assets_price != ''">assets_price,</if>
+        <if test="assetsPrice != null and assetsPrice != 0">assets_price,</if>
         <if test="storageUnit != null and storageUnit != ''">storage_unit,</if>
         <if test="storageDepartment != null and storageDepartment != ''">storage_department,</if>
         <if test="custodian != null and custodian != ''">custodian,</if>
@@ -98,7 +98,7 @@
         <if test="manufactureDate != null and manufactureDate != ''">manufacture_date,</if>
         <if test="warrantyDate != null and warrantyDate != ''">warranty_date,</if>
         <if test="mark != null and mark != ''">mark,</if>
-        createTime
+        create_time
         )values(
         <if test="assetsId != null and assetsId != 0">#{assetsId},</if>
         <if test="assetsNumber != null and assetsNumber != ''">#{assetsNumber},</if>
@@ -107,7 +107,7 @@
         <if test="assetsType != null and assetsType != ''">#{assetsType},</if>
         <if test="assetsAmount != null and assetsAmount != 0">#{assetsAmount},</if>
         <if test="measuringUnit != null and measuringUnit != ''">#{measuringUnit},</if>
-        <if test="assets_price != null and assets_price != ''">#{assets_price},</if>
+        <if test="assetsPrice != null and assetsPrice != ''">#{assetsPrice},</if>
         <if test="storageUnit != null and storageUnit != ''">#{storageUnit},</if>
         <if test="storageDepartment != null and storageDepartment != ''">#{storageDepartment},</if>
         <if test="custodian != null and custodian != ''">#{custodian},</if>
@@ -133,32 +133,32 @@
     <update id="updateAssets" parameterType="com.ams.system.domain.Assets">
         update assets_accounting
         <set>
-            <if test="assetsNumber != null and assetsNumber != ''">assetsNumber=#{assetsNumber},</if>
-            <if test="assetsName != null and assetsName!= ''">assetsName=#{assetsName},</if>
-            <if test="assetsNature != null and assetsNature != ''">assetsNature=#{assetsNature},</if>
-            <if test="assetsType != null and assetsType != ''">assetsType=#{assetsType},</if>
-            <if test="assetsAmount != null and assetsAmount != 0">assetsAmount=#{assetsAmount},</if>
-            <if test="measuringUnit != null and measuringUnit != ''">measuringUnit=#{measuringUnit},</if>
-            <if test="assets_price != null and assets_price != ''">assets_price=#{assets_price},</if>
-            <if test="storageUnit != null and storageUnit != ''">storageUnit=#{storageUnit},</if>
-            <if test="storageDepartment != null and storageDepartment != ''">storageDepartment=#{storageDepartment},
+            <if test="assetsNumber != null and assetsNumber != ''">assets_number=#{assetsNumber},</if>
+            <if test="assetsName != null and assetsName!= ''">assets_name=#{assetsName},</if>
+            <if test="assetsNature != null and assetsNature != ''">assets_nature=#{assetsNature},</if>
+            <if test="assetsType != null and assetsType != ''">assets_type=#{assetsType},</if>
+            <if test="assetsAmount != null and assetsAmount != 0">assets_amount=#{assetsAmount},</if>
+            <if test="measuringUnit != null and measuringUnit != ''">measuring_unit=#{measuringUnit},</if>
+            <if test="assets_price != null and assets_price != ''">assets_price=#{assetsPrice},</if>
+            <if test="storageUnit != null and storageUnit != ''">storage_unit=#{storageUnit},</if>
+            <if test="storageDepartment != null and storageDepartment != ''">storage_department=#{storageDepartment},
             </if>
             <if test="custodian != null and custodian != ''">custodian=#{custodian},</if>
             <if test="user != null and user != ''">user=#{user},</if>
-            <if test="storageAddr != null and storageAddr != ''">storageAddr=#{storageAddr},</if>
-            <if test="useStatus != null and useStatus != ''">useStatus=#{useStatus},</if>
-            <if test="assetsSource != null and assetsSource != ''">assetsSource=#{assetsSource},</if>
-            <if test="usefulLife != null and usefulLife != ''">usefulLife=#{usefulLife},</if>
-            <if test="residualRate != null and residualRate != 0">residualRate=#{residualRate},</if>
-            <if test="checkStatus != null and checkStatus != ''">checkStatus=#{checkStatus},</if>
-            <if test="assetsFormat != null and assetsFormat != ''">assetsFormat=#{assetsFormat},</if>
-            <if test="assetsModel != null and assetsModel != ''">assetsModel=#{assetsModel},</if>
-            <if test="assetsBrand != null and assetsBrand != ''">assetsBrand=#{assetsBrand},</if>
-            <if test="purchaseDate != null and purchaseDate != ''">purchaseDate=#{purchaseDate},</if>
-            <if test="manufactureDate != null and manufactureDate != ''">manufactureDate=#{manufactureDate},</if>
-            <if test="warrantyDate != null and warrantyDate != ''">warrantyDate=#{warrantyDate},</if>
+            <if test="storageAddr != null and storageAddr != ''">storage_addr=#{storageAddr},</if>
+            <if test="useStatus != null and useStatus != ''">use_status=#{useStatus},</if>
+            <if test="assetsSource != null and assetsSource != ''">assets_source=#{assetsSource},</if>
+            <if test="usefulLife != null and usefulLife != ''">useful_life=#{usefulLife},</if>
+            <if test="residualRate != null and residualRate != 0">residual_rate=#{residualRate},</if>
+            <if test="checkStatus != null and checkStatus != ''">check_status=#{checkStatus},</if>
+            <if test="assetsFormat != null and assetsFormat != ''">assets_format=#{assetsFormat},</if>
+            <if test="assetsModel != null and assetsModel != ''">assets_model=#{assetsModel},</if>
+            <if test="assetsBrand != null and assetsBrand != ''">assets_brand=#{assetsBrand},</if>
+            <if test="purchaseDate != null and purchaseDate != ''">purchase_date=#{purchaseDate},</if>
+            <if test="manufactureDate != null and manufactureDate != ''">manufacture_date=#{manufactureDate},</if>
+            <if test="warrantyDate != null and warrantyDate != ''">warranty_date=#{warrantyDate},</if>
             <if test="mark != null and mark != ''">mark=#{mark},</if>
-            updateTime = sysdate()
+            update_time = sysdate()
         </set>
         where assets_id = #{assetsId}
     </update>
@@ -177,10 +177,10 @@
                 AND a.storage_addr like concat('%', #{storageAddr}, '%')
             </if>
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
-                AND date_format(a.createTime,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+                AND date_format(a.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
             </if>
             <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
-                AND date_format(a.createTime,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+                AND date_format(a.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
             </if>
         </where>
     </select>
