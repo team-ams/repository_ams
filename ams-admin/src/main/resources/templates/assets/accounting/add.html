@@ -12,18 +12,18 @@
             <div class="row">
             	<div class="col-sm-6">
                     <div class="form-group">
-                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>用户名称：</label>
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>资产名称：</label>
                         <div class="col-sm-8">
-                            <input name="userName" placeholder="请输入用户名称" class="form-control" type="text" maxlength="30" required>
+                            <input name="assetsName" placeholder="请输入资产名称" class="form-control" type="text" maxlength="30" required>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>归属部门：</label>
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>资产编号：</label>
                         <div class="col-sm-8">
                             <div class="input-group">
-                            	<input name="deptName" onclick="selectDeptTree()" id="treeName" type="text" placeholder="请选择归属部门" class="form-control" required>
+                            	<input name="assetsNumber" onclick="selectDeptTree()" id="treeName" type="text" placeholder="支持RFID读取编号" class="form-control" required>
                                 <span class="input-group-addon"><i class="fa fa-search"></i></span>
                             </div>
                         </div>
@@ -33,35 +33,17 @@
             <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>手机号码：</label>
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>资产单价：</label>
                         <div class="col-sm-8">
-                            <input id="phonenumber" name="phonenumber" placeholder="请输入手机号码" class="form-control" type="text" maxlength="11" required>
+                            <input id="assetsPrice" placeholder="请输入资产单价" class="form-control" type="text" maxlength="11" required>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>邮箱：</label>
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>计量单位：</label>
                         <div class="col-sm-8">
-                            <input id="email" name="email" class="form-control email" type="text" maxlength="50" placeholder="请输入邮箱" required>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>登录账号：</label>
-                        <div class="col-sm-8">
-                            <input id="loginName" name="loginName" placeholder="请输入登录账号" class="form-control" type="text" maxlength="30" required>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>登录密码：</label>
-                        <div class="col-sm-8">
-                            <input name="password" placeholder="请输入登录密码" class="form-control" type="password" th:value="${@config.getKey('sys.user.initPassword')}" required>
+                            <input id="measuringUnit" class="form-control" type="text" maxlength="10" placeholder="请输入计量单位" required>
                         </div>
                     </div>
                 </div>
@@ -69,22 +51,35 @@
             <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label class="col-sm-4 control-label">用户性别：</label>
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>保管单位：</label>
                         <div class="col-sm-8">
-                            <select name="sex" class="form-control m-b" th:with="type=${@dict.getType('sys_user_sex')}">
-				                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-				            </select>
+                            <input id="storageUnit" placeholder="请输入保管单位" class="form-control" type="text" maxlength="30" required>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label class="col-sm-4 control-label">用户状态：</label>
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>保管部门：</label>
                         <div class="col-sm-8">
-                            <label class="toggle-switch switch-solid">
-	                            <input type="checkbox" id="status" checked>
-	                            <span></span>
-	                        </label>
+                            <input id="storageDepartment" placeholder="请输入保管部门" class="form-control" type="text" maxlength="30" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>存放地点：</label>
+                        <div class="col-sm-8">
+                            <input id="storageAddr" placeholder="请输入存放地点" class="form-control" type="text" maxlength="30" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">品牌：</label>
+                        <div class="col-sm-8">
+                            <input id="assetsBrand" placeholder="请输入品牌名" class="form-control" type="text" maxlength="11" required>
                         </div>
                     </div>
                 </div>
@@ -92,7 +87,7 @@
             <div class="row">
             	<div class="col-sm-6">
                     <div class="form-group">
-                        <label class="col-sm-4 control-label">岗位：</label>
+                        <label class="col-sm-4 control-label">保管人：</label>
                         <div class="col-sm-8">
                             <select id="post" class="form-control select2-multiple" multiple>
 								<option th:each="post:${posts}" th:value="${post.postId}" th:text="${post.postName}" th:disabled="${post.status == '1'}"></option>
@@ -114,19 +109,17 @@
             <div class="row">
             	<div class="col-sm-6">
                     <div class="form-group">
-                        <label class="col-sm-4 control-label">角色：</label>
+                        <label class="col-sm-4 control-label">资产来源：</label>
                         <div class="col-sm-8">
-                            <label th:each="role:${roles}" class="check-box">
-								<input name="role" type="checkbox" th:value="${role.roleId}" th:text="${role.roleName}" th:disabled="${role.status == '1'}">
-							</label>
+                            <input id="assetsSource" placeholder="请输入资产来源" class="form-control" type="text" maxlength="30" required>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label class="col-sm-4 control-label">购入日期：</label>
+                        <label class="col-sm-4 control-label">资产性质：</label>
                         <div class="col-sm-8">
-                            <input type="text" class="time-input" id="purchaseDate" placeholder="请选择购入日期" name="params[purchaseDate]"/>
+                            <input name="assetsNature" placeholder="请输入资产性质" class="form-control" type="text" maxlength="30" required>
                         </div>
                     </div>
                 </div>
@@ -137,6 +130,14 @@
                         <label class="col-sm-4 control-label">出厂日期：</label>
                         <div class="col-sm-8">
                             <input type="text" class="time-input" id="manufactureDate" placeholder="请选择出厂日期" name="params[manufactureDate]"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">购入日期：</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="time-input" id="purchaseDate" placeholder="请选择购入日期" name="params[purchaseDate]"/>
                         </div>
                     </div>
                 </div>
@@ -276,7 +277,7 @@
 
 		$(function() {
             $('#post').select2({
-                placeholder: "请选择岗位",
+                placeholder: "请填写保管人",
                 allowClear: true
             });
         })
