@@ -185,4 +185,10 @@
         </where>
     </select>
 
+    <select id="checkAssetsNumberUnique" parameterType="String" resultType="int">
+        SELECT COUNT(1)
+        FROM assets_accounting
+        WHERE assets_number = #{assetsNumber}
+    </select>
+
 </mapper> 

@@ -119,24 +119,14 @@ public class AssetsAccountingController extends BaseController
     @Log(title = "用户管理", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(@Validated SysUser user)
+    public AjaxResult addSave(@Validated Assets assets)
     {
-        if (UserConstants.USER_NAME_NOT_UNIQUE.equals(userService.checkLoginNameUnique(user.getLoginName())))
+        if (UserConstants.USER_NAME_NOT_UNIQUE.equals(accountingService.checkAssetsNumberUnique(assets.getAssetsNumber())))
         {
-            return error("新增用户'" + user.getLoginName() + "'失败，登录账号已存在");
+            return error("新增资产'" + assets.getAssetsNumber() + "'失败，资产编号已存在");
         }
-        else if (UserConstants.USER_PHONE_NOT_UNIQUE.equals(userService.checkPhoneUnique(user)))
-        {
-            return error("新增用户'" + user.getLoginName() + "'失败，手机号码已存在");
-        }
-        else if (UserConstants.USER_EMAIL_NOT_UNIQUE.equals(userService.checkEmailUnique(user)))
-        {
-            return error("新增用户'" + user.getLoginName() + "'失败，邮箱账号已存在");
-        }
-        user.setSalt(ShiroUtils.randomSalt());
-        user.setPassword(passwordService.encryptPassword(user.getLoginName(), user.getPassword(), user.getSalt()));
-        user.setCreateBy(ShiroUtils.getLoginName());
-        return toAjax(userService.insertUser(user));
+        assets.setCreateBy(ShiroUtils.getLoginName());
+        return toAjax(accountingService.insertAssets(assets));
     }
 
     /**

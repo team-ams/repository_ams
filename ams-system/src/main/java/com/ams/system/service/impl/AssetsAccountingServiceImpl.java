@@ -1,5 +1,6 @@
 package com.ams.system.service.impl;
 
+import com.ams.common.constant.AssetsConstants;
 import com.ams.common.exception.BusinessException;
 import com.ams.common.utils.StringUtils;
 import com.ams.system.domain.Assets;
@@ -25,6 +26,15 @@ public class AssetsAccountingServiceImpl implements IAssetsAccountingService {
     @Autowired
     private AssetsAccountingMapper assetsAccountingMapper;
 
+
+    @Override
+    public String checkAssetsNumberUnique(String assetsNumber) {
+        int counts = assetsAccountingMapper.checkAssetsNumberUnique(assetsNumber);
+        if (counts > 0){
+            return AssetsConstants.ASSETS_NAME_NOT_UNIQUE;
+        }
+            return AssetsConstants.ASSETS_NAME_UNIQUE;
+    }
 
     @Override
     public String importAssets(List<Assets> assetsList, Boolean isUpdateSupport, String operName) {

@@ -48,7 +48,7 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.addTab()" shiro:hasPermission="system:user:add">
+                <a class="btn btn-success" onclick="$.operate.addTab()" shiro:hasPermission="assets:accounting:add">
                     <i class="fa fa-plus"></i> 新增
                 </a>
                 <a class="btn btn-primary single disabled" onclick="$.operate.editTab()"
@@ -62,7 +62,7 @@
                 <a class="btn btn-info" onclick="$.table.importExcel()" shiro:hasPermission="assets:accounting:import">
                     <i class="fa fa-upload"></i> 导入
                 </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:user:export">
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="assets:accounting:export">
                     <i class="fa fa-download"></i> 导出
                 </a>
             </div>

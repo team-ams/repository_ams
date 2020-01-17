@@ -714,7 +714,7 @@ create table assets_accounting(
     assets_name      varchar(20)      not null default ''         comment '资产名称',
     assets_nature    varchar(10)      default ''                  comment '资产性质',
     assets_type      varchar(10)      default ''                  comment '资产类别',
-    assets_amount    int              default 0                   comment '数量',
+    assets_amount    int              default 1                   comment '数量',
     measuring_unit   char(1)          default ''                  comment '计量单位',
     assets_price     float            default 0.0                 comment '单价',
     storage_unit     varchar(10)      default ''                  comment '保管单位',
@@ -738,5 +738,20 @@ create table assets_accounting(
     update_time              timestamp           not null default current_timestamp on update current_timestamp      comment '更新时间',
     primary key (assets_id),
     unique key (assets_number)
-)engine = innodb default charset utf8 comment '资产导入表'
+)engine = innodb default charset utf8 comment '资产导入表';
+
+drop table if exists assets_source;
+create table assets_source(
+
+    source_id           int         not null auto_increment             comment '资产来源ID',
+    source_name         varchar(20)         not null        default ''  comment '资产来源名称',
+    source_sort         int(4)              not null                    comment '显示顺序',
+    status              char(1)             not null                    comment '状态（0正常  1停用）',
+    create_by           varchar(64)         default ''                  comment '创建者',
+    create_time         timestamp           not null default current_timestamp      comment '创建时间',
+    update_by           varchar(64)         default ''                  comment '更新者',
+    update_time         timestamp           not null default current_timestamp      comment '更新时间',
+    remark              text                                            comment '备注',
+    primary key (source_id)
+)engine = innodb default charset utf8 comment '资产来源信息表'
 

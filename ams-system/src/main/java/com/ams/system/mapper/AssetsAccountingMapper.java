@@ -42,4 +42,12 @@ public interface AssetsAccountingMapper {
      * @return
      */
     public List<Assets> getAssetsList(Assets assets);
+
+    /**
+     * 检查资产编号是否唯一
+     *
+     * @param assetsNumber
+     * @return
+     */
+    public int checkAssetsNumberUnique(String assetsNumber);
 }

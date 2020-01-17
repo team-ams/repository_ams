@@ -11,6 +11,14 @@ import java.util.List;
 public interface IAssetsAccountingService {
 
     /**
+     * 检查资产编号是否唯一
+     *
+     * @param AssetsNumber
+     * @return
+     */
+    public String checkAssetsNumberUnique(String AssetsNumber);
+
+    /**
      * 导入资产数据
      *
      * @param assetsList
