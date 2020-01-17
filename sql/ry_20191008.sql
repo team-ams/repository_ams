@@ -753,5 +753,8 @@ create table assets_source(
     update_time         timestamp           not null default current_timestamp      comment '更新时间',
     remark              text                                            comment '备注',
     primary key (source_id)
-)engine = innodb default charset utf8 comment '资产来源信息表'
+)engine = innodb default charset utf8 comment '资产来源信息表';
+
+insert into assets_source values (1,'购置',1,'0','admin','2020-01-14 11:50:06','zc','2020-01-14 11:50:08','');
+insert into assets_source values (2,'赠送',2,'0','admin','2020-01-14 11:50:06','zc','2020-01-14 11:50:08','');
 
