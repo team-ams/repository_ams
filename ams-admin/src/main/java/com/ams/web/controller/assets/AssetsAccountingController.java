@@ -11,10 +11,7 @@ import com.ams.framework.shiro.service.SysPasswordService;
 import com.ams.framework.util.ShiroUtils;
 import com.ams.system.domain.Assets;
 import com.ams.system.domain.SysUser;
-import com.ams.system.service.IAssetsAccountingService;
-import com.ams.system.service.ISysPostService;
-import com.ams.system.service.ISysRoleService;
-import com.ams.system.service.ISysUserService;
+import com.ams.system.service.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -41,6 +38,9 @@ public class AssetsAccountingController extends BaseController
 
     @Autowired
     private IAssetsAccountingService accountingService;
+
+    @Autowired
+    private IAssetsSourceService sourceService;
 
     @Autowired
     private ISysRoleService roleService;
@@ -109,6 +109,7 @@ public class AssetsAccountingController extends BaseController
     {
         mmap.put("roles", roleService.selectRoleAll());
         mmap.put("posts", postService.selectPostAll());
+        mmap.put("sources",sourceService.getAssetsSourceAll());
         return prefix + "/add";
     }
 

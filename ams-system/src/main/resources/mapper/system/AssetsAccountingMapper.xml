@@ -98,6 +98,7 @@
         <if test="manufactureDate != null and manufactureDate != ''">manufacture_date,</if>
         <if test="warrantyDate != null and warrantyDate != ''">warranty_date,</if>
         <if test="mark != null and mark != ''">mark,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
         create_time
         )values(
         <if test="assetsId != null and assetsId != 0">#{assetsId},</if>
@@ -125,6 +126,7 @@
         <if test="manufactureDate != null and manufactureDate != ''">#{manufactureDate},</if>
         <if test="warrantyDate != null and warrantyDate != ''">#{warrantyDate},</if>
         <if test="mark != null and mark != ''">#{mark},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
         sysdate()
         )
     </insert>

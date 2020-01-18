@@ -88,9 +88,7 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label">保管人：</label>
                         <div class="col-sm-8">
-                            <select id="post" class="form-control select2-multiple" multiple>
-								<option th:each="post:${posts}" th:value="${post.postId}" th:text="${post.postName}" th:disabled="${post.status == '1'}"></option>
-							</select>
+                            <input id="custodian" name="custodian" placeholder="请填写保管人" class="form-control" type="text" maxlength="15" >
                         </div>
                     </div>
                 </div>
@@ -110,8 +108,8 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label">资产来源：</label>
                         <div class="col-sm-8">
-                            <select id="assetsSource" class="form-control select2-multiple" multiple>
-                                <option th:each="post:${posts}" th:value="${post.postId}" th:text="${post.postName}" th:disabled="${post.status == '1'}"></option>
+                            <select name="assetsSource" class="form-control m-b" th:with="type=${@dict.getType('assets_source')}">
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                             </select>
                         </div>
                     </div>
@@ -130,7 +128,7 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label">出厂日期：</label>
                         <div class="col-sm-8">
-                            <input type="text" class="time-input" id="manufactureDate" placeholder="请选择出厂日期" name="params[manufactureDate]"/>
+                            <input type="text" class="time-input" id="manufactureDate" placeholder="请选择出厂日期" name="manufactureDate"/>
                         </div>
                     </div>
                 </div>
@@ -138,7 +136,7 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label">购入日期：</label>
                         <div class="col-sm-8">
-                            <input type="text" class="time-input" id="purchaseDate" placeholder="请选择购入日期" name="params[purchaseDate]"/>
+                            <input type="text" class="time-input" id="purchaseDate" placeholder="请选择购入日期" name="purchaseDate"/>
                         </div>
                     </div>
                 </div>
@@ -242,12 +240,6 @@
         function submitHandler() {
 	        if ($.validate.form()) {
 	        	var data = $("#form-user-add").serializeArray();
-	        	var status = $("input[id='status']").is(':checked') == true ? 0 : 1;
-	        	var roleIds = $.form.selectCheckeds("role");
-	        	var postIds = $.form.selectSelects("post");
-	        	data.push({"name": "status", "value": status});
-	        	data.push({"name": "roleIds", "value": roleIds});
-	        	data.push({"name": "postIds", "value": postIds});
 	        	$.operate.saveTab(prefix + "/add", data);
 	        }
 	    }

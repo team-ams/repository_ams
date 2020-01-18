@@ -50,4 +50,5 @@ public interface IAssetsAccountingService {
      * @return
      */
     public List<Assets> getAssetsList(Assets assets);
+
 }

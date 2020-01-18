@@ -521,7 +521,9 @@ insert into sys_dict_data values(25, 8,  '生成代码', '8',       'sys_oper_ty
 insert into sys_dict_data values(26, 9,  '清空数据', '9',       'sys_oper_type',       '',   'danger',  'N', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '清空操作');
 insert into sys_dict_data values(27, 1,  '成功',     '0',       'sys_common_status',   '',   'primary', 'N', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '正常状态');
 insert into sys_dict_data values(28, 2,  '失败',     '1',       'sys_common_status',   '',   'danger',  'N', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '停用状态');
-
+insert into sys_dict_data values(29,  1,  '购置',       '0',       'assets_source',        '',   '',        'Y', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '来源-购置');
+insert into sys_dict_data values(30,  2,  '赠送',       '1',       'assets_source',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '来源-赠送');
+insert into sys_dict_data values(31,  3,  '未知',     '2',       'assets_source',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '来源未知');
 
 -- ----------------------------
 -- 13、参数配置表
@@ -734,7 +736,9 @@ create table assets_accounting(
     manufacture_date        varchar(10)         default ''          comment '出厂日期',
     warranty_date           varchar(10)         default ''          comment '保修日期',
     mark                    text                                    comment '备注' ,
+    create_by               varchar(64)         default ''          comment '创建者',
     create_time              timestamp           not null default current_timestamp      comment '创建时间/登记时间',
+    update_by               varchar(64)         default ''          comment '更新者',
     update_time              timestamp           not null default current_timestamp on update current_timestamp      comment '更新时间',
     primary key (assets_id),
     unique key (assets_number)
