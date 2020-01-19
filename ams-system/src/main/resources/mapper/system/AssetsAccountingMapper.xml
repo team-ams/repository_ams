@@ -143,8 +143,7 @@
             <if test="measuringUnit != null and measuringUnit != ''">measuring_unit=#{measuringUnit},</if>
             <if test="assets_price != null and assets_price != ''">assets_price=#{assetsPrice},</if>
             <if test="storageUnit != null and storageUnit != ''">storage_unit=#{storageUnit},</if>
-            <if test="storageDepartment != null and storageDepartment != ''">storage_department=#{storageDepartment},
-            </if>
+            <if test="storageDepartment != null and storageDepartment != ''">storage_department=#{storageDepartment},</if>
             <if test="custodian != null and custodian != ''">custodian=#{custodian},</if>
             <if test="user != null and user != ''">user=#{user},</if>
             <if test="storageAddr != null and storageAddr != ''">storage_addr=#{storageAddr},</if>
@@ -191,6 +190,11 @@
         SELECT COUNT(1)
         FROM assets_accounting
         WHERE assets_number = #{assetsNumber}
+    </select>
+
+    <select id="getAssetsByNumber" parameterType="String" resultMap="AssetsResult">
+        <include refid="selectAssetsVo"/>
+        where assets_number = #{assetsNumber}
     </select>
 
 </mapper> 

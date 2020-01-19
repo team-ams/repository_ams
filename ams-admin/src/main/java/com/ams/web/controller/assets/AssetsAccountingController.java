@@ -131,37 +131,26 @@ public class AssetsAccountingController extends BaseController
     }
 
     /**
-     * 修改用户
+     * 修改资产
      */
-    @GetMapping("/edit/{userId}")
-    public String edit(@PathVariable("userId") Long userId, ModelMap mmap)
+    @GetMapping("/edit/{assetsNumber}")
+    public String edit(@PathVariable("assetsNumber") String assetsNumber, ModelMap mmap)
     {
-        mmap.put("user", userService.selectUserById(userId));
-        mmap.put("roles", roleService.selectRolesByUserId(userId));
-        mmap.put("posts", postService.selectPostsByUserId(userId));
+        mmap.put("assets",accountingService.getAssetsByNumber(assetsNumber));
         return prefix + "/edit";
     }
 
     /**
-     * 修改保存用户
+     * 修改保存资产
      */
     @RequiresPermissions("assets:accounting:edit")
-    @Log(title = "用户管理", businessType = BusinessType.UPDATE)
+    @Log(title = "资产管理", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
-    public AjaxResult editSave(@Validated SysUser user)
+    public AjaxResult editSave(@Validated Assets assets)
     {
-        userService.checkUserAllowed(user);
-        if (UserConstants.USER_PHONE_NOT_UNIQUE.equals(userService.checkPhoneUnique(user)))
-        {
-            return error("修改用户'" + user.getLoginName() + "'失败，手机号码已存在");
-        }
-        else if (UserConstants.USER_EMAIL_NOT_UNIQUE.equals(userService.checkEmailUnique(user)))
-        {
-            return error("修改用户'" + user.getLoginName() + "'失败，邮箱账号已存在");
-        }
-        user.setUpdateBy(ShiroUtils.getLoginName());
-        return toAjax(userService.updateUser(user));
+        assets.setUpdateBy(ShiroUtils.getLoginName());
+        return toAjax(accountingService.updateAssets(assets));
     }
 
     @RequiresPermissions("assets:accounting:resetPwd")

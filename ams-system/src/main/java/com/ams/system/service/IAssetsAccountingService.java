@@ -51,4 +51,12 @@ public interface IAssetsAccountingService {
      */
     public List<Assets> getAssetsList(Assets assets);
 
+    /**
+     * 根据assetsId查找资产
+     *
+     * @param assetsId
+     * @return
+     */
+    public Assets getAssetsByNumber(String assetsId);
+
 }

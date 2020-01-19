@@ -70,7 +70,7 @@ public class Assets extends BaseEntity {
     @Excel(name = "使用情况")
     private String useStatus;
 
-    /**资产来源(0：购置  1：赠送)*/
+    /**资产来源(0：购置  1：赠送  3：未知)*/
     @Excel(name = "资产来源")
     private String assetsSource;
 

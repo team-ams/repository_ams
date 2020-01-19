@@ -524,6 +524,22 @@ insert into sys_dict_data values(28, 2,  '失败',     '1',       'sys_common_st
 insert into sys_dict_data values(29,  1,  '购置',       '0',       'assets_source',        '',   '',        'Y', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '来源-购置');
 insert into sys_dict_data values(30,  2,  '赠送',       '1',       'assets_source',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '来源-赠送');
 insert into sys_dict_data values(31,  3,  '未知',     '2',       'assets_source',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '来源未知');
+insert into sys_dict_data values(32,  1,  '低值资产',       '0',       'assets_nature',        '',   '',        'Y', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '低值资产');
+insert into sys_dict_data values(33,  2,  '中值资产',       '1',       'assets_nature',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '中值资产');
+insert into sys_dict_data values(34,  3,  '贵重器材',     '2',       'assets_nature',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '贵重器材');
+insert into sys_dict_data values(35,  1,  '仪器仪表',       '0',       'assets_type',        '',   '',        'Y', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '仪器仪表');
+insert into sys_dict_data values(36,  2,  '机电设备',       '1',       'assets_type',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '机电设备');
+insert into sys_dict_data values(37,  3,  '电子设备',     '2',       'assets_type',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '电子设备');
+insert into sys_dict_data values(38,  4,  '印刷设备',       '3',       'assets_type',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '印刷设备');
+insert into sys_dict_data values(39,  5,  '卫生医疗器械',       '4',       'assets_type',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '卫生医疗器械');
+insert into sys_dict_data values(40,  6,  '文体设备',     '5',       'assets_type',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '文体设备');
+insert into sys_dict_data values(41,  7,  '标本模型',       '6',       'assets_type',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '标本模型');
+insert into sys_dict_data values(42,  8,  '文物及陈列品',       '7',       'assets_type',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '文物及陈列品');
+insert into sys_dict_data values(43,  9,  '图书',     '8',       'assets_type',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '图书');
+insert into sys_dict_data values(44,  10,  '工具、量具和器皿',       '9',       'assets_type',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '工具、量具和器皿');
+insert into sys_dict_data values(45,  11,  '家具',       '10',       'assets_type',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '家具');
+insert into sys_dict_data values(46,  12,  '行政办公设备',     '11',       'assets_type',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '行政办公设备');
+
 
 -- ----------------------------
 -- 13、参数配置表
@@ -724,8 +740,8 @@ create table assets_accounting(
     custodian               varchar(10)         default ''          comment '保管人',
     user                    varchar(10)         default ''          comment '使用人',
     storage_addr            varchar(20)         default ''          comment '存放地点',
-    use_status              char(1)             default '0'           comment '使用情况(0：正常  1：停用  2：维修中)',
-    assets_source           char(1)             default '0'           comment '资产来源(0：购置  1：赠送)',
+    use_status              varchar(10)             default '正常'           comment '使用情况(0：正常  1：停用  2：维修中)',
+    assets_source           varchar(10)             default '购置'           comment '资产来源(0：购置  1：赠送  3：未知)',
     useful_life             varchar(5)          default ''          comment '使用年限',
     residual_rate           float               default 0.0         comment '残值率',
     check_status            char(1)             default '0'           comment '是否盘点(0：否  1：是)',

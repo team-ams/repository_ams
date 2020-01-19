@@ -94,4 +94,9 @@ public class AssetsAccountingServiceImpl implements IAssetsAccountingService {
     public List<Assets> getAssetsList(Assets assets) {
         return assetsAccountingMapper.getAssetsList(assets);
     }
+
+    @Override
+    public Assets getAssetsByNumber(String assetsNumber) {
+        return assetsAccountingMapper.getAssetsByNumber(assetsNumber);
+    }
 }

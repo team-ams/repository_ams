@@ -50,4 +50,12 @@ public interface AssetsAccountingMapper {
      * @return
      */
     public int checkAssetsNumberUnique(String assetsNumber);
+
+    /**
+     * 根据assetsId查找资产
+     *
+     * @param assetsNumber
+     * @return
+     */
+    public Assets getAssetsByNumber(String assetsNumber);
 }
