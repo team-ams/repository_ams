@@ -141,7 +141,7 @@
             <if test="assetsType != null and assetsType != ''">assets_type=#{assetsType},</if>
             <if test="assetsAmount != null and assetsAmount != 0">assets_amount=#{assetsAmount},</if>
             <if test="measuringUnit != null and measuringUnit != ''">measuring_unit=#{measuringUnit},</if>
-            <if test="assets_price != null and assets_price != ''">assets_price=#{assetsPrice},</if>
+            <if test="assetsPrice != null and assetsPrice != ''">assets_price=#{assetsPrice},</if>
             <if test="storageUnit != null and storageUnit != ''">storage_unit=#{storageUnit},</if>
             <if test="storageDepartment != null and storageDepartment != ''">storage_department=#{storageDepartment},</if>
             <if test="custodian != null and custodian != ''">custodian=#{custodian},</if>

@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <head>
-	<th:block th:include="include :: header('修改用户')" />
+	<th:block th:include="include :: header('修改资产')" />
 	<th:block th:include="include :: select2-css" />
 </head>
 <body>
     <div class="main-content">
         <form class="form-horizontal" id="form-assets-edit" th:object="${assets}">
+            <input name="assetsId"  type="hidden"  th:field="*{assetsId}" />
             <h4 class="form-header h4">基本信息</h4>
             <div class="row">
                 <div class="col-sm-6">
@@ -164,9 +165,9 @@
 	<th:block th:include="include :: footer" />
 	<th:block th:include="include :: select2-js" />
 	<script type="text/javascript">
-        var prefix = ctx + "system/user";
+        var prefix = ctx + "assets/accounting";
         
-        $("#form-user-edit").validate({
+        $("#form-assets-edit").validate({
         	onkeyup: false,
         	rules:{
         		email:{
@@ -222,6 +223,8 @@
         function submitHandler() {
 	        if ($.validate.form()) {
 	        	var data = $("#form-assets-edit").serializeArray();
+	        	var assetsId = $("#assetsId").val();
+	        	data.push({"name":"assetsId","value":assetsId});
 	        	$.operate.saveTab(prefix + "/edit", data);
 	        }
 	    }
