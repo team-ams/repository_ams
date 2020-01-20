@@ -175,7 +175,7 @@ insert into sys_menu values('113',  '表单构建', '3', '1', '/tool/build',    
 insert into sys_menu values('114',  '代码生成', '3', '2', '/tool/gen',             '', 'C', '0', 'tool:gen:view',            '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '代码生成菜单');
 insert into sys_menu values('115',  '系统接口', '3', '3', '/tool/swagger',         '', 'C', '0', 'tool:swagger:view',        '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '系统接口菜单');
 
-insert into sys_menu values('116',  '入账管理', '4', '1', '/assets/accounting',                      '', 'C', '0', 'system:user:view',         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '入账管理菜单');
+insert into sys_menu values('116',  '入账管理', '4', '1', '/assets/accounting',                      '', 'C', '0', 'assets:accounting:view',         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '入账管理菜单');
 insert into sys_menu values('117',  '领用管理', '4', '2', '',                      '', 'C', '0', 'system:role:view',         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '领用管理菜单');
 insert into sys_menu values('118',  '借出管理', '4', '3', '',                      '', 'C', '0', 'system:menu:view',         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '借出管理菜单');
 insert into sys_menu values('119',  '归还管理', '4', '4', '',                      '', 'C', '0', 'system:dept:view',         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '归还管理菜单');
@@ -264,6 +264,16 @@ insert into sys_menu values('1059', '生成删除', '114', '3', '#', '',  'F', '
 insert into sys_menu values('1060', '预览代码', '114', '4', '#', '',  'F', '0', 'tool:gen:preview',  '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
 insert into sys_menu values('1061', '生成代码', '114', '5', '#', '',  'F', '0', 'tool:gen:code',     '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
 
+-- 入账管理按钮
+insert into sys_menu values('1062', '资产入账查询', '116', '1', '#', '',  'F', '0', 'assets:accounting:list',     '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
+insert into sys_menu values('1063', '资产新增', '116', '2', '#', '',  'F', '0', 'assets:accounting:add',     '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
+insert into sys_menu values('1064', '资产修改', '116', '3', '#', '',  'F', '0', 'assets:accounting:edit',     '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
+insert into sys_menu values('1065', '资产删除', '116', '4', '#', '',  'F', '0', 'assets:accounting:remove',   '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
+insert into sys_menu values('1066', '资产导出', '116', '5',  '#', '',  'F', '0', 'assets:accounting:export',      '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
+insert into sys_menu values('1067', '资产导入', '116', '6',  '#', '',  'F', '0', 'assets:accounting:import',      '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
+
+
+
 
 -- ----------------------------
 -- 6、用户和角色关联表  用户N-1角色
@@ -298,6 +308,7 @@ create table sys_role_menu (
 insert into sys_role_menu values ('2', '1');
 insert into sys_role_menu values ('2', '2');
 insert into sys_role_menu values ('2', '3');
+insert into sys_role_menu values ('2', '4');
 insert into sys_role_menu values ('2', '100');
 insert into sys_role_menu values ('2', '101');
 insert into sys_role_menu values ('2', '102');
@@ -314,6 +325,15 @@ insert into sys_role_menu values ('2', '112');
 insert into sys_role_menu values ('2', '113');
 insert into sys_role_menu values ('2', '114');
 insert into sys_role_menu values ('2', '115');
+insert into sys_role_menu values ('2', '117');
+insert into sys_role_menu values ('2', '118');
+insert into sys_role_menu values ('2', '119');
+insert into sys_role_menu values ('2', '120');
+insert into sys_role_menu values ('2', '121');
+insert into sys_role_menu values ('2', '122');
+insert into sys_role_menu values ('2', '123');
+insert into sys_role_menu values ('2', '124');
+insert into sys_role_menu values ('2', '125');
 insert into sys_role_menu values ('2', '500');
 insert into sys_role_menu values ('2', '501');
 insert into sys_role_menu values ('2', '1000');
@@ -378,6 +398,12 @@ insert into sys_role_menu values ('2', '1058');
 insert into sys_role_menu values ('2', '1059');
 insert into sys_role_menu values ('2', '1060');
 insert into sys_role_menu values ('2', '1061');
+insert into sys_role_menu values ('2', '1062');
+insert into sys_role_menu values ('2', '1063');
+insert into sys_role_menu values ('2', '1064');
+insert into sys_role_menu values ('2', '1065');
+insert into sys_role_menu values ('2', '1066');
+insert into sys_role_menu values ('2', '1067');
 
 -- ----------------------------
 -- 8、角色和部门关联表  角色1-N部门
