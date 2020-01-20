@@ -99,4 +99,9 @@ public class AssetsAccountingServiceImpl implements IAssetsAccountingService {
     public Assets getAssetsByNumber(String assetsNumber) {
         return assetsAccountingMapper.getAssetsByNumber(assetsNumber);
     }
+
+    @Override
+    public int deleteAssetsByNumbers(String numbers) throws BusinessException {
+        return 0;
+    }
 }

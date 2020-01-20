@@ -777,6 +777,7 @@ create table assets_accounting(
     purchase_date           varchar(10)         default ''          comment '购入日期',
     manufacture_date        varchar(10)         default ''          comment '出厂日期',
     warranty_date           varchar(10)         default ''          comment '保修日期',
+    del_flag                char(1)             default '0'         comment '删除标志（0：正常  2：已删除）',
     mark                    text                                    comment '备注' ,
     create_by               varchar(64)         default ''          comment '创建者',
     create_time              timestamp           not null default current_timestamp      comment '创建时间/登记时间',

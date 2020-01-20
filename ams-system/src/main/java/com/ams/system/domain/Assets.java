@@ -110,6 +110,9 @@ public class Assets extends BaseEntity {
     @Excel(name = "保修日期")
     private String warrantyDate;
 
+    /**删除标志（0：正常  2：已删除）*/
+    private String delFlag;
+
     /**备注*/
     @Excel(name = "备注",type = Excel.Type.EXPORT)
     private String mark;

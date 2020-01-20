@@ -59,4 +59,6 @@ public interface IAssetsAccountingService {
      */
     public Assets getAssetsByNumber(String assetsId);
 
+    public int deleteAssetsByNumbers(String numbers) throws Exception;
+
 }
