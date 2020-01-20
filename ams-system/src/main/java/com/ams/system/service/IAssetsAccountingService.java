@@ -59,6 +59,13 @@ public interface IAssetsAccountingService {
      */
     public Assets getAssetsByNumber(String assetsId);
 
+    /**
+     * 批量删除资产信息
+     *
+     * @param numbers
+     * @return
+     * @throws Exception
+     */
     public int deleteAssetsByNumbers(String numbers) throws Exception;
 
 }
