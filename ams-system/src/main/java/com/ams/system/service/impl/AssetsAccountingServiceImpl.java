@@ -1,6 +1,7 @@
 package com.ams.system.service.impl;
 
 import com.ams.common.constant.AssetsConstants;
+import com.ams.common.core.text.Convert;
 import com.ams.common.exception.BusinessException;
 import com.ams.common.utils.StringUtils;
 import com.ams.system.domain.Assets;
@@ -30,10 +31,10 @@ public class AssetsAccountingServiceImpl implements IAssetsAccountingService {
     @Override
     public String checkAssetsNumberUnique(String assetsNumber) {
         int counts = assetsAccountingMapper.checkAssetsNumberUnique(assetsNumber);
-        if (counts > 0){
+        if (counts > 0) {
             return AssetsConstants.ASSETS_NAME_NOT_UNIQUE;
         }
-            return AssetsConstants.ASSETS_NAME_UNIQUE;
+        return AssetsConstants.ASSETS_NAME_UNIQUE;
     }
 
     @Override
@@ -100,8 +101,16 @@ public class AssetsAccountingServiceImpl implements IAssetsAccountingService {
         return assetsAccountingMapper.getAssetsByNumber(assetsNumber);
     }
 
+    /**
+     * 批量删除资产信息
+     *
+     * @param numbers
+     * @return
+     * @throws BusinessException
+     */
     @Override
     public int deleteAssetsByNumbers(String numbers) throws BusinessException {
-        return 0;
+        String[] assetsNumbers = Convert.toStrArray(numbers);
+        return assetsAccountingMapper.deleteAssetsByNumbers(assetsNumbers);
     }
 }

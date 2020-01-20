@@ -190,7 +190,7 @@ public class AssetsAccountingController extends BaseController
     {
         try
         {
-            return toAjax(userService.deleteUserByIds(ids));
+            return toAjax(accountingService.deleteAssetsByNumbers(ids));
         }
         catch (Exception e)
         {

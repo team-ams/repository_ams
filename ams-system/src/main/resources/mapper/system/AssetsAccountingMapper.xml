@@ -147,7 +147,8 @@
             <if test="measuringUnit != null and measuringUnit != ''">measuring_unit=#{measuringUnit},</if>
             <if test="assetsPrice != null and assetsPrice != ''">assets_price=#{assetsPrice},</if>
             <if test="storageUnit != null and storageUnit != ''">storage_unit=#{storageUnit},</if>
-            <if test="storageDepartment != null and storageDepartment != ''">storage_department=#{storageDepartment},</if>
+            <if test="storageDepartment != null and storageDepartment != ''">storage_department=#{storageDepartment},
+            </if>
             <if test="custodian != null and custodian != ''">custodian=#{custodian},</if>
             <if test="user != null and user != ''">user=#{user},</if>
             <if test="storageAddr != null and storageAddr != ''">storage_addr=#{storageAddr},</if>
@@ -173,6 +174,7 @@
     <select id="getAssetsList" parameterType="com.ams.system.domain.Assets" resultMap="AssetsResult">
         <include refid="selectAssetsVo"/>
         <where>
+            a.del_flag = '0'
             <if test="assetsNumber != null and assetsNumber != ''">
                 AND a.assets_number like concat('%', #{assetsNumber}, '%')
             </if>
@@ -201,5 +203,12 @@
         <include refid="selectAssetsVo"/>
         where assets_number = #{assetsNumber}
     </select>
+
+    <delete id="deleteAssetsByNumbers" parameterType="String">
+        update assets_accounting set del_flag = '2' where assets_number in
+        <foreach collection="array" item="assetsNumber" open="(" separator="," close=")">
+            #{assetsNumber}
+        </foreach>
+    </delete>
 
 </mapper> 

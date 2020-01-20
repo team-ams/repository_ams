@@ -58,4 +58,12 @@ public interface AssetsAccountingMapper {
      * @return
      */
     public Assets getAssetsByNumber(String assetsNumber);
+
+    /**
+     * 批量删除资产信息
+     *
+     * @param numbers
+     * @return
+     */
+    public int deleteAssetsByNumbers(String[] numbers);
 }
