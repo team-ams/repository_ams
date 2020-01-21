@@ -762,7 +762,7 @@ create table gen_table_column (
 drop table if exists assets_accounting;
 create table assets_accounting(
     assets_id        int              not null auto_increment     comment '资产ID',
-    assets_number    varchar(8)       not null default ''         comment '资产编号',
+    assets_number    varchar(15)       not null default ''         comment '资产编号',
     assets_name      varchar(20)      not null default ''         comment '资产名称',
     assets_nature    varchar(10)      default ''                  comment '资产性质',
     assets_type      varchar(10)      default ''                  comment '资产类别',
@@ -812,4 +812,22 @@ create table assets_source(
 
 insert into assets_source values (1,'购置',1,'0','admin','2020-01-14 11:50:06','zc','2020-01-14 11:50:08','');
 insert into assets_source values (2,'赠送',2,'0','admin','2020-01-14 11:50:06','zc','2020-01-14 11:50:08','');
+
+
+drop table if exists assets_allocate;
+create table assets_allocate(
+    allocate_id           int               not null auto_increment         comment '资产领用ID',
+    assets_number         varchar(15)       not null default ''             comment '资产编号',
+    user_id               int               not null default 0              comment '用户ID',
+    auditor_id           int               not null default 0              comment '审批者ID',
+    remark                text                                              comment '备注',
+    create_time           timestamp         not null default current_timestamp      comment '创建时间',
+    update_time           timestamp         not null default current_timestamp      comment '更新时间',
+    primary key (allocate_id)
+
+)engine = innodb default charset utf8 comment '资产领用表';
+
+insert into assets_allocate values (1,'a9b7e8',2,1,'资产分配','2020-01-14 11:50:06','2020-01-14 11:50:08');
+insert into assets_allocate values (2,'e6f4d2',3,1,'资产分配','2020-01-14 11:50:06','2020-01-14 11:50:08');
+
 
