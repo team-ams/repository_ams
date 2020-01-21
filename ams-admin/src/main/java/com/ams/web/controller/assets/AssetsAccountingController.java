@@ -68,18 +68,18 @@ public class AssetsAccountingController extends BaseController
         return getDataTable(assetsList);
     }
 
-    @Log(title = "用户管理", businessType = BusinessType.EXPORT)
+    @Log(title = "资产管理", businessType = BusinessType.EXPORT)
     @RequiresPermissions("assets:accounting:export")
     @PostMapping("/export")
     @ResponseBody
-    public AjaxResult export(SysUser user)
+    public AjaxResult export(Assets assets)
     {
-        List<SysUser> list = userService.selectUserList(user);
-        ExcelUtil<SysUser> util = new ExcelUtil<SysUser>(SysUser.class);
-        return util.exportExcel(list, "用户数据");
+        List<Assets> list = accountingService.getAssetsList(assets);
+        ExcelUtil<Assets> util = new ExcelUtil<Assets>(Assets.class);
+        return util.exportExcel(list, "资产数据");
     }
 
-    @Log(title = "用户管理", businessType = BusinessType.IMPORT)
+    @Log(title = "资产管理", businessType = BusinessType.IMPORT)
     @RequiresPermissions("assets:accounting:import")
     @PostMapping("/importData")
     @ResponseBody
@@ -97,7 +97,7 @@ public class AssetsAccountingController extends BaseController
     @ResponseBody
     public AjaxResult importTemplate()
     {
-        ExcelUtil<SysUser> util = new ExcelUtil<SysUser>(SysUser.class);
+        ExcelUtil<Assets> util = new ExcelUtil<Assets>(Assets.class);
         return util.importTemplateExcel("用户数据");
     }
 

@@ -66,7 +66,7 @@ public class Assets extends BaseEntity {
     @Excel(name = "存放地点")
     private String storageAddr;
 
-    /**使用情况(0：正常  1：停用  2：维修中)*/
+    /**使用情况(0：正常 1：已领用 2：已外借 3：维修中 4：停用)*/
     @Excel(name = "使用情况")
     private String useStatus;
 

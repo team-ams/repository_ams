@@ -176,7 +176,7 @@ insert into sys_menu values('114',  '代码生成', '3', '2', '/tool/gen',      
 insert into sys_menu values('115',  '系统接口', '3', '3', '/tool/swagger',         '', 'C', '0', 'tool:swagger:view',        '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '系统接口菜单');
 
 insert into sys_menu values('116',  '入账管理', '4', '1', '/assets/accounting',                      '', 'C', '0', 'assets:accounting:view',         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '入账管理菜单');
-insert into sys_menu values('117',  '领用管理', '4', '2', '',                      '', 'C', '0', 'system:role:view',         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '领用管理菜单');
+insert into sys_menu values('117',  '领用管理', '4', '2', '/assets/allocate',                      '', 'C', '0', 'system:role:view',         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '领用管理菜单');
 insert into sys_menu values('118',  '借出管理', '4', '3', '',                      '', 'C', '0', 'system:menu:view',         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '借出管理菜单');
 insert into sys_menu values('119',  '归还管理', '4', '4', '',                      '', 'C', '0', 'system:dept:view',         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '归还管理菜单');
 insert into sys_menu values('120',  '转移管理', '4', '5', '',                      '', 'C', '0', 'system:post:view',         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '转移管理菜单');
@@ -271,6 +271,9 @@ insert into sys_menu values('1064', '资产修改', '116', '3', '#', '',  'F', '
 insert into sys_menu values('1065', '资产删除', '116', '4', '#', '',  'F', '0', 'assets:accounting:remove',   '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
 insert into sys_menu values('1066', '资产导出', '116', '5',  '#', '',  'F', '0', 'assets:accounting:export',      '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
 insert into sys_menu values('1067', '资产导入', '116', '6',  '#', '',  'F', '0', 'assets:accounting:import',      '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
+insert into sys_menu values('1068', '资产领用', '116', '7',  '#', '',  'F', '0', 'assets:accounting:allocate',      '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
+insert into sys_menu values('1069', '资产借用', '116', '8',  '#', '',  'F', '0', 'assets:accounting:borrow',      '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
+
 
 
 
@@ -565,6 +568,11 @@ insert into sys_dict_data values(43,  9,  '图书',     '8',       'assets_type'
 insert into sys_dict_data values(44,  10,  '工具、量具和器皿',       '9',       'assets_type',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '工具、量具和器皿');
 insert into sys_dict_data values(45,  11,  '家具',       '10',       'assets_type',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '家具');
 insert into sys_dict_data values(46,  12,  '行政办公设备',     '11',       'assets_type',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '行政办公设备');
+insert into sys_dict_data values(47,  1,  '正常',       '0',       'assets_status',        '',   '',        'Y', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '正常状态');
+insert into sys_dict_data values(48,  2,  '停用',       '1',       'assets_status',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '停用状态');
+insert into sys_dict_data values(49,  3,  '已领用',     '2',       'assets_status',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '已领用状态');
+insert into sys_dict_data values(50,  4,  '已外借',       '3',       'assets_status',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '已借用状态');
+insert into sys_dict_data values(51,  5,  '维修中',     '4',       'assets_status',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '维修中状态');
 
 
 -- ----------------------------
@@ -766,11 +774,11 @@ create table assets_accounting(
     custodian               varchar(10)         default ''          comment '保管人',
     user                    varchar(10)         default ''          comment '使用人',
     storage_addr            varchar(20)         default ''          comment '存放地点',
-    use_status              varchar(10)             default '正常'           comment '使用情况(0：正常  1：停用  2：维修中)',
-    assets_source           varchar(10)             default '购置'           comment '资产来源(0：购置  1：赠送  3：未知)',
+    use_status              varchar(10)         default '正常'      comment '使用情况(0：正常 1：已领用 2：已外借 3：维修中 4：停用)',
+    assets_source           varchar(10)         default '购置'      comment '资产来源(0：购置  1：赠送  3：未知)',
     useful_life             varchar(5)          default ''          comment '使用年限',
     residual_rate           float               default 0.0         comment '残值率',
-    check_status            char(1)             default '0'           comment '是否盘点(0：否  1：是)',
+    check_status            char(1)             default '0'         comment '是否盘点(0：否  1：是)',
     assets_format           varchar(10)         default ''          comment '规格',
     assets_model            varchar(20)         default ''          comment '型号',
     assets_brand            varchar(50)         default ''          comment '品牌',

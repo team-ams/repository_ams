@@ -11,6 +11,8 @@
         <div class="row">
             <div class="col-sm-12 search-collapse">
                 <form id="user-form">
+                    <input type="hidden" id="deptId" name="deptId">
+                    <input type="hidden" id="parentId" name="parentId">
                     <div class="select-list">
                         <ul>
                             <li>
@@ -20,10 +22,10 @@
                                 存放地点：<input type="text" name="storageAddr"/>
                             </li>
                             <li>
-                                资产状态：<select name="useStatus" th:with="type=${@dict.getType('assets_status')}">
+                                资产状态：<select name="status" th:with="type=${@dict.getType('sys_normal_disable')}">
                                 <option value="">所有</option>
                                 <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                                        th:value="${dict.dictLabel}"></option>
+                                        th:value="${dict.dictValue}"></option>
                             </select>
                             </li>
                             <li class="select-time">
@@ -105,12 +107,12 @@
             },
                 {
                     field: 'assetsNumber',
-                    title: '资产编号',
-                    sortable: true
+                    title: '资产编号'
                 },
                 {
                     field: 'assetsName',
-                    title: '资产名称'
+                    title: '资产名称',
+                    sortable: true
                 },
                 {
                     field: 'assetsType',
@@ -191,6 +193,7 @@
         };
         $.table.init(options);
     }
+
 
 </script>
 </body>
