@@ -44,12 +44,20 @@ public interface IAssetsAccountingService {
     public int updateAssets(Assets assets);
 
     /**
-     * 根据分页条件查询资产列表
+     * 根据分页条件查询资产列表（全部）
      *
      * @param assets
      * @return
      */
     public List<Assets> getAssetsList(Assets assets);
+
+    /**
+     * 根据分页条件查询资产列表（状态为正常的资产）
+     *
+     * @param assets
+     * @return
+     */
+    public List<Assets> getAssetsList0(Assets assets);
 
     /**
      * 根据assetsId查找资产

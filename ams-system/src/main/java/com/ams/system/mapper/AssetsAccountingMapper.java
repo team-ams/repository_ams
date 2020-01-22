@@ -43,6 +43,15 @@ public interface AssetsAccountingMapper {
      */
     public List<Assets> getAssetsList(Assets assets);
 
+
+    /**
+     * 根据分页信息查询资产信息（状态为正常的资产）
+     *
+     * @param assets
+     * @return
+     */
+    public List<Assets> getAssetsList0(Assets assets);
+
     /**
      * 检查资产编号是否唯一
      *

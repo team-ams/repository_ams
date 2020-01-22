@@ -2,6 +2,7 @@ package com.ams.system.service.impl;
 
 import com.ams.common.constant.AssetsConstants;
 import com.ams.common.core.text.Convert;
+import com.ams.common.enums.AssetsStutus;
 import com.ams.common.exception.BusinessException;
 import com.ams.common.utils.StringUtils;
 import com.ams.system.domain.Assets;
@@ -93,7 +94,20 @@ public class AssetsAccountingServiceImpl implements IAssetsAccountingService {
 
     @Override
     public List<Assets> getAssetsList(Assets assets) {
-        return assetsAccountingMapper.getAssetsList(assets);
+        List<Assets> assetsList = assetsAccountingMapper.getAssetsList(assets);
+        for (Assets item :assetsList) {
+            item.setUseStatus(AssetsStutus.getStatusByCode(item.getUseStatus()).getInfo());
+        }
+        return assetsList;
+    }
+
+    @Override
+    public List<Assets> getAssetsList0(Assets assets) {
+        List<Assets> assetsList0 = assetsAccountingMapper.getAssetsList0(assets);
+        for (Assets item :assetsList0) {
+            item.setUseStatus(AssetsStutus.getStatusByCode(item.getUseStatus()).getInfo());
+        }
+        return assetsList0;
     }
 
     @Override

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ams.system.mapper.AssetsAllocateMapper">
+
+    <resultMap type="com.ams.system.domain.AssetsAllocate" id="AssetsAllocateResult">
+        <id property="allocateId" column="allocate_id"/>
+        <result property="assetsNumber" column="assets_number"/>
+        <result property="userId" column="user_id"/>
+        <result property="auditorId" column="auditor_id"/>
+        <result property="remark" column="remark"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectAssetsAllocateVo">
+        select a.allocate_id,
+               a.assets_number,
+               a.user_id,
+               a.auditor_id,
+               a.remark,
+               a.create_time,
+               a.update_time
+        from assets_allocate a
+    </sql>
+
+    <insert id="insert" parameterType="com.ams.system.domain.AssetsAllocate" useGeneratedKeys="true" keyProperty="allocate_id">
+        insert into assets_accounting(
+        <if test="assetsNumber != null and assetsNumber != ''">assets_number,</if>
+        <if test="userId != null and userId != ''">user_id,</if>
+        <if test="auditorId != null and auditorId!= ''">auditor_id,</if>
+        <if test="remark != null and remark!= ''">remark,</if>
+        create_time
+        )values(
+        <if test="assetsNumber != null and assetsNumber != ''">#{assetsNumber},</if>
+        <if test="userId != null and userId != ''">#{userId},</if>
+        <if test="auditorId != null and auditorId!= ''">#{auditorId},</if>
+        <if test="remark != null and remark!= ''">#{remark},</if>
+        sysdate()
+        )
+    </insert>
+
+</mapper> 

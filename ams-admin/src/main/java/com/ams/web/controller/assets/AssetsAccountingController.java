@@ -53,7 +53,7 @@ public class AssetsAccountingController extends BaseController
 
     @RequiresPermissions("assets:accounting:view")
     @GetMapping()
-    public String user()
+    public String assets()
     {
         return prefix + "/accounting";
     }

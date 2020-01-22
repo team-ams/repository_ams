@@ -407,6 +407,7 @@ insert into sys_role_menu values ('2', '1064');
 insert into sys_role_menu values ('2', '1065');
 insert into sys_role_menu values ('2', '1066');
 insert into sys_role_menu values ('2', '1067');
+insert into sys_role_menu values ('2', '1068');
 
 -- ----------------------------
 -- 8、角色和部门关联表  角色1-N部门
@@ -569,10 +570,11 @@ insert into sys_dict_data values(44,  10,  '工具、量具和器皿',       '9'
 insert into sys_dict_data values(45,  11,  '家具',       '10',       'assets_type',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '家具');
 insert into sys_dict_data values(46,  12,  '行政办公设备',     '11',       'assets_type',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '行政办公设备');
 insert into sys_dict_data values(47,  1,  '正常',       '0',       'assets_status',        '',   '',        'Y', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '正常状态');
-insert into sys_dict_data values(48,  2,  '停用',       '1',       'assets_status',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '停用状态');
-insert into sys_dict_data values(49,  3,  '已领用',     '2',       'assets_status',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '已领用状态');
-insert into sys_dict_data values(50,  4,  '已外借',       '3',       'assets_status',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '已借用状态');
-insert into sys_dict_data values(51,  5,  '维修中',     '4',       'assets_status',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '维修中状态');
+insert into sys_dict_data values(48,  2,  '待审核',       '1',       'assets_status',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '待审核状态');
+insert into sys_dict_data values(49,  3,  '已领用',       '1',       'assets_status',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '已领用状态');
+insert into sys_dict_data values(50,  4,  '已外借',     '2',       'assets_status',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '已借用状态');
+insert into sys_dict_data values(51,  5,  '维修中',       '3',       'assets_status',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '维修中状态');
+insert into sys_dict_data values(52,  6,  '停用',     '4',       'assets_status',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '停用状态');
 
 
 -- ----------------------------
@@ -759,6 +761,10 @@ create table gen_table_column (
   primary key (column_id)
 ) engine=innodb auto_increment=1 comment = '代码生成业务表字段';
 
+
+-- ----------------------------
+-- 21、资产信息表
+-- ----------------------------
 drop table if exists assets_accounting;
 create table assets_accounting(
     assets_id        int              not null auto_increment     comment '资产ID',
@@ -774,7 +780,7 @@ create table assets_accounting(
     custodian               varchar(10)         default ''          comment '保管人',
     user                    varchar(10)         default ''          comment '使用人',
     storage_addr            varchar(20)         default ''          comment '存放地点',
-    use_status              varchar(10)         default '正常'      comment '使用情况(0：正常 1：已领用 2：已外借 3：维修中 4：停用)',
+    use_status              char(1)             default '0'         comment '使用情况(0：正常 1：已领用 2：已外借 3：维修中 4：停用)',
     assets_source           varchar(10)         default '购置'      comment '资产来源(0：购置  1：赠送  3：未知)',
     useful_life             varchar(5)          default ''          comment '使用年限',
     residual_rate           float               default 0.0         comment '残值率',
@@ -795,6 +801,19 @@ create table assets_accounting(
     unique key (assets_number)
 )engine = innodb default charset utf8 comment '资产导入表';
 
+-- ----------------------------
+-- 初始化-资产信息
+-- ----------------------------
+INSERT INTO assets_accounting VALUES (1, 'a9b7e8', '电脑', '低值资产', '办公家具', 1, '台', 5400, '新奥燃气', '行政部', '', '', '前台', '0', '购置', '5', 0.03, '1', '', '启天M7150', '联想', '2019-05-25', '', '', '0', NULL, 'admin', '2020-01-21 09:46:58', '', '2020-01-21 09:46:58');
+INSERT INTO assets_accounting VALUES (2, 'c377d8', '彩色打印机', '低值资产', '办公家具', 1, '台', 8890, '新奥燃气', '行政部', '', '', '前台', '0', '购置', '5', 0.06, '1', '', 'CP1020', '惠普', '2019-05-26', '', '', '0', NULL, 'admin', '2020-01-21 09:46:58', '', '2020-01-21 09:46:58');
+INSERT INTO assets_accounting VALUES (3, 'e6f4d2', '传真机', '低值资产', '仪器仪表', 1, '台', 3000, '新奥燃气', '行政部', '', '', '前台', '0', '购置', '2', 0.04, '1', '', 'SF-560R', '三星', '2019-05-27', '', '', '0', NULL, 'admin', '2020-01-21 09:46:58', '', '2020-01-21 09:47:17');
+INSERT INTO assets_accounting VALUES (4, '38d87b', '打印机', '低值资产', '仪器仪表', 1, '台', 1000.5, '新奥燃气', '行政部', '', '', '前台', '0', '购置', '3', 0.12, '1', '', 'S2520', 'FUJI', '2019-05-28', '2014-01-29', '', '0', NULL, 'admin', '2020-01-21 09:46:58', '', '2020-01-21 09:47:52');
+INSERT INTO assets_accounting VALUES (5, '5e6a1b', '电视机', '低值资产', '仪器仪表', 1, '台', 5800, '新奥燃气', '行政部', '', '', '档案室门口', '0', '赠送', '5', 0.22, '0', '', '', 'KONKA', '2019-05-29', '', '', '0', NULL, 'admin', '2020-01-21 09:46:58', '', '2020-01-21 16:48:18');
+INSERT INTO assets_accounting VALUES (6, 'oodsaf23', '打印机', '低值资产', '行政办公设备', 1, '台', 1345.5, '计算机学院', '物联', '', '', '前台', '1', '购置', '', 0, '0', '', '', '', '', '', '', '0', NULL, 'admin', '2020-01-21 09:57:24', '', '2020-01-22 10:27:47');
+
+-- ----------------------------
+-- 22、资产来源表
+-- ----------------------------
 drop table if exists assets_source;
 create table assets_source(
 
@@ -810,10 +829,16 @@ create table assets_source(
     primary key (source_id)
 )engine = innodb default charset utf8 comment '资产来源信息表';
 
+-- ----------------------------
+-- 初始化-资产来源信息
+-- ----------------------------
 insert into assets_source values (1,'购置',1,'0','admin','2020-01-14 11:50:06','zc','2020-01-14 11:50:08','');
 insert into assets_source values (2,'赠送',2,'0','admin','2020-01-14 11:50:06','zc','2020-01-14 11:50:08','');
 
 
+-- ----------------------------
+-- 23、资产领用表
+-- ----------------------------
 drop table if exists assets_allocate;
 create table assets_allocate(
     allocate_id           int               not null auto_increment         comment '资产领用ID',
@@ -826,7 +851,9 @@ create table assets_allocate(
     primary key (allocate_id)
 
 )engine = innodb default charset utf8 comment '资产领用表';
-
+-- ----------------------------
+-- 初始化-资产领用信息
+-- ----------------------------
 insert into assets_allocate values (1,'a9b7e8',2,1,'资产分配','2020-01-14 11:50:06','2020-01-14 11:50:08');
 insert into assets_allocate values (2,'e6f4d2',3,1,'资产分配','2020-01-14 11:50:06','2020-01-14 11:50:08');
 
