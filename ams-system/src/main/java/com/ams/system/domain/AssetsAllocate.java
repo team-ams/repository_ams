@@ -1,6 +1,7 @@
 package com.ams.system.domain;
 
 import com.ams.common.core.domain.BaseEntity;
+import com.ams.common.enums.AssetsAllocateStatus;
 import lombok.Data;
 
 /**
@@ -25,5 +26,24 @@ public class AssetsAllocate extends BaseEntity {
      * 审批者ID
      */
     private int auditorId;
+    /**
+     * 资产领用状态（0：审核中，1：审核通过，2：驳回）
+     */
+    private String status;
+    /**
+     * 资产详情
+     */
+    private Assets assets;
+    /**
+     * 申请人详情
+     */
+    private SysUser user;
+    /**
+     * 审核人详情
+     */
+    private SysUser auditor;
 
+    public static String getExamineStatusInfo(String examineStatusNumber) {
+        return AssetsAllocateStatus.AGREE.getCode().equals(examineStatusNumber) ? "已同意" : "已驳回";
+    }
 }

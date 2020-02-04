@@ -2,7 +2,7 @@ package com.ams.system.service.impl;
 
 import com.ams.common.constant.AssetsConstants;
 import com.ams.common.core.text.Convert;
-import com.ams.common.enums.AssetsStutus;
+import com.ams.common.enums.AssetsStatus;
 import com.ams.common.exception.BusinessException;
 import com.ams.common.utils.StringUtils;
 import com.ams.system.domain.Assets;
@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -49,7 +50,7 @@ public class AssetsAccountingServiceImpl implements IAssetsAccountingService {
         StringBuilder failureMsg = new StringBuilder();
         for (Assets assets : assetsList) {
             try {
-                // 验证是否存在这个用户
+                // 验证是否存在这个资产
                 Assets a = assetsAccountingMapper.getAssetsByAssetsNumber(assets.getAssetsNumber());
                 if (StringUtils.isNull(a)) {
                     assets.setCreateBy(operName);
@@ -58,7 +59,9 @@ public class AssetsAccountingServiceImpl implements IAssetsAccountingService {
                     successMsg.append("<br/>" + successNum + "、资产 " + assets.getAssetsNumber() + " 导入成功");
                 } else if (isUpdateSupport) {
                     assets.setUpdateBy(operName);
-                    this.updateAssets(assets);
+                    List<Assets> updateList = new ArrayList<>();
+                    updateList.add(assets);
+                    this.updateAssetsLists(updateList);
                     successNum++;
                     successMsg.append("<br/>" + successNum + "、资产 " + assets.getAssetsNumber() + " 更新成功");
                 } else {
@@ -87,16 +90,23 @@ public class AssetsAccountingServiceImpl implements IAssetsAccountingService {
         return rows;
     }
 
+    /**
+     * 批量更新资产信息（可单条）
+     *
+     * @param assetsList
+     * @return
+     */
     @Override
-    public int updateAssets(Assets assets) {
-        return assetsAccountingMapper.updateAssets(assets);
+    public int updateAssetsLists(List<Assets> assetsList) {
+        return assetsAccountingMapper.updateAssetsList(assetsList);
     }
+
 
     @Override
     public List<Assets> getAssetsList(Assets assets) {
         List<Assets> assetsList = assetsAccountingMapper.getAssetsList(assets);
-        for (Assets item :assetsList) {
-            item.setUseStatus(AssetsStutus.getStatusByCode(item.getUseStatus()).getInfo());
+        for (Assets item : assetsList) {
+            item.setUseStatus(AssetsStatus.getStatusByCode(item.getUseStatus()).getInfo());
         }
         return assetsList;
     }
@@ -104,15 +114,26 @@ public class AssetsAccountingServiceImpl implements IAssetsAccountingService {
     @Override
     public List<Assets> getAssetsList0(Assets assets) {
         List<Assets> assetsList0 = assetsAccountingMapper.getAssetsList0(assets);
-        for (Assets item :assetsList0) {
-            item.setUseStatus(AssetsStutus.getStatusByCode(item.getUseStatus()).getInfo());
+        for (Assets item : assetsList0) {
+            item.setUseStatus(AssetsStatus.getStatusByCode(item.getUseStatus()).getInfo());
         }
         return assetsList0;
     }
 
+    /**
+     * 根据资产编号查找资产信息（可批量查询）
+     *
+     * @param assetsNumbers
+     * @return
+     */
+    @Override
+    public List<Assets> getAssetsByNumbers(String[] assetsNumbers) {
+        return assetsAccountingMapper.getAssetsByNumbers(assetsNumbers);
+    }
+
     @Override
     public Assets getAssetsByNumber(String assetsNumber) {
-        return assetsAccountingMapper.getAssetsByNumber(assetsNumber);
+        return assetsAccountingMapper.getAssetsByAssetsNumber(assetsNumber);
     }
 
     /**
@@ -127,4 +148,14 @@ public class AssetsAccountingServiceImpl implements IAssetsAccountingService {
         String[] assetsNumbers = Convert.toStrArray(numbers);
         return assetsAccountingMapper.deleteAssetsByNumbers(assetsNumbers);
     }
+
+    @Override
+    public List<Assets> getAssetsByNumberList(List<String> assetsNumbers) {
+        List<Assets> assetsList = assetsAccountingMapper.getAssetsByNumberList(assetsNumbers);
+        for (Assets assets : assetsList) {
+            assets.setUseStatus(AssetsStatus.getStatusByCode(assets.getUseStatus()).getInfo());
+        }
+        return assetsList;
+    }
+
 }

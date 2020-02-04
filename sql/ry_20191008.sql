@@ -176,9 +176,9 @@ insert into sys_menu values('114',  '代码生成', '3', '2', '/tool/gen',      
 insert into sys_menu values('115',  '系统接口', '3', '3', '/tool/swagger',         '', 'C', '0', 'tool:swagger:view',        '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '系统接口菜单');
 
 insert into sys_menu values('116',  '入账管理', '4', '1', '/assets/accounting',                      '', 'C', '0', 'assets:accounting:view',         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '入账管理菜单');
-insert into sys_menu values('117',  '领用管理', '4', '2', '/assets/allocate',                      '', 'C', '0', 'system:role:view',         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '领用管理菜单');
-insert into sys_menu values('118',  '借出管理', '4', '3', '',                      '', 'C', '0', 'system:menu:view',         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '借出管理菜单');
-insert into sys_menu values('119',  '归还管理', '4', '4', '',                      '', 'C', '0', 'system:dept:view',         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '归还管理菜单');
+insert into sys_menu values('117',  '领用管理', '4', '2', '/assets/allocate',                      '', 'C', '1', 'assets:allocate:view',         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '领用管理菜单');
+insert into sys_menu values('118',  '借出管理', '4', '3', '',                      '', 'C', '1', 'system:menu:view',         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '借出管理菜单');
+insert into sys_menu values('119',  '归还管理', '4', '4', '',                      '', 'C', '1', 'system:dept:view',         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '归还管理菜单');
 insert into sys_menu values('120',  '转移管理', '4', '5', '',                      '', 'C', '0', 'system:post:view',         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '转移管理菜单');
 insert into sys_menu values('121',  '保修管理', '4', '6', '',                      '', 'C', '0', 'system:dict:view',         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '保修管理菜单');
 insert into sys_menu values('122',  '报废管理', '4', '7', '',                      '', 'C', '0', 'system:config:view',       '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '报废管理菜单');
@@ -331,12 +331,6 @@ insert into sys_role_menu values ('2', '115');
 insert into sys_role_menu values ('2', '117');
 insert into sys_role_menu values ('2', '118');
 insert into sys_role_menu values ('2', '119');
-insert into sys_role_menu values ('2', '120');
-insert into sys_role_menu values ('2', '121');
-insert into sys_role_menu values ('2', '122');
-insert into sys_role_menu values ('2', '123');
-insert into sys_role_menu values ('2', '124');
-insert into sys_role_menu values ('2', '125');
 insert into sys_role_menu values ('2', '500');
 insert into sys_role_menu values ('2', '501');
 insert into sys_role_menu values ('2', '1000');
@@ -401,13 +395,8 @@ insert into sys_role_menu values ('2', '1058');
 insert into sys_role_menu values ('2', '1059');
 insert into sys_role_menu values ('2', '1060');
 insert into sys_role_menu values ('2', '1061');
-insert into sys_role_menu values ('2', '1062');
-insert into sys_role_menu values ('2', '1063');
-insert into sys_role_menu values ('2', '1064');
-insert into sys_role_menu values ('2', '1065');
-insert into sys_role_menu values ('2', '1066');
-insert into sys_role_menu values ('2', '1067');
 insert into sys_role_menu values ('2', '1068');
+
 
 -- ----------------------------
 -- 8、角色和部门关联表  角色1-N部门
@@ -780,7 +769,7 @@ create table assets_accounting(
     custodian               varchar(10)         default ''          comment '保管人',
     user                    varchar(10)         default ''          comment '使用人',
     storage_addr            varchar(20)         default ''          comment '存放地点',
-    use_status              char(1)             default '0'         comment '使用情况(0：正常 1：已领用 2：已外借 3：维修中 4：停用)',
+    use_status              char(1)             default '0'         comment '使用情况(0：正常 1：审核中  2：已领用 3：已外借 4：维修中 5：停用)',
     assets_source           varchar(10)         default '购置'      comment '资产来源(0：购置  1：赠送  3：未知)',
     useful_life             varchar(5)          default ''          comment '使用年限',
     residual_rate           float               default 0.0         comment '残值率',
@@ -804,11 +793,11 @@ create table assets_accounting(
 -- ----------------------------
 -- 初始化-资产信息
 -- ----------------------------
-INSERT INTO assets_accounting VALUES (1, 'a9b7e8', '电脑', '低值资产', '办公家具', 1, '台', 5400, '新奥燃气', '行政部', '', '', '前台', '0', '购置', '5', 0.03, '1', '', '启天M7150', '联想', '2019-05-25', '', '', '0', NULL, 'admin', '2020-01-21 09:46:58', '', '2020-01-21 09:46:58');
-INSERT INTO assets_accounting VALUES (2, 'c377d8', '彩色打印机', '低值资产', '办公家具', 1, '台', 8890, '新奥燃气', '行政部', '', '', '前台', '0', '购置', '5', 0.06, '1', '', 'CP1020', '惠普', '2019-05-26', '', '', '0', NULL, 'admin', '2020-01-21 09:46:58', '', '2020-01-21 09:46:58');
-INSERT INTO assets_accounting VALUES (3, 'e6f4d2', '传真机', '低值资产', '仪器仪表', 1, '台', 3000, '新奥燃气', '行政部', '', '', '前台', '0', '购置', '2', 0.04, '1', '', 'SF-560R', '三星', '2019-05-27', '', '', '0', NULL, 'admin', '2020-01-21 09:46:58', '', '2020-01-21 09:47:17');
+INSERT INTO assets_accounting VALUES (1, 'a9b7e8', '电脑', '低值资产', '办公家具', 1, '台', 5400, '新奥燃气', '行政部', '', '', '前台', '1', '购置', '5', 0.03, '1', '', '启天M7150', '联想', '2019-05-25', '', '', '0', NULL, 'admin', '2020-01-21 09:46:58', '', '2020-01-21 09:46:58');
+INSERT INTO assets_accounting VALUES (2, 'c377d8', '彩色打印机', '低值资产', '办公家具', 1, '台', 8890, '新奥燃气', '行政部', '', '', '前台', '1', '购置', '5', 0.06, '1', '', 'CP1020', '惠普', '2019-05-26', '', '', '0', NULL, 'admin', '2020-01-21 09:46:58', '', '2020-01-21 09:46:58');
+INSERT INTO assets_accounting VALUES (3, 'e6f4d2', '传真机', '低值资产', '仪器仪表', 1, '台', 3000, '新奥燃气', '行政部', '', '', '前台', '1', '购置', '2', 0.04, '1', '', 'SF-560R', '三星', '2019-05-27', '', '', '0', NULL, 'admin', '2020-01-21 09:46:58', '', '2020-01-21 09:47:17');
 INSERT INTO assets_accounting VALUES (4, '38d87b', '打印机', '低值资产', '仪器仪表', 1, '台', 1000.5, '新奥燃气', '行政部', '', '', '前台', '0', '购置', '3', 0.12, '1', '', 'S2520', 'FUJI', '2019-05-28', '2014-01-29', '', '0', NULL, 'admin', '2020-01-21 09:46:58', '', '2020-01-21 09:47:52');
-INSERT INTO assets_accounting VALUES (5, '5e6a1b', '电视机', '低值资产', '仪器仪表', 1, '台', 5800, '新奥燃气', '行政部', '', '', '档案室门口', '0', '赠送', '5', 0.22, '0', '', '', 'KONKA', '2019-05-29', '', '', '0', NULL, 'admin', '2020-01-21 09:46:58', '', '2020-01-21 16:48:18');
+INSERT INTO assets_accounting VALUES (5, '5e6a1b', '电视机', '低值资产', '仪器仪表', 1, '台', 5800, '新奥燃气', '行政部', '', '', '档案室门口', '1', '赠送', '5', 0.22, '0', '', '', 'KONKA', '2019-05-29', '', '', '0', NULL, 'admin', '2020-01-21 09:46:58', '', '2020-01-21 16:48:18');
 INSERT INTO assets_accounting VALUES (6, 'oodsaf23', '打印机', '低值资产', '行政办公设备', 1, '台', 1345.5, '计算机学院', '物联', '', '', '前台', '1', '购置', '', 0, '0', '', '', '', '', '', '', '0', NULL, 'admin', '2020-01-21 09:57:24', '', '2020-01-22 10:27:47');
 
 -- ----------------------------
@@ -824,7 +813,7 @@ create table assets_source(
     create_by           varchar(64)         default ''                  comment '创建者',
     create_time         timestamp           not null default current_timestamp      comment '创建时间',
     update_by           varchar(64)         default ''                  comment '更新者',
-    update_time         timestamp           not null default current_timestamp      comment '更新时间',
+    update_time         timestamp           not null default current_timestamp  on update current_timestamp   comment '更新时间',
     remark              text                                            comment '备注',
     primary key (source_id)
 )engine = innodb default charset utf8 comment '资产来源信息表';
@@ -844,17 +833,19 @@ create table assets_allocate(
     allocate_id           int               not null auto_increment         comment '资产领用ID',
     assets_number         varchar(15)       not null default ''             comment '资产编号',
     user_id               int               not null default 0              comment '用户ID',
-    auditor_id           int               not null default 0              comment '审批者ID',
+    auditor_id            int               not null default 0              comment '审批者ID',
+    status                char(1)               not null default 0              comment '资产领用状态（0：审核中，1：审核通过，2：驳回）',
     remark                text                                              comment '备注',
     create_time           timestamp         not null default current_timestamp      comment '创建时间',
-    update_time           timestamp         not null default current_timestamp      comment '更新时间',
+    update_time           timestamp         not null default current_timestamp on update current_timestamp   comment '更新时间',
     primary key (allocate_id)
 
 )engine = innodb default charset utf8 comment '资产领用表';
 -- ----------------------------
 -- 初始化-资产领用信息
 -- ----------------------------
-insert into assets_allocate values (1,'a9b7e8',2,1,'资产分配','2020-01-14 11:50:06','2020-01-14 11:50:08');
-insert into assets_allocate values (2,'e6f4d2',3,1,'资产分配','2020-01-14 11:50:06','2020-01-14 11:50:08');
-
+insert into assets_allocate values (1,'a9b7e8',2,0,0,'资产分配','2020-01-14 11:50:06','2020-01-14 11:50:08');
+insert into assets_allocate values (2,'e6f4d2',3,0,0,'资产分配','2020-01-14 11:50:06','2020-01-14 11:50:08');
+insert into assets_allocate values (3,'c377d8',2,0,0,'资产分配','2020-01-14 11:50:06','2020-01-14 11:50:08');
+insert into assets_allocate values (4,'5e6a1b',2,0,0,'资产分配','2020-01-14 11:50:06','2020-01-14 11:50:08');
 

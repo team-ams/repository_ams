@@ -2,11 +2,68 @@ package com.ams.system.service;
 
 import com.ams.system.domain.AssetsAllocate;
 
+import java.util.List;
+
 /**
  * @author zengchao
  * @since 创建时间：2020/1/22 17:37
  */
 public interface IAssetsAllocateService {
 
+    /**
+     * 新增资产领用
+     *
+     * @param allocate
+     * @return
+     */
     int insertAllocate(AssetsAllocate allocate);
+
+    /**
+     * 批量增加资产领用记录
+     *
+     * @param allocateList
+     * @return
+     */
+    int insertAllocateByList(List<AssetsAllocate> allocateList);
+
+    /**
+     * 资产待审批记录 管理员
+     *
+     * @return
+     */
+    List<AssetsAllocate> getAllocateAdminList();
+
+    /**
+     * 查询管理员资产审批记录
+     *
+     * @return
+     */
+    List<AssetsAllocate> getMyAllocateExamineList();
+
+    /**
+     * 根据userId查询  “我的资产领用"  信息
+     *
+     * @param userId
+     * @return
+     */
+    List<AssetsAllocate> getMyAllocateListByUserId(int userId);
+
+    /**
+     * 根据用户和资产编号查询状态为审核中的资产领用
+     *
+     * @param assetsNumber
+     * @param allocateUserId
+     * @return
+     */
+    AssetsAllocate getAssetsAllocateBy(String assetsNumber, int allocateUserId);
+
+
+    /**
+     * 更新资产领用
+     *
+     * @param assetsAllocate
+     * @return
+     */
+    int updateAssetsAllocate(AssetsAllocate assetsAllocate);
+
 }

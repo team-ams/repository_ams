@@ -1,9 +1,6 @@
 package com.ams.common.enums;
 
-/**
- * @author zengchao
- */
-public enum AssetsStutus {
+public enum AssetsStatus {
     /**
      * 正常状态
      */
@@ -11,12 +8,11 @@ public enum AssetsStutus {
     /**
      * 待审核状态
      */
-    TOAPPROVAL("1", "待审核"),
+    TOAPPROVAL("1", "审核中"),
     /**
      * 已领用状态
      */
     ALLOCATE("2", "已领用"),
-
     /**
      * 已外借状态
      */
@@ -28,17 +24,21 @@ public enum AssetsStutus {
     /**
      * 停用状态
      */
-    DISABLE("5", "停用");
+    DISABLE("5", "停用"),
+    /**
+     * 未知状态
+     */
+    UNKNOW("-1","未知");
 
     private final String code;
     private final String info;
 
-    AssetsStutus(String code, String info) {
+    AssetsStatus(String code, String info) {
         this.code = code;
         this.info = info;
     }
 
-    public static AssetsStutus getStatusByCode(String code) {
+    public static AssetsStatus getStatusByCode(String code) {
         switch (code) {
             case "0":
                 return NORMAL;
@@ -53,7 +53,7 @@ public enum AssetsStutus {
             case "5":
                 return DISABLE;
             default:
-                return NORMAL;
+                return UNKNOW;
         }
     }
 

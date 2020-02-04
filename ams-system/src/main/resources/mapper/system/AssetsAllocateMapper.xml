@@ -6,39 +6,216 @@
 
     <resultMap type="com.ams.system.domain.AssetsAllocate" id="AssetsAllocateResult">
         <id property="allocateId" column="allocate_id"/>
-        <result property="assetsNumber" column="assets_number"/>
-        <result property="userId" column="user_id"/>
+        <result property="assetsNumber" column="allocate_assets_number"/>
+        <result property="userId" column="allocate_user_id"/>
         <result property="auditorId" column="auditor_id"/>
+        <result property="status" column="allocate_status"/>
         <result property="remark" column="remark"/>
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
+        <association property="assets" column="allocate_assets_number" javaType="com.ams.system.domain.Assets"
+                     resultMap="AssetsResult"/>
+        <association property="user" column="allocate_user_id" javaType="com.ams.system.domain.SysUser"
+                     resultMap="SysUserResult"/>
+        <association property="auditor" column="auditor_id" javaType="com.ams.system.domain.SysUser"
+                     resultMap="AuditorResult"/>
     </resultMap>
+
+    <resultMap type="com.ams.system.domain.Assets" id="AssetsResult">
+        <id property="assetsId" column="assets_id"/>
+        <result property="assetsNumber" column="assets_number"/>
+        <result property="assetsName" column="assets_name"/>
+        <result property="assetsNature" column="assets_nature"/>
+        <result property="assetsType" column="assets_type"/>
+        <result property="assetsAmount" column="assets_amount"/>
+        <result property="measuringUnit" column="measuring_unit"/>
+        <result property="assetsPrice" column="assets_price"/>
+        <result property="storageUnit" column="storage_unit"/>
+        <result property="storageDepartment" column="storage_department"/>
+        <result property="custodian" column="custodian"/>
+        <result property="user" column="user"/>
+        <result property="storageAddr" column="storage_addr"/>
+        <result property="useStatus" column="use_status"/>
+        <result property="assetsSource" column="assets_source"/>
+        <result property="usefulLife" column="useful_life"/>
+        <result property="residualRate" column="residual_rate"/>
+        <result property="checkStatus" column="check_status"/>
+        <result property="assetsFormat" column="assets_format"/>
+        <result property="assetsModel" column="assets_model"/>
+        <result property="assetsBrand" column="assets_brand"/>
+        <result property="purchaseDate" column="purchase_date"/>
+        <result property="manufactureDate" column="manufacture_date"/>
+        <result property="warrantyDate" column="warranty_date"/>
+        <result property="delFlag" column="assets_del_flag"/>
+        <result property="mark" column="mark"/>
+        <result property="createTime" column="assets_create_time"/>
+        <result property="updateTime" column="assets_update_time"/>
+    </resultMap>
+
+    <resultMap type="com.ams.system.domain.SysUser" id="SysUserResult">
+        <id property="userId" column="user_id"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="loginName" column="login_name"/>
+        <result property="userName" column="user_name"/>
+        <result property="email" column="email"/>
+        <result property="phonenumber" column="phonenumber"/>
+        <result property="sex" column="sex"/>
+        <result property="avatar" column="avatar"/>
+        <result property="password" column="password"/>
+        <result property="salt" column="salt"/>
+        <result property="status" column="status"/>
+        <result property="delFlag" column="user_del_flag"/>
+        <result property="loginIp" column="login_ip"/>
+        <result property="loginDate" column="login_date"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="user_create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="user_remark"/>
+    </resultMap>
+
+    <resultMap type="com.ams.system.domain.SysUser" id="AuditorResult">
+        <id property="userId" column="u2_user_id"/>
+        <result property="loginName" column="u2_login_name"/>
+        <result property="userName" column="u2_user_name"/>
+        <result property="remark" column="u2_remark"/>
+    </resultMap>
+
 
     <sql id="selectAssetsAllocateVo">
         select a.allocate_id,
-               a.assets_number,
-               a.user_id,
+               a.assets_number as allocate_assets_number,
+               a.user_id as allocate_user_id,
                a.auditor_id,
                a.remark,
+               a.status as allocate_status,
                a.create_time,
-               a.update_time
+               a.update_time,
+
+               b.assets_id,
+               b.assets_number,
+               b.assets_name,
+               b.assets_nature,
+               b.assets_type,
+               b.assets_amount,
+               b.measuring_unit,
+               b.assets_price,
+               b.storage_unit,
+               b.storage_department,
+               b.custodian,
+               b.user,
+               b.storage_addr,
+               b.use_status,
+               b.assets_source,
+               b.useful_life,
+               b.residual_rate,
+               b.check_status,
+               b.assets_format,
+               b.assets_model,
+               b.assets_brand,
+               b.purchase_date,
+               b.manufacture_date,
+               b.warranty_date,
+               b.del_flag as assets_del_flag,
+               b.create_time as assets_create_time,
+               b.update_time as assets_update_time,
+
+               u.user_id,
+               u.dept_id,
+               u.login_name,
+               u.user_name,
+               u.email,
+               u.avatar,
+               u.phonenumber,
+               u.sex,
+               u.password,
+               u.salt,
+               u.status,
+               u.del_flag as user_del_flag,
+               u.login_ip,
+               u.login_date,
+               u.create_time as user_create_time,
+               u.remark as user_remark,
+
+               u2.user_id as u2_user_id,
+               u2.login_name as u2_login_name,
+               u2.user_name as u2_user_name,
+               u2.remark as u2_remark
         from assets_allocate a
+            left join assets_accounting b on a.assets_number = b.assets_number
+            left join sys_user u on a.user_id =  u.user_id
+            left join sys_user u2 on a.auditor_id = u2.user_id and u2.del_flag = 0
     </sql>
 
-    <insert id="insert" parameterType="com.ams.system.domain.AssetsAllocate" useGeneratedKeys="true" keyProperty="allocate_id">
-        insert into assets_accounting(
+    <insert id="insert" parameterType="com.ams.system.domain.AssetsAllocate" useGeneratedKeys="true"
+            keyProperty="allocate_id">
+        insert into assets_allocate(
         <if test="assetsNumber != null and assetsNumber != ''">assets_number,</if>
-        <if test="userId != null and userId != ''">user_id,</if>
-        <if test="auditorId != null and auditorId!= ''">auditor_id,</if>
+        <if test="userId != null">user_id,</if>
+        <if test="auditorId != null">auditor_id,</if>
+        <if test="status != null and status!= ''">status,</if>
         <if test="remark != null and remark!= ''">remark,</if>
         create_time
         )values(
         <if test="assetsNumber != null and assetsNumber != ''">#{assetsNumber},</if>
-        <if test="userId != null and userId != ''">#{userId},</if>
-        <if test="auditorId != null and auditorId!= ''">#{auditorId},</if>
+        <if test="userId != null">#{userId},</if>
+        <if test="auditorId != null">auditor_id,</if>
+        <if test="status != null and status!= ''">#{status},</if>
         <if test="remark != null and remark!= ''">#{remark},</if>
         sysdate()
         )
     </insert>
 
+    <insert id="insertByList" parameterType="com.ams.system.domain.AssetsAllocate" useGeneratedKeys="true"
+            keyProperty="allocate_id">
+        <foreach collection="list" item="item" separator=";">
+            insert into assets_allocate(
+            <if test="item.assetsNumber != null and item.assetsNumber != ''">assets_number,</if>
+            <if test="item.userId != null">user_id,</if>
+            <if test="item.auditorId != null">auditor_id,</if>
+            <if test="item.status != null and item.status!= ''">status,</if>
+            <if test="item.remark != null and item.remark!= ''">remark,</if>
+            create_time
+            )values(
+            <if test="item.assetsNumber != null and item.assetsNumber != ''">#{item.assetsNumber},</if>
+            <if test="item.userId != null">#{item.userId},</if>
+            <if test="item.auditorId != null">#{item.auditorId},</if>
+            <if test="item.status != null and item.status!= ''">#{item.status},</if>
+            <if test="item.remark != null and item.remark!= ''">#{item.remark},</if>
+            sysdate()
+            )
+        </foreach>
+    </insert>
+
+    <select id="getAllocateAdminList" resultMap="AssetsAllocateResult">
+        <include refid="selectAssetsAllocateVo"/>
+        where a.status = 0
+    </select>
+
+    <select id="getMyAllocateExamineList" resultMap="AssetsAllocateResult">
+        <include refid="selectAssetsAllocateVo"/>
+        where a.auditor_id = 1 and a.status > 0
+    </select>
+
+    <select id="getAssetsAllocateBy" resultMap="AssetsAllocateResult">
+        <include refid="selectAssetsAllocateVo"/>
+        where a.assets_number = #{assetsNumber} and a.user_id = #{allocateUserId} and a.status = 0
+    </select>
+
+    <update id="updateAssetsAllocate" parameterType="com.ams.system.domain.AssetsAllocate">
+        update assets_allocate
+        <set>
+            <if test="assetsNumber != null and assetsNumber != ''">assets_number=#{assetsNumber},</if>
+            <if test="userId != null">user_id=#{userId},</if>
+            <if test="auditorId != null">auditor_id=#{auditorId},</if>
+            <if test="status != null and status != ''">status=#{status},</if>
+            update_time = sysdate()
+        </set>
+        where allocate_id = #{allocateId}
+    </update>
+
+    <select id="getMyAllocateListByUserId" parameterType="int" resultMap="AssetsAllocateResult">
+        <include refid="selectAssetsAllocateVo"/>
+        where a.user_id = #{userId}
+    </select>
 </mapper> 

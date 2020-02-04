@@ -1,6 +1,7 @@
 package com.ams.system.service;
 
 import com.ams.system.domain.Assets;
+import com.ams.system.domain.AssetsAllocate;
 
 import java.util.List;
 
@@ -38,10 +39,10 @@ public interface IAssetsAccountingService {
     /**
      * 更新资产信息
      *
-     * @param assets
+     * @param assetsList
      * @return
      */
-    public int updateAssets(Assets assets);
+    public int updateAssetsLists(List<Assets> assetsList);
 
     /**
      * 根据分页条件查询资产列表（全部）
@@ -60,12 +61,20 @@ public interface IAssetsAccountingService {
     public List<Assets> getAssetsList0(Assets assets);
 
     /**
-     * 根据assetsId查找资产
+     * 根据资产编号查找资产（可批量查询）
      *
-     * @param assetsId
+     * @param assetsNumbers
      * @return
      */
-    public Assets getAssetsByNumber(String assetsId);
+    public List<Assets> getAssetsByNumbers(String[] assetsNumbers);
+
+    /**
+     * 根据资产编号查找资产(单条）
+     *
+     * @param assetsNumber
+     * @return
+     */
+    Assets getAssetsByNumber(String assetsNumber);
 
     /**
      * 批量删除资产信息
@@ -76,4 +85,11 @@ public interface IAssetsAccountingService {
      */
     public int deleteAssetsByNumbers(String numbers) throws Exception;
 
+    /**
+     * 根据传入的资产编号（卡号）查找资产信息
+     *
+     * @param assetsNumbers
+     * @return
+     */
+    public List<Assets> getAssetsByNumberList(List<String> assetsNumbers);
 }

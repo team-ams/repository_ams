@@ -864,7 +864,7 @@ var table = {
                         $.operate.ajaxSuccess(result);
                     }
                 };
-                $.ajax(config)
+                $.ajax(config);
             },
             // post请求传输
             post: function (url, data, callback) {
@@ -928,17 +928,38 @@ var table = {
 
             },
 
+            //领用资产
             allocate: function (id) {
                 table.set();
-                $.modal.comfirm("确定领用该项" + table.options.modalName + "吗？", function () {
+                $.modal.confirm("确定提交该项" + table.options.modalName + "吗？", function () {
                     var url = $.common.isEmpty(id) ? table.options.allocateUrl : table.options.allocateUrl.replace("{id}", id);
                     if (table.options.type == table_type.bootstrapTreeTable) {
                         $.operate.get(url);
                     } else {
-                        var data = {"ids": id};
+                        var data = {"ids" : id};
                         $.operate.submit(url, "post", "json", data);
                     }
                 });
+            },
+            //审批资产领用信息 同意（管理员）
+            allocateExamineOK: function(assetsNumber,userId){
+                table.set();
+                $.modal.confirm("同意该项" + table.options.modalName + "？",function () {
+                    var url = $.common.isEmpty(assetsNumber) ? table.options.approveUrl : table.options.approveUrl.replace("{assetsNumber}",assetsNumber).replace("{userId}",userId);
+                    var data = {"assetsNumber" : assetsNumber,"userId" : userId};
+                    $.operate.submit(url,"post","json",data)
+                });
+
+            },
+            //审批资产领用信息 驳回（管理员）
+            allocateExamineReject: function(assetsNumber,userId){
+                table.set();
+                $.modal.confirm("驳回该项" + table.options.modalName + "？",function () {
+                    var url = $.common.isEmpty(assetsNumber) ? table.options.rejectUrl : table.options.rejectUrl.replace("{assetsNumber}",assetsNumber).replace("{userId}",userId);
+                    var data = {"assetsNumber" : assetsNumber,"userId" : userId};
+                    $.operate.submit(url,"post","json",data)
+                });
+
             },
 
             // 批量删除信息
@@ -983,6 +1004,18 @@ var table = {
             addUrl: function (id) {
                 var url = $.common.isEmpty(id) ? table.options.createUrl.replace("{id}", "") : table.options.createUrl.replace("{id}", id);
                 return url;
+            },
+            //我的领用，以tab页展示
+            myAllocateTab: function(id){
+                table.set();
+                var url = $.common.isEmpty(id) ? table.options.myAllocateUrl : table.options.myAllocateUrl.replace("{id}",id);
+                $.modal.openTab("我的" + table.options.modalName, url)
+            },
+            //我的审批， 以tab页展示
+            myAllocateExamineTab: function(id){
+                table.set();
+                var url = $.common.isEmpty(id) ? table.options.myAllocateExamineUrl : table.options.myAllocateExamineUrl.replace("{id}",id);
+                $.modal.openTab("我的" + table.options.modalName, url)
             },
             // 修改信息
             edit: function (id) {

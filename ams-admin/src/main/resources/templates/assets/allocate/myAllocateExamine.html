@@ -40,14 +40,8 @@
                 </form>
             </div>
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.myAllocateTab()">
-                    <i class="fa fa-user-md"></i> 我的领用
-                </a>
-                <a class="btn btn-success" onclick="selectUsersToParent()">
-                    <i class="fa fa-user-md"></i> 资产领用
-                </a>
-                <a class="btn btn-success">
-                    <i class="fa fa-user-md"></i> <p id="allocateNumber" th:utext="${content}"> </p>
+                <a class="btn btn-sm btn-danger" onclick="closeItem()">
+                    <i class="fa fa-reply-all"></i> 关闭
                 </a>
             </div>
             <div class="col-sm-12 select-table table-striped">
@@ -74,12 +68,10 @@
 
     function queryUserList() {
         var options = {
-            url: prefix + "/list",
-            allocateUrl:prefix+"/allocate/{id}",
-            myAllocateUrl:prefix+"/myAllocate",
+            url: prefix + "/myAllocateExamineList",
             sortName: "createTime",
             sortOrder: "desc",
-            modalName: "资产领用",
+            modalName: "我的资产审批记录",
             columns: [{
                 checkbox: true
             },
@@ -89,82 +81,47 @@
                     sortable: true
                 },
                 {
-                    field: 'assetsName',
+                    field: 'assets.assetsName',
                     title: '资产名称',
 
                 },
                 {
-                    field: 'assetsType',
+                    field: 'assets.assetsType',
                     title: '资产类别'
                 },
                 {
-                    field: 'assetsAmount',
-                    title: '数量'
+                    field: 'assets.assetsPrice',
+                    title: '单价'
                 },
                 {
-                    field: 'measuringUnit',
-                    title: '计量单位'
+                    field: 'assets.usefulLife',
+                    title: '使用年限'
                 },
-				{
-					field: 'assetsPrice',
-					title: '单价'
-				},
-				{
-					field: 'storageDepartment',
-					title: '保管部门'
-				},
-				{
-					field: 'storageAddr',
-					title: '存放地点'
-				},
-				{
-					field: 'useStatus',
-					title: '使用情况'
-				},
-				{
-					field: 'assetsSource',
-					title: '资产来源'
-				},
-				{
-					field: 'usefulLife',
-					title: '使用年限'
-				},
-				{
-					field: 'assetsModel',
-					title: '型号'
-				},
-				{
-					field: 'assetsBrand',
-					title: '品牌'
-				},
                 {
-                    field: 'purchaseDate',
-                    title: '购入日期',
-                    sortable: true
+                    field: 'assets.assetsModel',
+                    title: '型号'
+                },
+                {
+                    field: 'assets.assetsBrand',
+                    title: '品牌'
+                },
+                {
+                    field: 'user.userName',
+                    title: '申请人'
                 },
                 {
                     field: 'createTime',
-                    title: '创建时间',
-                    visible: false
+                    title: '申请时间',
+                    sortable: true
                 },
                 {
-                    title: '操作',
-                    align: 'center',
-                    formatter: function (value, row, index) {
-                        var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs ' + allocateFlag + '" href="javascript:void(0)" onclick="$.operate.allocate(\'' + row.assetsNumber + '\')"><i class="fa fa-edit"></i>领用</a> ');
-                        return actions.join('');
-                    }
+                    field: 'status',
+                    title: '审批结果'
                 }]
         };
         $.table.init(options);
     }
 
-
-    function selectUsersToParent(){
-        $.modal.open("选择资产", prefix + "/allocateParent/22");
-        setTimeout($.modal.close(),2000);
-    }
 
 </script>
 </body>

@@ -20,6 +20,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -102,19 +103,17 @@ public class AssetsAccountingController extends BaseController
     }
 
     /**
-     * 新增用户
+     * 新增资产
      */
     @GetMapping("/add")
     public String add(ModelMap mmap)
     {
-        mmap.put("roles", roleService.selectRoleAll());
-        mmap.put("posts", postService.selectPostAll());
         mmap.put("sources",sourceService.getAssetsSourceAll());
         return prefix + "/add";
     }
 
     /**
-     * 新增保存用户
+     * 新增保存资产
      */
     @RequiresPermissions("assets:accounting:add")
     @Log(title = "用户管理", businessType = BusinessType.INSERT)
@@ -150,37 +149,11 @@ public class AssetsAccountingController extends BaseController
     public AjaxResult editSave(@Validated Assets assets)
     {
         assets.setUpdateBy(ShiroUtils.getLoginName());
-        return toAjax(accountingService.updateAssets(assets));
+        List<Assets> updateList = new ArrayList<>();
+        updateList.add(assets);
+        return toAjax(accountingService.updateAssetsLists(updateList));
     }
 
-    @RequiresPermissions("assets:accounting:resetPwd")
-    @Log(title = "重置密码", businessType = BusinessType.UPDATE)
-    @GetMapping("/resetPwd/{userId}")
-    public String resetPwd(@PathVariable("userId") Long userId, ModelMap mmap)
-    {
-        mmap.put("user", userService.selectUserById(userId));
-        return prefix + "/resetPwd";
-    }
-
-    @RequiresPermissions("assets:accounting:resetPwd")
-    @Log(title = "重置密码", businessType = BusinessType.UPDATE)
-    @PostMapping("/resetPwd")
-    @ResponseBody
-    public AjaxResult resetPwdSave(SysUser user)
-    {
-        userService.checkUserAllowed(user);
-        user.setSalt(ShiroUtils.randomSalt());
-        user.setPassword(passwordService.encryptPassword(user.getLoginName(), user.getPassword(), user.getSalt()));
-        if (userService.resetUserPwd(user) > 0)
-        {
-            if (ShiroUtils.getUserId() == user.getUserId())
-            {
-                ShiroUtils.setSysUser(userService.selectUserById(user.getUserId()));
-            }
-            return success();
-        }
-        return error();
-    }
 
     @RequiresPermissions("assets:accounting:remove")
     @Log(title = "用户管理", businessType = BusinessType.DELETE)
@@ -198,46 +171,4 @@ public class AssetsAccountingController extends BaseController
         }
     }
 
-    /**
-     * 校验用户名
-     */
-    @PostMapping("/checkLoginNameUnique")
-    @ResponseBody
-    public String checkLoginNameUnique(SysUser user)
-    {
-        return userService.checkLoginNameUnique(user.getLoginName());
-    }
-
-    /**
-     * 校验手机号码
-     */
-    @PostMapping("/checkPhoneUnique")
-    @ResponseBody
-    public String checkPhoneUnique(SysUser user)
-    {
-        return userService.checkPhoneUnique(user);
-    }
-
-    /**
-     * 校验email邮箱
-     */
-    @PostMapping("/checkEmailUnique")
-    @ResponseBody
-    public String checkEmailUnique(SysUser user)
-    {
-        return userService.checkEmailUnique(user);
-    }
-
-    /**
-     * 用户状态修改
-     */
-    @Log(title = "用户管理", businessType = BusinessType.UPDATE)
-    @RequiresPermissions("assets:accounting:edit")
-    @PostMapping("/changeStatus")
-    @ResponseBody
-    public AjaxResult changeStatus(SysUser user)
-    {
-        userService.checkUserAllowed(user);
-        return toAjax(userService.changeStatus(user));
-    }
 }

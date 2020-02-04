@@ -136,38 +136,40 @@
     </insert>
 
 
-    <update id="updateAssets" parameterType="com.ams.system.domain.Assets">
-        update assets_accounting
-        <set>
-            <if test="assetsNumber != null and assetsNumber != ''">assets_number=#{assetsNumber},</if>
-            <if test="assetsName != null and assetsName!= ''">assets_name=#{assetsName},</if>
-            <if test="assetsNature != null and assetsNature != ''">assets_nature=#{assetsNature},</if>
-            <if test="assetsType != null and assetsType != ''">assets_type=#{assetsType},</if>
-            <if test="assetsAmount != null and assetsAmount != 0">assets_amount=#{assetsAmount},</if>
-            <if test="measuringUnit != null and measuringUnit != ''">measuring_unit=#{measuringUnit},</if>
-            <if test="assetsPrice != null and assetsPrice != ''">assets_price=#{assetsPrice},</if>
-            <if test="storageUnit != null and storageUnit != ''">storage_unit=#{storageUnit},</if>
-            <if test="storageDepartment != null and storageDepartment != ''">storage_department=#{storageDepartment},
-            </if>
-            <if test="custodian != null and custodian != ''">custodian=#{custodian},</if>
-            <if test="user != null and user != ''">user=#{user},</if>
-            <if test="storageAddr != null and storageAddr != ''">storage_addr=#{storageAddr},</if>
-            <if test="useStatus != null and useStatus != ''">use_status=#{useStatus},</if>
-            <if test="assetsSource != null and assetsSource != ''">assets_source=#{assetsSource},</if>
-            <if test="usefulLife != null and usefulLife != ''">useful_life=#{usefulLife},</if>
-            <if test="residualRate != null and residualRate != 0">residual_rate=#{residualRate},</if>
-            <if test="checkStatus != null and checkStatus != ''">check_status=#{checkStatus},</if>
-            <if test="assetsFormat != null and assetsFormat != ''">assets_format=#{assetsFormat},</if>
-            <if test="assetsModel != null and assetsModel != ''">assets_model=#{assetsModel},</if>
-            <if test="assetsBrand != null and assetsBrand != ''">assets_brand=#{assetsBrand},</if>
-            <if test="purchaseDate != null and purchaseDate != ''">purchase_date=#{purchaseDate},</if>
-            <if test="manufactureDate != null and manufactureDate != ''">manufacture_date=#{manufactureDate},</if>
-            <if test="warrantyDate != null and warrantyDate != ''">warranty_date=#{warrantyDate},</if>
-            <if test="delFlag != null and delFlag != ''">del_flag=#{delFlag},</if>
-            <if test="mark != null and mark != ''">mark=#{mark},</if>
-            update_time = sysdate()
-        </set>
-        where assets_id = #{assetsId}
+    <update id="updateAssetsList" parameterType="java.util.List">
+        <foreach collection="list" item="item" separator=";">
+            update assets_accounting
+            <set>
+                <if test="item.assetsNumber != null and item.assetsNumber != ''">assets_number=#{item.assetsNumber},</if>
+                <if test="item.assetsName != null and item.assetsName!= ''">assets_name=#{item.assetsName},</if>
+                <if test="item.assetsNature != null and item.assetsNature != ''">assets_nature=#{item.assetsNature},</if>
+                <if test="item.assetsType != null and item.assetsType != ''">assets_type=#{item.assetsType},</if>
+                <if test="item.assetsAmount != null and item.assetsAmount != 0">assets_amount=#{item.assetsAmount},</if>
+                <if test="item.measuringUnit != null and item.measuringUnit != ''">measuring_unit=#{item.measuringUnit},</if>
+                <if test="item.assetsPrice != null and item.assetsPrice != ''">assets_price=#{item.assetsPrice},</if>
+                <if test="item.storageUnit != null and item.storageUnit != ''">storage_unit=#{item.storageUnit},</if>
+                <if test="item.storageDepartment != null and item.storageDepartment != ''">storage_department=#{item.storageDepartment},
+                </if>
+                <if test="item.custodian != null and item.custodian != ''">custodian=#{item.custodian},</if>
+                <if test="item.user != null and item.user != ''">user=#{item.user},</if>
+                <if test="item.storageAddr != null and item.storageAddr != ''">storage_addr=#{item.storageAddr},</if>
+                <if test="item.useStatus != null and item.useStatus != ''">use_status=#{item.useStatus},</if>
+                <if test="item.assetsSource != null and item.assetsSource != ''">assets_source=#{item.assetsSource},</if>
+                <if test="item.usefulLife != null and item.usefulLife != ''">useful_life=#{item.usefulLife},</if>
+                <if test="item.residualRate != null and item.residualRate != 0">residual_rate=#{item.residualRate},</if>
+                <if test="item.checkStatus != null and item.checkStatus != ''">check_status=#{item.checkStatus},</if>
+                <if test="item.assetsFormat != null and item.assetsFormat != ''">assets_format=#{item.assetsFormat},</if>
+                <if test="item.assetsModel != null and item.assetsModel != ''">assets_model=#{item.assetsModel},</if>
+                <if test="item.assetsBrand != null and item.assetsBrand != ''">assets_brand=#{item.assetsBrand},</if>
+                <if test="item.purchaseDate != null and item.purchaseDate != ''">purchase_date=#{item.purchaseDate},</if>
+                <if test="item.manufactureDate != null and item.manufactureDate != ''">manufacture_date=#{item.manufactureDate},</if>
+                <if test="item.warrantyDate != null and item.warrantyDate != ''">warranty_date=#{item.warrantyDate},</if>
+                <if test="item.delFlag != null and item.delFlag != ''">del_flag=#{item.delFlag},</if>
+                <if test="item.mark != null and item.mark != ''">mark=#{item.mark},</if>
+                update_time = sysdate()
+            </set>
+            where assets_id = #{item.assetsId}
+        </foreach>
     </update>
 
 
@@ -220,9 +222,12 @@
         WHERE assets_number = #{assetsNumber}
     </select>
 
-    <select id="getAssetsByNumber" parameterType="String" resultMap="AssetsResult">
+    <select id="getAssetsByNumbers" parameterType="String" resultMap="AssetsResult">
         <include refid="selectAssetsVo"/>
-        where assets_number = #{assetsNumber}
+        where assets_number in
+        <foreach collection="array" item="assetsNumber" open="(" separator="," close=")">
+            #{assetsNumber}
+        </foreach>
     </select>
 
     <delete id="deleteAssetsByNumbers" parameterType="String">
@@ -232,4 +237,12 @@
         </foreach>
     </delete>
 
-</mapper> 
+    <select id="getAssetsByNumberList" parameterType="java.util.List" resultMap="AssetsResult">
+        <include refid="selectAssetsVo"/>
+        where a.assets_number in
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+
+</mapper>

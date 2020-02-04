@@ -33,7 +33,7 @@ public interface AssetsAccountingMapper {
      * @param assets
      * @return
      */
-    public int updateAssets(Assets assets);
+    public int updateAssetsList(List<Assets> assets);
 
     /**
      * 根据分页信息查询资产信息
@@ -66,7 +66,7 @@ public interface AssetsAccountingMapper {
      * @param assetsNumber
      * @return
      */
-    public Assets getAssetsByNumber(String assetsNumber);
+    public List<Assets> getAssetsByNumbers(String[] assetsNumber);
 
     /**
      * 批量删除资产信息
@@ -75,4 +75,13 @@ public interface AssetsAccountingMapper {
      * @return
      */
     public int deleteAssetsByNumbers(String[] numbers);
+
+    /**
+     * 根据传入的资产编号（卡号）查找资产信息
+     *
+     * @param assetsNumbers
+     * @return
+     */
+    public List<Assets> getAssetsByNumberList(List<String> assetsNumbers);
+
 }
