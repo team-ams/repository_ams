@@ -25,17 +25,13 @@ import java.util.List;
 
 /**
  * 用户信息
- * 
+ *
  * @author zengchao
  */
 @Controller
 @RequestMapping("/assets/accounting")
-public class AssetsAccountingController extends BaseController
-{
+public class AssetsAccountingController extends BaseController {
     private String prefix = "/assets/accounting";
-
-    @Autowired
-    private ISysUserService userService;
 
     @Autowired
     private IAssetsAccountingService accountingService;
@@ -43,27 +39,16 @@ public class AssetsAccountingController extends BaseController
     @Autowired
     private IAssetsSourceService sourceService;
 
-    @Autowired
-    private ISysRoleService roleService;
-
-    @Autowired
-    private ISysPostService postService;
-
-    @Autowired
-    private SysPasswordService passwordService;
-
     @RequiresPermissions("assets:accounting:view")
     @GetMapping()
-    public String assets()
-    {
+    public String assets() {
         return prefix + "/accounting";
     }
 
     @RequiresPermissions("assets:accounting:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(Assets assets)
-    {
+    public TableDataInfo list(Assets assets) {
         startPage();
         List<Assets> assetsList = accountingService.getAssetsList(assets);
         return getDataTable(assetsList);
@@ -73,8 +58,7 @@ public class AssetsAccountingController extends BaseController
     @RequiresPermissions("assets:accounting:export")
     @PostMapping("/export")
     @ResponseBody
-    public AjaxResult export(Assets assets)
-    {
+    public AjaxResult export(Assets assets) {
         List<Assets> list = accountingService.getAssetsList(assets);
         ExcelUtil<Assets> util = new ExcelUtil<Assets>(Assets.class);
         return util.exportExcel(list, "资产数据");
@@ -84,31 +68,28 @@ public class AssetsAccountingController extends BaseController
     @RequiresPermissions("assets:accounting:import")
     @PostMapping("/importData")
     @ResponseBody
-    public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception
-    {
+    public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception {
         ExcelUtil<Assets> util = new ExcelUtil<Assets>(Assets.class);
         List<Assets> userList = util.importExcel(file.getInputStream());
         String operName = ShiroUtils.getSysUser().getLoginName();
-        String message = accountingService.importAssets(userList,updateSupport,operName);
+        String message = accountingService.importAssets(userList, updateSupport, operName);
         return AjaxResult.success(message);
     }
 
     @RequiresPermissions("assets:accounting:view")
     @GetMapping("/importTemplate")
     @ResponseBody
-    public AjaxResult importTemplate()
-    {
+    public AjaxResult importTemplate() {
         ExcelUtil<Assets> util = new ExcelUtil<Assets>(Assets.class);
-        return util.importTemplateExcel("用户数据");
+        return util.importTemplateExcel("资产数据");
     }
 
     /**
      * 新增资产
      */
     @GetMapping("/add")
-    public String add(ModelMap mmap)
-    {
-        mmap.put("sources",sourceService.getAssetsSourceAll());
+    public String add(ModelMap mmap) {
+        mmap.put("sources", sourceService.getAssetsSourceAll());
         return prefix + "/add";
     }
 
@@ -116,13 +97,11 @@ public class AssetsAccountingController extends BaseController
      * 新增保存资产
      */
     @RequiresPermissions("assets:accounting:add")
-    @Log(title = "用户管理", businessType = BusinessType.INSERT)
+    @Log(title = "资产管理", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(@Validated Assets assets)
-    {
-        if (UserConstants.USER_NAME_NOT_UNIQUE.equals(accountingService.checkAssetsNumberUnique(assets.getAssetsNumber())))
-        {
+    public AjaxResult addSave(@Validated Assets assets) {
+        if (UserConstants.USER_NAME_NOT_UNIQUE.equals(accountingService.checkAssetsNumberUnique(assets.getAssetsNumber()))) {
             return error("新增资产'" + assets.getAssetsNumber() + "'失败，资产编号已存在");
         }
         assets.setCreateBy(ShiroUtils.getLoginName());
@@ -133,9 +112,8 @@ public class AssetsAccountingController extends BaseController
      * 修改资产
      */
     @GetMapping("/edit/{assetsNumber}")
-    public String edit(@PathVariable("assetsNumber") String assetsNumber, ModelMap mmap)
-    {
-        mmap.put("assets",accountingService.getAssetsByNumber(assetsNumber));
+    public String edit(@PathVariable("assetsNumber") String assetsNumber, ModelMap mmap) {
+        mmap.put("assets", accountingService.getAssetsByNumber(assetsNumber));
         return prefix + "/edit";
     }
 
@@ -146,8 +124,7 @@ public class AssetsAccountingController extends BaseController
     @Log(title = "资产管理", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
-    public AjaxResult editSave(@Validated Assets assets)
-    {
+    public AjaxResult editSave(@Validated Assets assets) {
         assets.setUpdateBy(ShiroUtils.getLoginName());
         List<Assets> updateList = new ArrayList<>();
         updateList.add(assets);
@@ -159,14 +136,10 @@ public class AssetsAccountingController extends BaseController
     @Log(title = "用户管理", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody
-    public AjaxResult remove(String ids)
-    {
-        try
-        {
+    public AjaxResult remove(String ids) {
+        try {
             return toAjax(accountingService.deleteAssetsByNumbers(ids));
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             return error(e.getMessage());
         }
     }

@@ -1,11 +1,17 @@
 package com.ams.common.core.controller;
 
 import java.beans.PropertyEditorSupport;
+import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import com.ams.common.core.domain.RestResult;
+import com.ams.common.core.websocket.WebSocketServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.WebDataBinder;
@@ -21,6 +27,11 @@ import com.ams.common.utils.DateUtils;
 import com.ams.common.utils.ServletUtils;
 import com.ams.common.utils.StringUtils;
 import com.ams.common.utils.sql.SqlUtil;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 /**
  * web层通用数据处理
@@ -168,5 +179,47 @@ public class BaseController
     public String redirect(String url)
     {
         return StringUtils.format("redirect:{}", url);
+    }
+
+    /**
+     * 推送数据接口
+     *
+     * @param cid
+     * @param message
+     * @return
+     */
+    public RestResult pushToWeb(String cid, String message) {
+        RestResult restResult = new RestResult();
+        try {
+            WebSocketServer.sendInfo(message, cid);
+        } catch (IOException e) {
+            e.printStackTrace();
+            restResult.setCode("1");
+            restResult.setValue("失败");
+            return restResult;
+        }
+        return restResult;
+    }
+
+
+    /**
+     * 获取参数，封装成Map
+     *
+     * @return
+     */
+    public Map<String, String> getParameterMap() {
+
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+
+        Map<String, String[]> map = request.getParameterMap();
+
+        Map<String, String> parameterMap = new HashMap<>();
+
+        for (String key : map.keySet()) {
+
+            parameterMap.put(key, map.get(key)[0]);
+
+        }
+        return parameterMap;
     }
 }

@@ -23,16 +23,87 @@ create table sys_dept (
 -- ----------------------------
 -- 初始化-部门表数据
 -- ----------------------------
-insert into sys_dept values(100,  0,   '0',          'AMS科技',   0, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
-insert into sys_dept values(101,  100, '0,100',      '深圳总公司', 1, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
-insert into sys_dept values(102,  100, '0,100',      '长沙分公司', 2, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
-insert into sys_dept values(103,  101, '0,100,101',  '研发部门',   1, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
-insert into sys_dept values(104,  101, '0,100,101',  '市场部门',   2, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
-insert into sys_dept values(105,  101, '0,100,101',  '测试部门',   3, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
-insert into sys_dept values(106,  101, '0,100,101',  '财务部门',   4, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
-insert into sys_dept values(107,  101, '0,100,101',  '运维部门',   5, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
-insert into sys_dept values(108,  102, '0,100,102',  '市场部门',   1, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
-insert into sys_dept values(109,  102, '0,100,102',  '财务部门',   2, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(100,  0,   '0',          '肇庆学院',   0, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(101,  100, '0,100',      '计算机学院', 1, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(102,  100, '0,100',      '美术学院', 2, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(103,  100, '0,100',      '数学与统计学院', 3, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(104,  100, '0,100',      '政法学院', 4, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(105,  100, '0,100',      '教育科学学院', 5, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(106,  100, '0,100',      '体育与健康学院', 6, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(107,  100, '0,100',      '生命科学学院', 7, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(108,  100, '0,100',      '机械与汽车工程学院', 8, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(109,  100, '0,100',      '电子与电气学院', 9, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(110,  100, '0,100',      '旅游与历史文化学院', 10, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(111,  100, '0,100',      '音乐学院', 11, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(112,  100, '0,100',      '外国语学院', 12, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(113,  100, '0,100',      '文学院', 13, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+
+
+insert into sys_dept values(1113,  101, '0,100,101',  '计算机科学与技术',   1, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(1114,  101, '0,100,101',  '软件工程',   2, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(1115,  101, '0,100,101',  '网络工程',   3, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(1116,  101, '0,100,101',  '物联网工程',   4, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(117,  101, '0,100,101',  '数据科学与大数据技术',   5, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+
+insert into sys_dept values(1118,  102, '0,100,102',  '产品设计',   1, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(1119,  102, '0,100,102',  '动画',   2, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(1120,  102, '0,100,102',  '工艺美术',   3, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(1121,  102, '0,100,102',  '环境设计',   4, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(1122,  102, '0,100,102',  '美术学',   5, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(1123,  102, '0,100,102',  '视觉传达',   6, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(1124,  102, '0,100,102',  '工业设计',   7, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+
+insert into sys_dept values(1125,  103, '0,100,103',  '金融数学',   1, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(1126,  103, '0,100,103',  '数学与应用数学',   2, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(1127,  103, '0,100,103',  '统计学',   3, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+
+insert into sys_dept values(1128,  104, '0,100,104',  '法学',   1, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(1129,  104, '0,100,104',  '行政管理',   2, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(1130,  104, '0,100,104',  '思想政治教育',   3, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(1131,  104, '0,100,104',  '知识产权',   4, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+
+insert into sys_dept values(1132,  105, '0,100,105',  '小学教育',   1, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(1133,  105, '0,100,105',  '学前教育',   2, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(1134,  105, '0,100,105',  '应用心理学',   3, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(1135,  105, '0,100,105',  '数字媒体技术',   4, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+
+insert into sys_dept values(1136,  106, '0,100,106',  '体育教育',   1, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+
+insert into sys_dept values(1137,  107, '0,100,107',  '风景园林',   1, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(1138,  107, '0,100,107',  '生物技术',   2, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(1139,  107, '0,100,107',  '生物科学',   3, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+
+insert into sys_dept values(1140,  108, '0,100,108',  '车辆工程',   1, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(1141,  108, '0,100,108',  '机械设计制造及其自动化',   2, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+
+insert into sys_dept values(1142,  109, '0,100,109',  '电气工程及其自动化',   1, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(1143,  109, '0,100,109',  '电子信息科学与技术',   2, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(1144,  109, '0,100,109',  '通信工程',   3, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(1145,  109, '0,100,109',  '物理学',   4, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+
+insert into sys_dept values(1146,  110, '0,100,110',  '酒店管理',   1, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(1147,  110, '0,100,110',  '历史学',   2, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+
+insert into sys_dept values(1148,  111, '0,100,111',  '舞蹈学',   1, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(1149,  111, '0,100,111',  '音乐表演',   2, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(1150,  111, '0,100,111',  '音乐学',   3, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+
+insert into sys_dept values(1151,  112, '0,100,112',  '日语',   1, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(1152,  112, '0,100,112',  '商务英语',   2, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(1153,  112, '0,100,112',  '英语',   3, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+
+insert into sys_dept values(1154,  112, '0,100,112',  '思想政治教育',   1, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(1155,  112, '0,100,112',  '知识产权',   2, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+
+insert into sys_dept values(1156,  113, '0,100,113',  '广播电视学',   1, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(1157,  113, '0,100,113',  '汉语言文学',   2, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(1158,  113, '0,100,113',  '秘书学',   3, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(1159,  113, '0,100,113',  '书法学',   4, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+
+
+
+
+
 
 
 -- ----------------------------
@@ -48,6 +119,7 @@ create table sys_user (
   email             varchar(50)     default ''                 comment '用户邮箱',
   phonenumber       varchar(11)     default ''                 comment '手机号码',
   sex               char(1)         default '0'                comment '用户性别（0男 1女 2未知）',
+  card_number       varchar(12)     default ''                 comment '用户卡号(12位学号)',
   avatar            varchar(100)    default ''                 comment '头像路径',
   password          varchar(50)     default ''                 comment '密码',
   salt              varchar(20)     default ''                 comment '盐加密',
@@ -66,8 +138,11 @@ create table sys_user (
 -- ----------------------------
 -- 初始化-用户信息表数据
 -- ----------------------------
-insert into sys_user values(1,  103, 'admin', 'AMS', '00', 'ry@163.com', '15888888888', '1', '', '29c67a30398638269fe600f73a054934', '111111', '0', '0', '127.0.0.1', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '管理员');
-insert into sys_user values(2,  105, 'ry',    'AMS', '00', 'ry@qq.com',  '15666666666', '1', '', '8e6d98b90472783cc73c17047ddccf36', '222222', '0', '0', '127.0.0.1', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '测试员');
+insert into sys_user values(1,  1116, 'admin', 'AMS', '00', 'ry@163.com', '15888888888', '1','201624134148', '', '29c67a30398638269fe600f73a054934', '111111', '0', '0', '127.0.0.1', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '管理员');
+insert into sys_user values(2,  1125, 'ry',    'AMS', '00', 'ry@qq.com',  '15666666666', '1','201624134148','', '8e6d98b90472783cc73c17047ddccf36', '222222', '0', '0', '127.0.0.1', '2018-03-16 11-33-00', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '测试员');
+INSERT INTO sys_user VALUES (3, 1132, 'zc', 'zengchao', '00', '920253445@qq.com', '15976195138', '0','201624134148', '', '472deaf7c5a0e68690d6c27a165e1b26', '800ced', '0', '0', '127.0.0.1', '2020-01-05 00:01:12', 'admin', '2020-01-01 21:58:24', 'admin', '2020-01-05 00:01:11', '');
+INSERT INTO sys_user VALUES (4, 1141, 'zengchao', 'zengchao', '00', '920253447@qq.com', '15976195139', '0','201624134148', '', 'e8a55db6899004e7160a66969538e5b8', '15c838', '0', '0', '127.0.0.1', '2020-01-01 23:11:09', 'admin', '2020-01-01 23:10:08', '', '2020-01-05 23:30:39', '管理员2');
+INSERT INTO sys_user VALUES (6, 1119, 'zengchao1', 'test', '00', '1121012388@qq.com', '15976195131', '0', '201624134148','', '303e9b4ed2a4e6dacc9776e21e065a36', '1dcf5f', '0', '0', '127.0.0.1', '2020-01-05 00:05:54', 'admin', '2020-01-05 00:05:03', '', '2020-01-05 00:05:53', NULL);
 
 
 -- ----------------------------
@@ -176,15 +251,15 @@ insert into sys_menu values('114',  '代码生成', '3', '2', '/tool/gen',      
 insert into sys_menu values('115',  '系统接口', '3', '3', '/tool/swagger',         '', 'C', '0', 'tool:swagger:view',        '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '系统接口菜单');
 
 insert into sys_menu values('116',  '入账管理', '4', '1', '/assets/accounting',                      '', 'C', '0', 'assets:accounting:view',         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '入账管理菜单');
-insert into sys_menu values('117',  '领用管理', '4', '2', '/assets/allocate',                      '', 'C', '1', 'assets:allocate:view',         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '领用管理菜单');
-insert into sys_menu values('118',  '借出管理', '4', '3', '',                      '', 'C', '1', 'system:menu:view',         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '借出管理菜单');
-insert into sys_menu values('119',  '归还管理', '4', '4', '',                      '', 'C', '1', 'system:dept:view',         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '归还管理菜单');
-insert into sys_menu values('120',  '转移管理', '4', '5', '',                      '', 'C', '0', 'system:post:view',         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '转移管理菜单');
-insert into sys_menu values('121',  '保修管理', '4', '6', '',                      '', 'C', '0', 'system:dict:view',         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '保修管理菜单');
-insert into sys_menu values('122',  '报废管理', '4', '7', '',                      '', 'C', '0', 'system:config:view',       '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '报废管理菜单');
-insert into sys_menu values('123',  '报警管理', '4', '8', '',                      '', 'C', '0', 'system:notice:view',       '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '报警管理菜单');
-insert into sys_menu values('124',  '盘点管理', '4', '9', '#',                     '', 'C', '0', '',                         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '盘点管理菜单');
-insert into sys_menu values('125',  '报表管理', '4', '10','#',                     '', 'C', '0', '',                         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '报表管理菜单');
+insert into sys_menu values('117',  '领用管理', '4', '2', '/assets/allocate',                      '', 'C', '0', 'assets:allocate:view',         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '领用管理菜单');
+insert into sys_menu values('118',  '借还管理', '4', '3', '/assets/borrow',                      '', 'C', '0', 'assets:borrow:view',         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '借出管理菜单');
+insert into sys_menu values('119',  '保养管理', '4', '4', '/assets/maintain',                      '', 'C', '0', 'assets:maintain:view',         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '归还管理菜单');
+insert into sys_menu values('120',  '转移管理', '4', '5', '/assets/move',                      '', 'C', '0', 'assets:move:view',         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '转移管理菜单');
+insert into sys_menu values('121',  '维修管理', '4', '6', '/assets/repair',                      '', 'C', '0', 'assets:repair:view',         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '保修管理菜单');
+insert into sys_menu values('122',  '事故管理', '4', '7', '/assets/accident',                      '', 'C', '0', 'assets:accident:view',       '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '报废管理菜单');
+insert into sys_menu values('123',  '报警管理', '4', '8', '/assets/alarm',                      '', 'C', '0', 'assets:alarm:view',       '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '报警管理菜单');
+insert into sys_menu values('124',  '盘点管理', '4', '9', '/assets/check',                     '', 'C', '0', 'assets:check:view',                         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '盘点管理菜单');
+insert into sys_menu values('125',  '报表管理', '4', '10','/assets/chart',                     '', 'C', '0', 'assets:chart:view',                         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '报表管理菜单');
 -- 三级菜单
 insert into sys_menu values('500',  '操作日志', '108', '1', '/monitor/operlog',    '', 'C', '0', 'monitor:operlog:view',     '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '操作日志菜单');
 insert into sys_menu values('501',  '登录日志', '108', '2', '/monitor/logininfor', '', 'C', '0', 'monitor:logininfor:view',  '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '登录日志菜单');
@@ -263,7 +338,6 @@ insert into sys_menu values('1058', '生成修改', '114', '2', '#', '',  'F', '
 insert into sys_menu values('1059', '生成删除', '114', '3', '#', '',  'F', '0', 'tool:gen:remove',   '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
 insert into sys_menu values('1060', '预览代码', '114', '4', '#', '',  'F', '0', 'tool:gen:preview',  '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
 insert into sys_menu values('1061', '生成代码', '114', '5', '#', '',  'F', '0', 'tool:gen:code',     '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
-
 -- 入账管理按钮
 insert into sys_menu values('1062', '资产入账查询', '116', '1', '#', '',  'F', '0', 'assets:accounting:list',     '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
 insert into sys_menu values('1063', '资产新增', '116', '2', '#', '',  'F', '0', 'assets:accounting:add',     '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
@@ -271,8 +345,35 @@ insert into sys_menu values('1064', '资产修改', '116', '3', '#', '',  'F', '
 insert into sys_menu values('1065', '资产删除', '116', '4', '#', '',  'F', '0', 'assets:accounting:remove',   '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
 insert into sys_menu values('1066', '资产导出', '116', '5',  '#', '',  'F', '0', 'assets:accounting:export',      '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
 insert into sys_menu values('1067', '资产导入', '116', '6',  '#', '',  'F', '0', 'assets:accounting:import',      '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
-insert into sys_menu values('1068', '资产领用', '116', '7',  '#', '',  'F', '0', 'assets:accounting:allocate',      '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
-insert into sys_menu values('1069', '资产借用', '116', '8',  '#', '',  'F', '0', 'assets:accounting:borrow',      '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
+-- 领用管理按钮
+insert into sys_menu values('1068', '保养查询', '117', '1', '#', '',  'F', '0', 'assets:allocate:list',     '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
+insert into sys_menu values('1069', '保养新增', '117', '2', '#', '',  'F', '0', 'assets:allocate:add',     '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
+insert into sys_menu values('1070', '保养修改', '117', '3', '#', '',  'F', '0', 'assets:allocate:edit',     '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
+insert into sys_menu values('1071', '保养删除', '117', '4', '#', '',  'F', '0', 'assets:allocate:remove',   '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
+-- 借还管理按钮
+insert into sys_menu values('1072', '借用查询', '118', '1', '#', '',  'F', '0', 'assets:borrow:list',     '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
+insert into sys_menu values('1073', '借用新增', '118', '2', '#', '',  'F', '0', 'assets:borrow:add',     '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
+insert into sys_menu values('1074', '借用修改', '118', '3', '#', '',  'F', '0', 'assets:borrow:edit',     '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
+insert into sys_menu values('1075', '借用删除', '118', '4', '#', '',  'F', '0', 'assets:borrow:remove',   '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
+insert into sys_menu values('1076', '归还查询', '118', '5', '#', '',  'F', '0', 'assets:return:list',     '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
+insert into sys_menu values('1077', '归还新增', '118', '6', '#', '',  'F', '0', 'assets:return:add',     '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
+insert into sys_menu values('1078', '归还修改', '118', '7', '#', '',  'F', '0', 'assets:return:edit',     '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
+insert into sys_menu values('1079', '归还删除', '118', '8', '#', '',  'F', '0', 'assets:return:remove',   '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
+-- 保养管理按钮
+insert into sys_menu values('1080', '保养查询', '119', '1', '#', '',  'F', '0', 'assets:maintain:list',     '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
+insert into sys_menu values('1081', '保养新增', '119', '2', '#', '',  'F', '0', 'assets:maintain:add',     '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
+insert into sys_menu values('1082', '保养修改', '119', '3', '#', '',  'F', '0', 'assets:maintain:edit',     '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
+insert into sys_menu values('1083', '保养删除', '119', '4', '#', '',  'F', '0', 'assets:maintain:remove',   '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
+-- 事故管理按钮
+insert into sys_menu values('1084', '事故查询', '122', '1', '#', '',  'F', '0', 'assets:accident:list',     '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
+insert into sys_menu values('1085', '事故新增', '122', '2', '#', '',  'F', '0', 'assets:accident:add',     '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
+insert into sys_menu values('1086', '事故修改', '122', '3', '#', '',  'F', '0', 'assets:accident:edit',     '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
+insert into sys_menu values('1087', '事故删除', '122', '4', '#', '',  'F', '0', 'assets:accident:remove',   '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
+-- 维修管理按钮
+insert into sys_menu values('1088', '维修查询', '121', '1', '#', '',  'F', '0', 'assets:repair:list',     '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
+insert into sys_menu values('1089', '维修新增', '121', '2', '#', '',  'F', '0', 'assets:repair:add',     '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
+insert into sys_menu values('1090', '维修修改', '121', '3', '#', '',  'F', '0', 'assets:repair:edit',     '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
+insert into sys_menu values('1091', '维修删除', '121', '4', '#', '',  'F', '0', 'assets:repair:remove',   '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
 
 
 
@@ -328,9 +429,16 @@ insert into sys_role_menu values ('2', '112');
 insert into sys_role_menu values ('2', '113');
 insert into sys_role_menu values ('2', '114');
 insert into sys_role_menu values ('2', '115');
+
+insert into sys_role_menu values ('2', '116');
 insert into sys_role_menu values ('2', '117');
 insert into sys_role_menu values ('2', '118');
 insert into sys_role_menu values ('2', '119');
+insert into sys_role_menu values ('2', '120');
+insert into sys_role_menu values ('2', '121');
+insert into sys_role_menu values ('2', '122');
+insert into sys_role_menu values ('2', '123');
+
 insert into sys_role_menu values ('2', '500');
 insert into sys_role_menu values ('2', '501');
 insert into sys_role_menu values ('2', '1000');
@@ -395,7 +503,20 @@ insert into sys_role_menu values ('2', '1058');
 insert into sys_role_menu values ('2', '1059');
 insert into sys_role_menu values ('2', '1060');
 insert into sys_role_menu values ('2', '1061');
+
+insert into sys_role_menu values ('2', '1062');
 insert into sys_role_menu values ('2', '1068');
+insert into sys_role_menu values ('2', '1069');
+insert into sys_role_menu values ('2', '1072');
+insert into sys_role_menu values ('2', '1073');
+insert into sys_role_menu values ('2', '1076');
+insert into sys_role_menu values ('2', '1077');
+insert into sys_role_menu values ('2', '1080');
+insert into sys_role_menu values ('2', '1081');
+insert into sys_role_menu values ('2', '1084');
+insert into sys_role_menu values ('2', '1085');
+insert into sys_role_menu values ('2', '1088');
+insert into sys_role_menu values ('2', '1089');
 
 
 -- ----------------------------
@@ -564,6 +685,13 @@ insert into sys_dict_data values(49,  3,  '已领用',       '1',       'assets_
 insert into sys_dict_data values(50,  4,  '已外借',     '2',       'assets_status',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '已借用状态');
 insert into sys_dict_data values(51,  5,  '维修中',       '3',       'assets_status',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '维修中状态');
 insert into sys_dict_data values(52,  6,  '停用',     '4',       'assets_status',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '停用状态');
+insert into sys_dict_data values(53,  1,  '未归还',     '0',       'is_return',        '',   '',        'Y', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '未归还状态');
+insert into sys_dict_data values(54,  2,  '已归还',     '1',       'is_return',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '已归还状态');
+insert into sys_dict_data values(55,  1,  '常规检查',     '0',       'maintain_name',        '',   '',        'Y', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '常规检查状态');
+insert into sys_dict_data values(56,  2,  '抢修',     '1',       'maintain_name',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '抢修状态');
+insert into sys_dict_data values(57,  1,  '正常',     '0',       'maintain_status',        '',   '',        'Y', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '正常状态');
+insert into sys_dict_data values(58,  2,  '故障',     '1',       'maintain_status',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '故障状态');
+
 
 
 -- ----------------------------
@@ -834,18 +962,134 @@ create table assets_allocate(
     assets_number         varchar(15)       not null default ''             comment '资产编号',
     user_id               int               not null default 0              comment '用户ID',
     auditor_id            int               not null default 0              comment '审批者ID',
-    status                char(1)               not null default 0              comment '资产领用状态（0：审核中，1：审核通过，2：驳回）',
+    status                char(1)           not null default '0'            comment '资产领用状态（0：审核中，1：审核通过，2：驳回）',
     remark                text                                              comment '备注',
-    create_time           timestamp         not null default current_timestamp      comment '创建时间',
-    update_time           timestamp         not null default current_timestamp on update current_timestamp   comment '更新时间',
+    create_by               varchar(64)         default ''          comment '创建者',
+    create_time              timestamp           not null default current_timestamp      comment '创建时间/登记时间',
+    update_by               varchar(64)         default ''          comment '更新者',
+    update_time              timestamp           not null default current_timestamp on update current_timestamp      comment '更新时间',
     primary key (allocate_id)
 
 )engine = innodb default charset utf8 comment '资产领用表';
 -- ----------------------------
 -- 初始化-资产领用信息
 -- ----------------------------
-insert into assets_allocate values (1,'a9b7e8',2,0,0,'资产分配','2020-01-14 11:50:06','2020-01-14 11:50:08');
-insert into assets_allocate values (2,'e6f4d2',3,0,0,'资产分配','2020-01-14 11:50:06','2020-01-14 11:50:08');
-insert into assets_allocate values (3,'c377d8',2,0,0,'资产分配','2020-01-14 11:50:06','2020-01-14 11:50:08');
-insert into assets_allocate values (4,'5e6a1b',2,0,0,'资产分配','2020-01-14 11:50:06','2020-01-14 11:50:08');
+insert into assets_allocate values (1,'a9b7e8',2,0,'0','资产分配','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_allocate values (2,'e6f4d2',3,0,'0','资产分配','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_allocate values (3,'c377d8',2,0,'0','资产分配','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_allocate values (4,'5e6a1b',2,0,'0','资产分配','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+
+
+-- ----------------------------
+-- 24、资产借还表
+-- ----------------------------
+drop table if exists assets_borrow;
+create table assets_borrow(
+    borrow_id             int               not null auto_increment         comment '借还表ID',
+    assets_number         varchar(15)       not null default ''             comment '资产编号',
+    borrow_userid         int               not null default 0              comment '借用人ID',
+    is_return             char(1)           not null default '0'            comment '是否归还（0：未归还，1：已归还）',
+    installation_addr     varchar(50)       not null default ''             comment '安装地点',
+    remark                text                                              comment '备注',
+    borrow_time           timestamp         not null default current_timestamp             comment '借用时间',
+    return_time           timestamp         not null default current_timestamp             comment '归还时间',
+    create_by               varchar(64)         default ''          comment '创建者',
+    create_time              timestamp           not null default current_timestamp      comment '创建时间/登记时间',
+    update_by               varchar(64)         default ''          comment '更新者',
+    update_time              timestamp           not null default current_timestamp on update current_timestamp      comment '更新时间',
+    primary key (borrow_id)
+)engine = innodb default charset utf8 comment '资产借还表';
+-- ----------------------------
+-- 初始化-资产借还信息
+-- ----------------------------
+insert into assets_borrow values (1,'a9b7e8',2,0,'第一教学楼','资产借还','2020-01-14 11:50:06','2020-01-14 11:50:08','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_borrow values (2,'e6f4d2',3,0,'第二教学楼','资产借还','2020-01-14 11:50:06','2020-01-14 11:50:08','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_borrow values (3,'c377d8',2,0,'第三教学楼','资产借还','2020-01-14 11:50:06','2020-01-14 11:50:08','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_borrow values (4,'5e6a1b',2,0,'图书馆','资产借还','2020-01-14 11:50:06','2020-01-14 11:50:08','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+
+-- ----------------------------
+-- 25、资产保养表
+-- ----------------------------
+drop table if exists assets_maintain;
+create table assets_maintain(
+     maintain_id           int               not null auto_increment         comment '保养表ID',
+     assets_number         varchar(15)       not null default ''             comment '资产编号',
+     maintain_userId       int               not null default 0              comment '保养人ID',
+     maintain_name         char(1)       not null default ''             comment '保养名称（0：常规检查，1：抢修）',
+     maintain_status       char(1)           not null default '0'            comment '保养后状态（0：正常，1：故障）',
+     installation_addr     varchar(50)       not null default ''             comment '安装地点',
+     remark                text                                              comment '备注',
+     maintain_time         timestamp         not null default current_timestamp             comment '保养时间',
+     create_by               varchar(64)         default ''          comment '创建者',
+     create_time              timestamp           not null default current_timestamp      comment '创建时间/登记时间',
+     update_by               varchar(64)         default ''          comment '更新者',
+     update_time              timestamp           not null default current_timestamp on update current_timestamp      comment '更新时间',
+     primary key (maintain_id)
+)engine = innodb default charset utf8 comment '资产保养表';
+-- ----------------------------
+-- 初始化-资产保养信息
+-- ----------------------------
+insert into assets_maintain values (1,'a9b7e8',2,0,0,'第一教学楼','资产保养','2020-01-14 11:50:06','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_maintain values (2,'e6f4d2',3,1,0,'第二教学楼','资产保养','2020-01-14 11:50:06','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_maintain values (3,'c377d8',2,1,0,'第三教学楼','资产保养','2020-01-14 11:50:06','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_maintain values (4,'5e6a1b',2,0,0,'图书馆','资产保养','2020-01-14 11:50:06','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+
+
+-- ----------------------------
+-- 26、设备事故表
+-- ----------------------------
+drop table if exists assets_accident;
+create table assets_accident(
+     accident_id           int               not null auto_increment         comment '事故ID',
+     assets_number         varchar(15)       not null default ''             comment '资产编号',
+     report_userId         int               not null default 0              comment '事故上报人ID',
+     maintain_status       char(1)           not null default ''             comment '保养后状态（0：正常，1：故障）',
+     accident_dept         varchar(50)       not null default ''             comment '事故发生部门',
+     accident_grade        char(1)           not null default ''             comment '事故级别（1：一般事故，2：中等事故，3：重大事故）',
+     economic_losses       varchar(10)       not null default ''             comment '经济损失',
+     accident_remark       text                                              comment '故障描述',
+     summary               text                                              comment '防范总结',
+     accident_time         timestamp         not null default current_timestamp      comment '事故发生日期',
+     create_by               varchar(64)         default ''          comment '创建者',
+     create_time              timestamp           not null default current_timestamp      comment '创建时间/登记时间',
+     update_by               varchar(64)         default ''          comment '更新者',
+     update_time              timestamp           not null default current_timestamp on update current_timestamp      comment '更新时间',
+     primary key (accident_id)
+)engine = innodb default charset utf8 comment '资产事故表';
+-- ----------------------------
+-- 初始化-设备事故信息
+-- ----------------------------
+insert into assets_accident values (1,'a9b7e8',2,'','第一教学楼','3','1000','资产事故','注意规范使用设备','2020-01-14 11:50:06','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_accident values (2,'e6f4d2',3,'','第二教学楼','1','1500','资产事故','注意规范使用设备','2020-01-14 11:50:06','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_accident values (3,'c377d8',2,'','第三教学楼','2','1586.2','资产事故','注意规范使用设备','2020-01-14 11:50:06','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_accident values (4,'5e6a1b',2,'','图书馆','1','624.33','资产事故','注意规范使用设备','2020-01-14 11:50:06','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+
+-- ----------------------------
+-- 27、资产维修表
+-- ----------------------------
+drop table if exists assets_repair;
+create table assets_repair(
+    repair_id             int               not null auto_increment         comment '维修ID',
+    assets_number         varchar(15)       not null default ''             comment '资产编号',
+    userId                int               not null default 0              comment '申请人ID',
+    repair_status       char(1)           not null default ''               comment '修复状态（1：A，2：B，3：C）',
+    installation_addr     varchar(50)       not null default ''             comment '安装地点',
+    repair_grade          char(1)           not null default ''             comment '修复级别（1：部件维修，2：中修，3：大修）',
+    repair_fees           varchar(10)       not null default ''             comment '维修费用',
+    accident_remark       text                                              comment '故障描述',
+    sent_time             timestamp         not null default current_timestamp      comment '送修日期',
+    repair_time           timestamp         not null default current_timestamp      comment '维修日期',
+    create_by               varchar(64)         default ''          comment '创建者',
+    create_time              timestamp           not null default current_timestamp      comment '创建时间/登记时间',
+    update_by               varchar(64)         default ''          comment '更新者',
+    update_time              timestamp           not null default current_timestamp on update current_timestamp      comment '更新时间',
+    primary key (repair_id)
+)engine = innodb default charset utf8 comment '资产维修表';
+-- ----------------------------
+-- 初始化-设备维修信息
+-- ----------------------------
+insert into assets_repair values (1,'a9b7e8',2,'','第一教学楼','3','1000','资产维修','2020-01-14 11:50:06','2020-01-14 11:50:06','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_repair values (2,'e6f4d2',3,'','第二教学楼','1','1500','资产维修','2020-01-14 11:50:06','2020-01-14 11:50:06','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_repair values (3,'c377d8',2,'','第三教学楼','2','1586.2','资产维修','2020-01-14 11:50:06','2020-01-14 11:50:06','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_repair values (4,'5e6a1b',2,'','图书馆','1','624.33','资产维修','2020-01-14 11:50:06','2020-01-14 11:50:06','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
 

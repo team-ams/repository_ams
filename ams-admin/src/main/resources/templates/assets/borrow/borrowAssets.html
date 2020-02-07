@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('表格传值给父页面')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <form id="form-assets-add" class="form-horizontal">
+        <h4 class="form-header h4">基本信息</h4>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>安装地点：</label>
+                    <div class="col-sm-8">
+                        <input id="installationAddr" name="installationAddr" placeholder="请输入安装地点" class="form-control"
+                               type="text" maxlength="11" required/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>借用日期：</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="time-input" id="borrowTime" placeholder="请选择借用日期" name="borrowTime"
+                               required/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <!-- 表格部分-->
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+        <h4 class="form-header h4">其他信息</h4>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-xs-2 control-label">备注：</label>
+                    <div class="col-xs-10">
+                        <textarea name="remark" maxlength="500" class="form-control" rows="3"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+    var prefix = ctx + "assets/borrow";
+
+    $(function () {
+        var options = {
+            url: prefix + "/borrowList",
+            showSearch: false,
+            showRefresh: false,
+            showToggle: false,
+            showColumns: false,
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'assetsNumber',
+                    title: '资产编号',
+                    sortable: true
+                },
+                {
+                    field: 'assetsName',
+                    title: '资产名称',
+
+                },
+                {
+                    field: 'assetsType',
+                    title: '资产类别'
+                },
+                {
+                    field: 'assetsAmount',
+                    title: '数量'
+                },
+                {
+                    field: 'measuringUnit',
+                    title: '计量单位'
+                },
+                {
+                    field: 'assetsPrice',
+                    title: '单价'
+                },
+                {
+                    field: 'storageDepartment',
+                    title: '保管部门'
+                },
+                {
+                    field: 'storageAddr',
+                    title: '存放地点'
+                },
+                {
+                    field: 'useStatus',
+                    title: '使用情况'
+                },
+                {
+                    field: 'assetsSource',
+                    title: '资产来源'
+                },
+                {
+                    field: 'usefulLife',
+                    title: '使用年限'
+                },
+                {
+                    field: 'assetsModel',
+                    title: '型号'
+                },
+                {
+                    field: 'assetsBrand',
+                    title: '品牌'
+                },
+                {
+                    field: 'purchaseDate',
+                    title: '购入日期',
+                    sortable: true
+                },
+                {
+                    field: 'createTime',
+                    title: '创建时间',
+                    visible: false
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs" href="#"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs" href="#"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+
+    /* 添加用户-选择用户-提交 */
+    function submitHandler(index, layero) {
+        var data = {};
+        if ($.validate.form()) {
+            data = $("#form-assets-add").serializeArray();
+        }
+        var rows = $.table.selectFirstColumns();
+        var url = prefix + "/borrowConfirm";
+        if (rows.length == 0) {
+            $.modal.alertWarning("请至少选择一条记录");
+            return;
+        }
+        //卡号拼接起来
+        data.push({"name":"assetsNumber","value":rows.join()});
+        //ajax异步调用后台接口，完成新增资产领用
+        $.operate.submit(url, "post", "json", data);
+        //延时2秒关闭，等待submit的ajax异步方法回调后执行关闭模态框
+        setTimeout(function () {
+            $.modal.close();
+        }, 2000);
+        $.modal.msgReload("操作成功,正在刷新数据请稍后……", modal_status.SUCCESS);
+
+    }
+
+    //websocket 客户端（前端页面）与服务器（后台）建立连接（tcp连接）
+    var socket;
+    if (typeof (WebSocket) == "undefined") {
+        console.log("您的浏览器不支持WebSocket");
+    } else {
+        console.log("您的浏览器支持WebSocket");
+        //实现化WebSocket对象，指定要连接的服务器地址与端口  建立连接
+        //webSocket = new WebSocket("ws://localhost:8080/websocket/20");
+        var basePath = [[${basePath}]];
+        var fid = [[${fid}]]
+        webSocket = new WebSocket((basePath + "websocket/" + fid).replace("http", "ws"));
+        //打开事件
+        webSocket.onopen = function () {
+            console.log("Socket 已打开");
+            //socket.send("这是来自客户端的消息" + location.href + new Date());
+        };
+        //获得消息事件
+        webSocket.onmessage = function (msg) {
+            $.table.refresh();
+            console.log(msg.data);
+            //发现消息进入    开始处理前端触发逻辑
+        };
+        //关闭事件
+        webSocket.onclose = function () {
+            console.log("Socket已关闭");
+        };
+        //发生了错误事件
+        webSocket.onerror = function () {
+            alert("Socket发生了错误");
+            //此时可以尝试刷新页面
+        }
+        //离开页面时，关闭socket
+        //jquery1.8中已经被废弃，3.0中已经移除
+        // $(window).unload(function(){
+        //     socket.close();
+        //});
+        // 往后台服务器发送消息.
+        function sendMessage() {
+            var sendmsg = document.getElementById("sendMsg").value;
+            console.log("发送的消息：" + sendmsg);
+            // 发送至后台服务器中.
+            webSocket.send(sendmsg);
+        }
+    }
+</script>
+</body>
+</html>

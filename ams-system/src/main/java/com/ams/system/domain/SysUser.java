@@ -54,6 +54,10 @@ public class SysUser extends BaseEntity
     @Excel(name = "用户性别", readConverterExp = "0=男,1=女,2=未知")
     private String sex;
 
+    /** 用户卡号*/
+    @Excel(name = "用户卡号")
+    private String cardNumber;
+
     /** 用户头像 */
     private String avatar;
 
@@ -209,6 +213,18 @@ public class SysUser extends BaseEntity
         this.sex = sex;
     }
 
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public String getCardNumber() {
+        return cardNumber;
+    }
+
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
+    }
+
     public String getAvatar()
     {
         return avatar;
@@ -333,6 +349,7 @@ public class SysUser extends BaseEntity
             .append("email", getEmail())
             .append("phonenumber", getPhonenumber())
             .append("sex", getSex())
+                .append("cardNumber",getCardNumber())
             .append("avatar", getAvatar())
             .append("password", getPassword())
             .append("salt", getSalt())

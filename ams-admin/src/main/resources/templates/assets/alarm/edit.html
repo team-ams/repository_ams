@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('修改资产')" />
+	<th:block th:include="include :: select2-css" />
+</head>
+<body>
+    <div class="main-content">
+        <form class="form-horizontal" id="form-assets-edit" th:object="${assets}">
+            <input name="assetsId"  type="hidden"  th:field="*{assetsId}" />
+            <h4 class="form-header h4">基本信息</h4>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>资产名称：</label>
+                        <div class="col-sm-8">
+                            <input name="assetsName" placeholder="请输入资产名称" class="form-control" type="text" maxlength="30" th:field="*{assetsName}" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>资产编号：</label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <input class="form-control" type="text" readonly="true" th:field="*{assetsNumber}"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>资产单价：</label>
+                        <div class="col-sm-8">
+                            <input id="assetsPrice" name="assetsPrice" placeholder="请输入资产单价" class="form-control" type="text" maxlength="11" th:field="*{assetsPrice}" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>计量单位：</label>
+                        <div class="col-sm-8">
+                            <input id="measuringUnit" name="measuringUnit" class="form-control" type="text" maxlength="10" placeholder="请输入计量单位" th:field="*{measuringUnit}" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>保管单位：</label>
+                        <div class="col-sm-8">
+                            <input id="storageUnit" name="storageUnit" placeholder="请输入保管单位" class="form-control" type="text" maxlength="30" th:field="*{storageUnit}" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>保管部门：</label>
+                        <div class="col-sm-8">
+                            <input id="storageDepartment" name="storageDepartment" placeholder="请输入保管部门" class="form-control" type="text" maxlength="30" th:field="*{storageDepartment}" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>存放地点：</label>
+                        <div class="col-sm-8">
+                            <input id="storageAddr" name="storageAddr" placeholder="请输入存放地点" class="form-control" type="text" maxlength="30" th:field="*{storageAddr}" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">品牌：</label>
+                        <div class="col-sm-8">
+                            <input id="assetsBrand" name="assetsBrand" placeholder="请输入品牌名" class="form-control" type="text" maxlength="11" th:field="*{assetsBrand}" >
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">保管人：</label>
+                        <div class="col-sm-8">
+                            <input id="custodian" name="custodian" placeholder="请填写保管人" class="form-control" type="text" maxlength="15" th:field="*{custodian}" >
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">资产类别：</label>
+                        <div class="col-sm-8">
+                            <select name="assetsType" class="form-control m-b" th:with="type=${@dict.getType('assets_type')}">
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictLabel} " th:field="*{assetsType}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">资产来源：</label>
+                        <div class="col-sm-8">
+                            <select name="assetsSource" class="form-control m-b" th:with="type=${@dict.getType('assets_source')}">
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictLabel}" th:field="*{assetsSource}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">资产性质：</label>
+                        <div class="col-sm-8">
+                            <select name="assetsNature" class="form-control m-b" th:with="type=${@dict.getType('assets_nature')}">
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictLabel}" th:field="*{assetsNature}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">出厂日期：</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="time-input" id="manufactureDate" placeholder="请选择出厂日期" name="manufactureDate" th:field="*{manufactureDate}"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">购入日期：</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="time-input" id="purchaseDate" placeholder="请选择购入日期" name="purchaseDate" th:field="*{purchaseDate}"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h4 class="form-header h4">其他信息</h4>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label">备注：</label>
+                        <div class="col-xs-10">
+                            <textarea name="remark" maxlength="500" class="form-control" rows="3">[[*{mark}]]</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row">
+        <div class="col-sm-offset-5 col-sm-10">
+            <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler()"><i class="fa fa-check"></i>保 存</button>&nbsp;
+            <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭 </button>
+        </div>
+    </div>
+	<th:block th:include="include :: footer" />
+	<th:block th:include="include :: select2-js" />
+	<script type="text/javascript">
+        var prefix = ctx + "assets/accounting";
+
+        function submitHandler() {
+	        if ($.validate.form()) {
+	        	var data = $("#form-assets-edit").serializeArray();
+	        	var assetsId = $("#assetsId").val();
+	        	data.push({"name":"assetsId","value":assetsId});
+	        	$.operate.saveTab(prefix + "/edit", data);
+	        }
+	    }
+    </script>
+</body>
+</html>

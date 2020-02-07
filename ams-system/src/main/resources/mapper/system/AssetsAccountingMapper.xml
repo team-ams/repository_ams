@@ -166,6 +166,7 @@
                 <if test="item.warrantyDate != null and item.warrantyDate != ''">warranty_date=#{item.warrantyDate},</if>
                 <if test="item.delFlag != null and item.delFlag != ''">del_flag=#{item.delFlag},</if>
                 <if test="item.mark != null and item.mark != ''">mark=#{item.mark},</if>
+                <if test="item.updateBy != null and item.updateBy != ''">update_by=#{updateBy}</if>
                 update_time = sysdate()
             </set>
             where assets_id = #{item.assetsId}

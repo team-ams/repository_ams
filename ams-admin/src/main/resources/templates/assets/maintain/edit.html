@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('修改资产')" />
+	<th:block th:include="include :: select2-css" />
+</head>
+<body>
+    <div class="main-content">
+        <form class="form-horizontal" id="form-assets-edit" th:object="${maintain}">
+            <input name="maintainId"  type="hidden"  th:field="*{maintainId}" />
+            <input name="maintainUserId" type="hidden" th:field="*{maintainUserId}"/>
+            <h4 class="form-header h4">基本信息</h4>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>资产编号：</label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <input class="form-control" type="text" readonly="true" th:field="*{assetsNumber}"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>资产名称：</label>
+                        <div class="col-sm-8">
+                            <input placeholder="请输入资产名称" class="form-control" type="text" readonly="true" maxlength="30" th:field="*{assets.assetsName}" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>保养人：</label>
+                        <div class="col-sm-8">
+                            <input id="maintainUserId" placeholder="请输入保养人" class="form-control" type="text" readonly="true" maxlength="11" th:field="*{user.userName}" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>保养时间：</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="time-input" id="maintainTime" placeholder="请选择保养日期" name="maintainTime" th:field="*{maintainTime}" th:required/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>保养名称：</label>
+                        <div class="col-sm-8">
+                            <select name="maintainName" class="form-control m-b" th:with="type=${@dict.getType('maintain_name')}">
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{maintainName}" th:required="true"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>保养后状态：</label>
+                        <div class="col-sm-8">
+                            <select name="maintainStatus" class="form-control m-b" th:with="type=${@dict.getType('maintain_status')}">
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{maintainStatus}" th:required="true"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>安装地点：</label>
+                        <div class="col-sm-8">
+                            <input id="installationAddr" name="installationAddr" placeholder="请输入安装地点" class="form-control" type="text" maxlength="30" th:field="*{installationAddr}" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h4 class="form-header h4">其他信息</h4>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label">备注：</label>
+                        <div class="col-xs-10">
+                            <textarea name="remark" maxlength="500" class="form-control" rows="3">[[*{remark}]]</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row">
+        <div class="col-sm-offset-5 col-sm-10">
+            <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler()"><i class="fa fa-check"></i>保 存</button>&nbsp;
+            <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭 </button>
+        </div>
+    </div>
+	<th:block th:include="include :: footer" />
+	<th:block th:include="include :: select2-js" />
+	<script type="text/javascript">
+        var prefix = ctx + "assets/maintain";
+
+        function submitHandler() {
+	        if ($.validate.form()) {
+	        	var data = $("#form-assets-edit").serializeArray();
+	        	var maintainId = $("#maintainId").val();
+                var maintainUserId = $("#maintainUserId").val();
+	        	data.push({"name":"maintainId","value":maintainId});
+                data.push({"name":"maintainUserId","value":maintainUserId});
+	        	$.operate.saveTab(prefix + "/edit", data);
+	        }
+	    }
+    </script>
+</body>
+</html>

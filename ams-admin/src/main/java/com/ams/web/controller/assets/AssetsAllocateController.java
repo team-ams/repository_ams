@@ -236,47 +236,4 @@ public class AssetsAllocateController extends BaseController {
         return mav;
     }
 
-    /**
-     * 推送数据接口
-     *
-     * @param cid
-     * @param message
-     * @return
-     */
-    @ResponseBody
-    @RequestMapping("/socket/push/{cid}")
-    public RestResult pushToWeb(@PathVariable String cid, String message) {
-        RestResult restResult = new RestResult();
-        try {
-            WebSocketServer.sendInfo(message, cid);
-        } catch (IOException e) {
-            e.printStackTrace();
-            restResult.setCode("1");
-            restResult.setValue("失败");
-            return restResult;
-        }
-        return restResult;
-    }
-
-
-    /**
-     * 获取参数，封装成Map
-     *
-     * @return
-     */
-    public Map<String, String> getParameterMap() {
-
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-
-        Map<String, String[]> map = request.getParameterMap();
-
-        Map<String, String> parameterMap = new HashMap<>();
-
-        for (String key : map.keySet()) {
-
-            parameterMap.put(key, map.get(key)[0]);
-
-        }
-        return parameterMap;
-    }
 }
