@@ -64,13 +64,13 @@ public class AssetsAllocateController extends BaseController {
         if (currentSysUser != null) {
             //当前系统用户不是管理员，资产领用信息
             if (!currentSysUser.isAdmin()) {
-                startPage();
                 List<Assets> assetsList0 = accountingService.getAssetsList0(assets);
+                startPage();
                 return getDataTable(assetsList0);
             }
             //当前系统用户是管理员，待审批信息
-            startPage();
             List<AssetsAllocate> allocateAdminList = allocateService.getAllocateAdminList();
+            startPage();
             return getDataTable(allocateAdminList);
         }
         return getDataTable(new ArrayList<>());

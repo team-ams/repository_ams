@@ -45,25 +45,6 @@
                 </form>
             </div>
 
-            <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.addTab()" shiro:hasPermission="assets:accounting:add">
-                    <i class="fa fa-plus"></i> 新增
-                </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.editTab()"
-                   shiro:hasPermission="assets:accounting:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
-                   shiro:hasPermission="assets:accounting:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
-                <a class="btn btn-info" onclick="$.table.importExcel()" shiro:hasPermission="assets:accounting:import">
-                    <i class="fa fa-upload"></i> 导入
-                </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="assets:accounting:export">
-                    <i class="fa fa-download"></i> 导出
-                </a>
-            </div>
 
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
@@ -74,10 +55,14 @@
 
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: layout-latest-js"/>
+<th:block th:include="include :: bootstrap-suggest-js"/>
+<th:block th:include="include :: bootstrap-typeahead-js"/>
 <script th:inline="javascript">
-    var editFlag = [[${@permission.hasPermi('assets:accounting:edit')}]];
-    var removeFlag = [[${@permission.hasPermi('assets:accounting:remove')}]];
-    var prefix = ctx + "assets/accounting";
+    var editFlag = [[${@permission.hasPermi('assets:checkTask:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('assets:checkTask:remove')}]];
+    var datas = [[${@dict.getType('is_check')}]];
+    var checkStatus = [[${@dict.getType('check_status')}]]
+    var prefix = ctx + "assets/checkTask";
 
     $(function () {
         var panehHidden = false;
@@ -86,11 +71,11 @@
         }
         $('body').layout({initClosed: panehHidden, west__size: 185});
         queryUserList();
-     });
+    });
 
     function queryUserList() {
         var options = {
-            url: prefix + "/list",
+            url: prefix + "/checkRecordList",
             createUrl: prefix + "/add",
             updateUrl: prefix + "/edit/{id}",
             removeUrl: prefix + "/remove",
@@ -99,88 +84,91 @@
             importTemplateUrl: prefix + "/importTemplate",
             sortName: "createTime",
             sortOrder: "desc",
-            modalName: "资产",
+            modalName: "已盘点",
             columns: [{
                 checkbox: true
             },
                 {
-                    field: 'assetsNumber',
-                    title: '资产编号',
-                    sortable: true
+                    field: 'taskId',
+                    title: '盘点任务id',
+                    sortable: true,
+                    visible: false,
+                    align: 'center'
                 },
                 {
-                    field: 'assetsName',
-                    title: '资产名称'
+                    field: 'checkNumber',
+                    title: '盘点单号',
+                    sortable: true,
+                    align: 'center'
                 },
                 {
-                    field: 'assetsType',
-                    title: '资产类别'
+                    field: 'checkAddr',
+                    title: '盘点地点',
+                    align: 'center'
                 },
                 {
-                    field: 'assetsAmount',
-                    title: '数量'
+                    field: 'user.userName',
+                    title: '负责人姓名',
+                    align: 'center'
                 },
                 {
-                    field: 'measuringUnit',
-                    title: '计量单位'
+                    field: 'user.cardNumber',
+                    title: '负责人卡号',
+                    align: 'center'
                 },
-				{
-					field: 'assetsPrice',
-					title: '单价'
-				},
-				{
-					field: 'storageDepartment',
-					title: '保管部门'
-				},
-				{
-					field: 'custodian',
-					title: '保管人',
-                    visible: false
-				},
-				{
-					field: 'user',
-					title: '使用人'
-				},
-				{
-					field: 'storageAddr',
-					title: '存放地点'
-				},
-				{
-					field: 'useStatus',
-					title: '使用情况'
-				},
-				{
-					field: 'assetsSource',
-					title: '资产来源'
-				},
-				{
-					field: 'usefulLife',
-					title: '使用年限'
-				},
-				{
-					field: 'assetsModel',
-					title: '型号'
-				},
-				{
-					field: 'assetsBrand',
-					title: '品牌'
-				},
                 {
-                    field: 'purchaseDate',
-                    title: '购入日期'
+                    field: 'user.dept.parentName',
+                    title: '所在学院',
+                    align: 'center'
+                },
+                {
+                    field: 'user.dept.deptName',
+                    title: '所属专业',
+                    align: 'center'
+                },
+                {
+                    field: 'targetNum',
+                    title: '应盘数量',
+                    align: 'center'
+                },
+                {
+                    field: 'isCheck',
+                    title: '是否盘点',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(datas, value);
+                    }
+                },
+                {
+                    field: 'checkProfit',
+                    title: '盘盈',
+                    align: 'center'
+                },
+                {
+                    field: 'checkLoss',
+                    title: '盘亏',
+                    align: 'center'
+                },
+                {
+                    field: 'checkStatus',
+                    title: '审核状态',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(checkStatus, value);
+                    }
                 },
                 {
                     field: 'createTime',
                     title: '创建时间',
-                    sortable: true
+                    align: 'center'
                 },
                 {
                     title: '操作',
                     align: 'center',
                     formatter: function (value, row, index) {
                         var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.editTab(\'' + row.assetsNumber + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.assetsNumber + '\')"><i class="fa fa-remove"></i>删除</a> ');
+                        var reCheckFlag = row.checkStatus === "3" ? '' : 'hidden';
+                        actions.push('<a class="btn btn-success btn-xs ' + reCheckFlag + ' " href="javascript:void(0)" onclick="clickToReCheck(\'' + row.taskId + '\')"><i class="fa fa-edit"></i>重新盘点</a> ');
                         return actions.join('');
                     }
                 }]
@@ -188,6 +176,29 @@
         $.table.init(options);
     }
 
+    function clickToReCheck(taskId) {
+        if ($.common.isNotEmpty(taskId)) {
+            $.modal.open("开始盘点", prefix + "/checkBegin/6/" + taskId);
+        }
+    }
+
+
+    /* 提交 */
+    function submitCheckTask(index, layero) {
+        var data = {};
+        if ($.validate.form()) {
+            data = $("#form-assets-add").serializeArray();
+        }
+        var url = prefix + "/checkTaskConfirm";
+        //ajax异步调用后台接口，完成新增资产领用
+        $.operate.submit(url, "post", "json", data);
+        //延时2秒关闭，等待submit的ajax异步方法回调后执行关闭模态框
+        setTimeout(function () {
+            $.modal.close();
+        }, 500);
+        //$.modal.msgReload("操作成功,正在刷新数据请稍后……", modal_status.SUCCESS);
+
+    }
 </script>
 </body>
 <!-- 导入区域 -->

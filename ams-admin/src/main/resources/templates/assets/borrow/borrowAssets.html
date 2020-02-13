@@ -29,9 +29,9 @@
         </div>
 
         <div class="row">
-            <div class="col-sm-12">
-                <!-- 表格部分-->
-                <table id="bootstrap-table"></table>
+
+            <div class="col-sm-12" id="centerDiv">
+                <label class="col-sm-12" id="readCardInfo" style="color:red;font-size: 20px;font-weight: bolder" th:align="center" ><a href="javascript:void(0);"><i class="fa fa-ticket"></i></a> 刷卡以读取资产信息</label>
             </div>
         </div>
         <h4 class="form-header h4">其他信息</h4>
@@ -51,7 +51,7 @@
 <script th:inline="javascript">
     var prefix = ctx + "assets/borrow";
 
-    $(function () {
+    function tableInit() {
         var options = {
             url: prefix + "/borrowList",
             showSearch: false,
@@ -124,20 +124,10 @@
                     field: 'createTime',
                     title: '创建时间',
                     visible: false
-                },
-                {
-                    title: '操作',
-                    align: 'center',
-                    formatter: function (value, row, index) {
-                        var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs" href="#"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs" href="#"><i class="fa fa-remove"></i>删除</a>');
-                        return actions.join('');
-                    }
                 }]
         };
         $.table.init(options);
-    });
+    }
 
     /* 添加用户-选择用户-提交 */
     function submitHandler(index, layero) {
@@ -160,7 +150,6 @@
             $.modal.close();
         }, 2000);
         $.modal.msgReload("操作成功,正在刷新数据请稍后……", modal_status.SUCCESS);
-
     }
 
     //websocket 客户端（前端页面）与服务器（后台）建立连接（tcp连接）
@@ -181,9 +170,25 @@
         };
         //获得消息事件
         webSocket.onmessage = function (msg) {
-            $.table.refresh();
-            console.log(msg.data);
-            //发现消息进入    开始处理前端触发逻辑
+            //localeCompare相等返回0，大于返回大于0，小于返回小于0
+            if(!msg.data.localeCompare("连接成功")){
+                console.log(msg.data.localeCompare("成功"));
+                return ;
+            }
+            if(document.getElementById("bootstrap-table")){
+                $.table.refresh();
+                console.log(msg.data);
+                //发现消息进入    开始处理前端触发逻辑
+            }else{
+                var parent = document.getElementById("centerDiv");
+                var readCardInfo = document.getElementById("readCardInfo");
+                if(readCardInfo != null){
+                    parent.removeChild(readCardInfo);
+                }
+                <!-- 添加表格部分-->
+                $("#centerDiv").append("<table id=\"bootstrap-table\"></table>");
+                tableInit();
+            }
         };
         //关闭事件
         webSocket.onclose = function () {

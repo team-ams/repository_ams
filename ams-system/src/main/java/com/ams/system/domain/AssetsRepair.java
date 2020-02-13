@@ -19,7 +19,7 @@ public class AssetsRepair extends BaseEntity {
     /**
      * '申请人ID'
      */
-    private int userId;
+    private int repairUserId;
     /**
      * '修复状态（1：A，2：B，3：C）'
      */
@@ -43,12 +43,18 @@ public class AssetsRepair extends BaseEntity {
     /**
      * '送修日期'
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date sentTime;
+    private String sentTime;
     /**
      * '维修日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date repairTime;
+    private String repairTime;
 
+    /**
+     * 资产详情
+     */
+    private Assets assets;
+    /**
+     * 申请人详情
+     */
+    private SysUser user;
 }

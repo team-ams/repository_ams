@@ -64,13 +64,13 @@ public class AssetsMaintainController extends BaseController {
         if (currentSysUser != null) {
             //当前系统用户不是管理员，个人保养信息
             if (!currentSysUser.isAdmin()) {
-                startPage();
                 List<AssetsMaintain> maintainListByUserId = maintainService.getMaintainListByUserId(currentSysUser.getUserId().toString());
+                startPage();
                 return getDataTable(maintainListByUserId);
             }
             //当前系统用户是管理员，全部信息
-            startPage();
             List<AssetsMaintain> maintainListAll = maintainService.getMaintainListAll();
+            startPage();
             return getDataTable(maintainListAll);
         }
         return getDataTable(new ArrayList<>());
@@ -104,14 +104,6 @@ public class AssetsMaintainController extends BaseController {
     public AjaxResult importTemplate() {
         ExcelUtil<Assets> util = new ExcelUtil<Assets>(Assets.class);
         return util.importTemplateExcel("资产数据");
-    }
-
-    /**
-     * 新增资产
-     */
-    @GetMapping("/add")
-    public String add(ModelMap mmap) {
-        return prefix + "/maintainAssets";
     }
 
 
@@ -149,6 +141,14 @@ public class AssetsMaintainController extends BaseController {
         }
     }
 
+    /**
+     * 新增（模态框）
+     *
+     * @param fid
+     * @param mmap
+     * @param request
+     * @return
+     */
     @GetMapping("/maintainModal/{fid}")
     public String maintainModal(@PathVariable("fid") String fid, ModelMap mmap, HttpServletRequest request) {
         mmap.put("basePath", request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/");

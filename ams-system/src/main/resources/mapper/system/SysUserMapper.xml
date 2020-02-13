@@ -12,6 +12,7 @@
         <result property="email" column="email"/>
         <result property="phonenumber" column="phonenumber"/>
         <result property="sex" column="sex"/>
+        <result property="cardNumber" column="card_number"/>
         <result property="avatar" column="avatar"/>
         <result property="password" column="password"/>
         <result property="salt" column="salt"/>
@@ -83,7 +84,7 @@
 
     <select id="selectUserList" parameterType="com.ams.system.domain.SysUser" resultMap="SysUserResult">
         select u.user_id, u.dept_id, u.login_name, u.user_name, u.email, u.avatar, u.phonenumber, u.password, u.sex,
-        u.salt, u.status, u.del_flag, u.login_ip, u.login_date, u.create_by, u.create_time, u.remark, d.dept_name,
+        u.salt, u.card_number, u.status, u.del_flag, u.login_ip, u.login_date, u.create_by, u.create_time, u.remark, d.dept_name,
         d.leader from sys_user u
         left join sys_dept d on u.dept_id = d.dept_id
         where u.del_flag = '0'

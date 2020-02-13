@@ -16,7 +16,7 @@ public interface IAssetsMaintainService {
     List<AssetsMaintain> getMaintainListByUserId(String userId);
 
     /**
-     * 根据id查找资产保养信息（管理员级别）
+     * 根据id查找资产保养信息
      *
      * @param maintainId
      * @return
@@ -24,7 +24,7 @@ public interface IAssetsMaintainService {
     AssetsMaintain getMaintainById(String maintainId);
 
     /**
-     * 查找所有资产保养信息
+     * 查找所有资产保养信息（管理员级别）
      *
      * @return
      */

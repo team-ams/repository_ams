@@ -92,4 +92,27 @@ public interface IAssetsAccountingService {
      * @return
      */
     public List<Assets> getAssetsByNumberList(List<String> assetsNumbers);
+
+    /**
+     * 根据资产 存放地址 统计数量（用于盘点的应盘数量）
+     *
+     * @param storageAddr
+     * @return
+     */
+    int getCountByStorageAddr(String storageAddr);
+
+    /**
+     * 根据资产 存放地址 获得资产编号（用于盘点）
+     *
+     * @param storageAddr
+     * @return
+     */
+    List<String> getAssetsNumberListByStorageAddr(String storageAddr);
+
+    /**
+     * 查找所有资产 存放地址（去重）
+     *
+     * @return
+     */
+    List<String> getStorageAddrAll();
 }

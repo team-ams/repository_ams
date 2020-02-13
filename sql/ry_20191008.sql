@@ -254,11 +254,11 @@ insert into sys_menu values('116',  '入账管理', '4', '1', '/assets/accountin
 insert into sys_menu values('117',  '领用管理', '4', '2', '/assets/allocate',                      '', 'C', '0', 'assets:allocate:view',         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '领用管理菜单');
 insert into sys_menu values('118',  '借还管理', '4', '3', '/assets/borrow',                      '', 'C', '0', 'assets:borrow:view',         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '借出管理菜单');
 insert into sys_menu values('119',  '保养管理', '4', '4', '/assets/maintain',                      '', 'C', '0', 'assets:maintain:view',         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '归还管理菜单');
-insert into sys_menu values('120',  '转移管理', '4', '5', '/assets/move',                      '', 'C', '0', 'assets:move:view',         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '转移管理菜单');
+insert into sys_menu values('120',  '转移管理', '4', '5', '/assets/transfer',                      '', 'C', '0', 'assets:move:view',         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '转移管理菜单');
 insert into sys_menu values('121',  '维修管理', '4', '6', '/assets/repair',                      '', 'C', '0', 'assets:repair:view',         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '保修管理菜单');
 insert into sys_menu values('122',  '事故管理', '4', '7', '/assets/accident',                      '', 'C', '0', 'assets:accident:view',       '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '报废管理菜单');
 insert into sys_menu values('123',  '报警管理', '4', '8', '/assets/alarm',                      '', 'C', '0', 'assets:alarm:view',       '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '报警管理菜单');
-insert into sys_menu values('124',  '盘点管理', '4', '9', '/assets/check',                     '', 'C', '0', 'assets:check:view',                         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '盘点管理菜单');
+insert into sys_menu values('124',  '盘点管理', '4', '9', '/assets/checkTask',                     '', 'C', '0', 'assets:checkTask:view',                         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '盘点管理菜单');
 insert into sys_menu values('125',  '报表管理', '4', '10','/assets/chart',                     '', 'C', '0', 'assets:chart:view',                         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '报表管理菜单');
 -- 三级菜单
 insert into sys_menu values('500',  '操作日志', '108', '1', '/monitor/operlog',    '', 'C', '0', 'monitor:operlog:view',     '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '操作日志菜单');
@@ -374,6 +374,16 @@ insert into sys_menu values('1088', '维修查询', '121', '1', '#', '',  'F', '
 insert into sys_menu values('1089', '维修新增', '121', '2', '#', '',  'F', '0', 'assets:repair:add',     '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
 insert into sys_menu values('1090', '维修修改', '121', '3', '#', '',  'F', '0', 'assets:repair:edit',     '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
 insert into sys_menu values('1091', '维修删除', '121', '4', '#', '',  'F', '0', 'assets:repair:remove',   '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
+-- 转移管理按钮
+insert into sys_menu values('1092', '转移查询', '120', '1', '#', '',  'F', '0', 'assets:transfer:list',     '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
+insert into sys_menu values('1093', '转移新增', '120', '2', '#', '',  'F', '0', 'assets:transfer:add',     '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
+insert into sys_menu values('1094', '转移修改', '120', '3', '#', '',  'F', '0', 'assets:transfer:edit',     '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
+insert into sys_menu values('1095', '转移删除', '120', '4', '#', '',  'F', '0', 'assets:transfer:remove',   '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
+-- 盘点管理按钮
+insert into sys_menu values('1096', '盘点查询', '120', '1', '#', '',  'F', '0', 'assets:checkTask:list',     '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
+insert into sys_menu values('1097', '盘点新增', '120', '2', '#', '',  'F', '0', 'assets:checkTask:add',     '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
+insert into sys_menu values('1098', '盘点修改', '120', '3', '#', '',  'F', '0', 'assets:checkTask:edit',     '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
+insert into sys_menu values('1099', '盘点删除', '120', '4', '#', '',  'F', '0', 'assets:checkTask:remove',   '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
 
 
 
@@ -438,6 +448,9 @@ insert into sys_role_menu values ('2', '120');
 insert into sys_role_menu values ('2', '121');
 insert into sys_role_menu values ('2', '122');
 insert into sys_role_menu values ('2', '123');
+insert into sys_role_menu values ('2', '124');
+insert into sys_role_menu values ('2', '125');
+
 
 insert into sys_role_menu values ('2', '500');
 insert into sys_role_menu values ('2', '501');
@@ -517,6 +530,8 @@ insert into sys_role_menu values ('2', '1084');
 insert into sys_role_menu values ('2', '1085');
 insert into sys_role_menu values ('2', '1088');
 insert into sys_role_menu values ('2', '1089');
+insert into sys_role_menu values ('2', '1096');
+
 
 
 -- ----------------------------
@@ -691,6 +706,23 @@ insert into sys_dict_data values(55,  1,  '常规检查',     '0',       'mainta
 insert into sys_dict_data values(56,  2,  '抢修',     '1',       'maintain_name',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '抢修状态');
 insert into sys_dict_data values(57,  1,  '正常',     '0',       'maintain_status',        '',   '',        'Y', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '正常状态');
 insert into sys_dict_data values(58,  2,  '故障',     '1',       'maintain_status',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '故障状态');
+insert into sys_dict_data values(59,  1,  '部件维修',     '1',       'repair_grade',        '',   '',        'Y', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '部件维修状态');
+insert into sys_dict_data values(60,  2,  '中修',     '2',       'repair_grade',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '中修状态');
+insert into sys_dict_data values(61,  3,  '大修',     '3',       'repair_grade',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '大修状态');
+insert into sys_dict_data values(62,  1,  'A',     '1',       'repair_status',        '',   '',        'Y', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', 'A状态');
+insert into sys_dict_data values(63,  2,  'B',     '2',       'repair_status',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', 'B状态');
+insert into sys_dict_data values(64,  3,  'C',     '3',       'repair_status',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', 'C状态');
+insert into sys_dict_data values(65,  1,  '一般事故',     '1',       'accident_grade',        '',   '',        'Y', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '一般事故状态');
+insert into sys_dict_data values(66,  2,  '中等事故',     '2',       'accident_grade',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '中等事故状态');
+insert into sys_dict_data values(67,  3,  '重大事故',     '3',       'accident_grade',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '重大事故状态');
+insert into sys_dict_data values(68,  1,  '未盘点',     '0',       'is_check',        '',   '',        'Y', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '未盘点状态');
+insert into sys_dict_data values(69,  2,  '已盘点',     '1',       'is_check',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '已盘点状态');
+insert into sys_dict_data values(70,  1,  '审核中',     '1',       'check_status',        '',   '',        'Y', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '审核中状态');
+insert into sys_dict_data values(71,  2,  '同意',     '2',       'check_status',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '同意状态');
+insert into sys_dict_data values(72,  3,  '驳回',     '3',       'check_status',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '驳回状态');
+
+
+
 
 
 
@@ -921,12 +953,23 @@ create table assets_accounting(
 -- ----------------------------
 -- 初始化-资产信息
 -- ----------------------------
-INSERT INTO assets_accounting VALUES (1, 'a9b7e8', '电脑', '低值资产', '办公家具', 1, '台', 5400, '新奥燃气', '行政部', '', '', '前台', '1', '购置', '5', 0.03, '1', '', '启天M7150', '联想', '2019-05-25', '', '', '0', NULL, 'admin', '2020-01-21 09:46:58', '', '2020-01-21 09:46:58');
-INSERT INTO assets_accounting VALUES (2, 'c377d8', '彩色打印机', '低值资产', '办公家具', 1, '台', 8890, '新奥燃气', '行政部', '', '', '前台', '1', '购置', '5', 0.06, '1', '', 'CP1020', '惠普', '2019-05-26', '', '', '0', NULL, 'admin', '2020-01-21 09:46:58', '', '2020-01-21 09:46:58');
-INSERT INTO assets_accounting VALUES (3, 'e6f4d2', '传真机', '低值资产', '仪器仪表', 1, '台', 3000, '新奥燃气', '行政部', '', '', '前台', '1', '购置', '2', 0.04, '1', '', 'SF-560R', '三星', '2019-05-27', '', '', '0', NULL, 'admin', '2020-01-21 09:46:58', '', '2020-01-21 09:47:17');
-INSERT INTO assets_accounting VALUES (4, '38d87b', '打印机', '低值资产', '仪器仪表', 1, '台', 1000.5, '新奥燃气', '行政部', '', '', '前台', '0', '购置', '3', 0.12, '1', '', 'S2520', 'FUJI', '2019-05-28', '2014-01-29', '', '0', NULL, 'admin', '2020-01-21 09:46:58', '', '2020-01-21 09:47:52');
-INSERT INTO assets_accounting VALUES (5, '5e6a1b', '电视机', '低值资产', '仪器仪表', 1, '台', 5800, '新奥燃气', '行政部', '', '', '档案室门口', '1', '赠送', '5', 0.22, '0', '', '', 'KONKA', '2019-05-29', '', '', '0', NULL, 'admin', '2020-01-21 09:46:58', '', '2020-01-21 16:48:18');
-INSERT INTO assets_accounting VALUES (6, 'oodsaf23', '打印机', '低值资产', '行政办公设备', 1, '台', 1345.5, '计算机学院', '物联', '', '', '前台', '1', '购置', '', 0, '0', '', '', '', '', '', '', '0', NULL, 'admin', '2020-01-21 09:57:24', '', '2020-01-22 10:27:47');
+INSERT INTO assets_accounting VALUES (1, 'a9b7e8', '电脑', '低值资产', '办公家具', 1, '台', 5400, '新奥燃气', '行政部', '', '', '第一教学楼101教室', '1', '购置', '5', 0.03, '1', '', '启天M7150', '联想', '2019-05-25', '', '', '0', NULL, 'admin', '2020-01-21 09:46:58', '', '2020-01-21 09:46:58');
+INSERT INTO assets_accounting VALUES (2, 'c377d8', '彩色打印机', '低值资产', '办公家具', 1, '台', 8890, '新奥燃气', '行政部', '', '', '第三教学楼103教室', '1', '购置', '5', 0.06, '1', '', 'CP1020', '惠普', '2019-05-26', '', '', '0', NULL, 'admin', '2020-01-21 09:46:58', '', '2020-01-21 09:46:58');
+INSERT INTO assets_accounting VALUES (3, 'e6f4d2', '传真机', '低值资产', '仪器仪表', 1, '台', 3000, '新奥燃气', '行政部', '', '', '第二教学楼102教室', '1', '购置', '2', 0.04, '1', '', 'SF-560R', '三星', '2019-05-27', '', '', '0', NULL, 'admin', '2020-01-21 09:46:58', '', '2020-01-21 09:47:17');
+INSERT INTO assets_accounting VALUES (4, '38d87b', '打印机', '低值资产', '仪器仪表', 1, '台', 1000.5, '新奥燃气', '行政部', '', '', '福慧图书馆电子阅览室', '0', '购置', '3', 0.12, '1', '', 'S2520', 'FUJI', '2019-05-28', '2014-01-29', '', '0', NULL, 'admin', '2020-01-21 09:46:58', '', '2020-01-21 09:47:52');
+INSERT INTO assets_accounting VALUES (5, '5e6a1b', '电视机', '低值资产', '仪器仪表', 1, '台', 5800, '新奥燃气', '行政部', '', '', '中巴软件园708教室', '1', '赠送', '5', 0.22, '0', '', '', 'KONKA', '2019-05-29', '', '', '0', NULL, 'admin', '2020-01-21 09:46:58', '', '2020-01-21 16:48:18');
+INSERT INTO assets_accounting VALUES (6, 'oodsaf23', '打印机', '低值资产', '行政办公设备', 1, '台', 1345.5, '计算机学院', '物联', '', '', '中巴软件园709教室', '1', '购置', '', 0, '0', '', '', '', '', '', '', '0', NULL, 'admin', '2020-01-21 09:57:24', '', '2020-01-22 10:27:47');
+INSERT INTO assets_accounting VALUES (7, 'oodsbe24', '打印机', '低值资产', '行政办公设备', 1, '台', 1345.5, '计算机学院', '物联', '', '', '学生活动中心', '1', '购置', '', 0, '0', '', '', '', '', '', '', '0', NULL, 'admin', '2020-01-21 09:57:24', '', '2020-01-22 10:27:47');
+INSERT INTO assets_accounting VALUES (8, 'oodsct25', '打印机', '低值资产', '行政办公设备', 1, '台', 1345.5, '计算机学院', '物联', '', '', '学术大厅', '1', '购置', '', 0, '0', '', '', '', '', '', '', '0', NULL, 'admin', '2020-01-21 09:57:24', '', '2020-01-22 10:27:47');
+INSERT INTO assets_accounting VALUES (9, 'oodsaf26', '打印机', '低值资产', '行政办公设备', 1, '台', 1345.5, '计算机学院', '物联', '', '', '行政楼106室', '1', '购置', '', 0, '0', '', '', '', '', '', '', '0', NULL, 'admin', '2020-01-21 09:57:24', '', '2020-01-22 10:27:47');
+INSERT INTO assets_accounting VALUES (10, 'oidsqf27', '打印机', '低值资产', '行政办公设备', 1, '台', 1345.5, '计算机学院', '物联', '', '', '实验大楼305室', '1', '购置', '', 0, '0', '', '', '', '', '', '', '0', NULL, 'admin', '2020-01-21 09:57:24', '', '2020-01-22 10:27:47');
+INSERT INTO assets_accounting VALUES (11, 'oodsmf28', '打印机', '低值资产', '行政办公设备', 1, '台', 1345.5, '计算机学院', '物联', '', '', '实验大楼306室', '1', '购置', '', 0, '0', '', '', '', '', '', '', '0', NULL, 'admin', '2020-01-21 09:57:24', '', '2020-01-22 10:27:47');
+INSERT INTO assets_accounting VALUES (12, 'oodsaf29', '打印机', '低值资产', '行政办公设备', 1, '台', 1345.5, '计算机学院', '物联', '', '', '实验大楼411室', '1', '购置', '', 0, '0', '', '', '', '', '', '', '0', NULL, 'admin', '2020-01-21 09:57:24', '', '2020-01-22 10:27:47');
+INSERT INTO assets_accounting VALUES (13, 'oedjaf30', '打印机', '低值资产', '行政办公设备', 1, '台', 1345.5, '计算机学院', '物联', '', '', '第一教学楼101教室', '1', '购置', '', 0, '0', '', '', '', '', '', '', '0', NULL, 'admin', '2020-01-21 09:57:24', '', '2020-01-22 10:27:47');
+INSERT INTO assets_accounting VALUES (14, 'uusoc31', '飞利浦投影仪', '低值资产', '行政办公设备', 1, '台', 1345.5, '计算机学院', '物联', '', '', '第一教学楼101教室', '1', '购置', '', 0, '0', '', '', '', '', '', '', '0', NULL, 'admin', '2020-01-21 09:57:24', '', '2020-01-22 10:27:47');
+INSERT INTO assets_accounting VALUES (15, 'esdc73', '凯德龙音响', '低值资产', '行政办公设备', 1, '台', 1345.5, '计算机学院', '物联', '', '', '中巴软件园708教室', '1', '购置', '', 0, '0', '', '', '', '', '', '', '0', NULL, 'admin', '2020-01-21 09:57:24', '', '2020-01-22 10:27:47');
+INSERT INTO assets_accounting VALUES (16, 'dd78aa3', '中智讯嵌入式实验箱001', '中值资产', '实验教学设备', 1, '台', 1345.5, '计算机学院', '物联', '', '', '中巴软件园708教室', '1', '购置', '', 0, '0', '', '', '', '', '', '', '0', NULL, 'admin', '2020-01-21 09:57:24', '', '2020-01-22 10:27:47');
+
 
 -- ----------------------------
 -- 22、资产来源表
@@ -1043,11 +1086,10 @@ create table assets_accident(
      accident_id           int               not null auto_increment         comment '事故ID',
      assets_number         varchar(15)       not null default ''             comment '资产编号',
      report_userId         int               not null default 0              comment '事故上报人ID',
-     maintain_status       char(1)           not null default ''             comment '保养后状态（0：正常，1：故障）',
      accident_dept         varchar(50)       not null default ''             comment '事故发生部门',
      accident_grade        char(1)           not null default ''             comment '事故级别（1：一般事故，2：中等事故，3：重大事故）',
      economic_losses       varchar(10)       not null default ''             comment '经济损失',
-     accident_remark       text                                              comment '故障描述',
+     remark       text                                              comment '故障描述',
      summary               text                                              comment '防范总结',
      accident_time         timestamp         not null default current_timestamp      comment '事故发生日期',
      create_by               varchar(64)         default ''          comment '创建者',
@@ -1059,10 +1101,10 @@ create table assets_accident(
 -- ----------------------------
 -- 初始化-设备事故信息
 -- ----------------------------
-insert into assets_accident values (1,'a9b7e8',2,'','第一教学楼','3','1000','资产事故','注意规范使用设备','2020-01-14 11:50:06','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
-insert into assets_accident values (2,'e6f4d2',3,'','第二教学楼','1','1500','资产事故','注意规范使用设备','2020-01-14 11:50:06','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
-insert into assets_accident values (3,'c377d8',2,'','第三教学楼','2','1586.2','资产事故','注意规范使用设备','2020-01-14 11:50:06','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
-insert into assets_accident values (4,'5e6a1b',2,'','图书馆','1','624.33','资产事故','注意规范使用设备','2020-01-14 11:50:06','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_accident values (1,'a9b7e8',2,'第一教学楼','3','1000','资产事故','注意规范使用设备','2020-01-14 11:50:06','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_accident values (2,'e6f4d2',3,'第二教学楼','1','1500','资产事故','注意规范使用设备','2020-01-14 11:50:06','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_accident values (3,'c377d8',2,'第三教学楼','2','1586.2','资产事故','注意规范使用设备','2020-01-14 11:50:06','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_accident values (4,'5e6a1b',2,'图书馆','1','624.33','资产事故','注意规范使用设备','2020-01-14 11:50:06','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
 
 -- ----------------------------
 -- 27、资产维修表
@@ -1071,12 +1113,12 @@ drop table if exists assets_repair;
 create table assets_repair(
     repair_id             int               not null auto_increment         comment '维修ID',
     assets_number         varchar(15)       not null default ''             comment '资产编号',
-    userId                int               not null default 0              comment '申请人ID',
+    repair_userId                int               not null default 0              comment '申请人ID',
     repair_status       char(1)           not null default ''               comment '修复状态（1：A，2：B，3：C）',
     installation_addr     varchar(50)       not null default ''             comment '安装地点',
     repair_grade          char(1)           not null default ''             comment '修复级别（1：部件维修，2：中修，3：大修）',
     repair_fees           varchar(10)       not null default ''             comment '维修费用',
-    accident_remark       text                                              comment '故障描述',
+    remark       text                                              comment '故障描述',
     sent_time             timestamp         not null default current_timestamp      comment '送修日期',
     repair_time           timestamp         not null default current_timestamp      comment '维修日期',
     create_by               varchar(64)         default ''          comment '创建者',
@@ -1088,8 +1130,139 @@ create table assets_repair(
 -- ----------------------------
 -- 初始化-设备维修信息
 -- ----------------------------
-insert into assets_repair values (1,'a9b7e8',2,'','第一教学楼','3','1000','资产维修','2020-01-14 11:50:06','2020-01-14 11:50:06','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
-insert into assets_repair values (2,'e6f4d2',3,'','第二教学楼','1','1500','资产维修','2020-01-14 11:50:06','2020-01-14 11:50:06','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
-insert into assets_repair values (3,'c377d8',2,'','第三教学楼','2','1586.2','资产维修','2020-01-14 11:50:06','2020-01-14 11:50:06','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
-insert into assets_repair values (4,'5e6a1b',2,'','图书馆','1','624.33','资产维修','2020-01-14 11:50:06','2020-01-14 11:50:06','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_repair values (1,'a9b7e8',2,'1','第一教学楼','3','1000','资产维修','2020-01-14 11:50:06','2020-01-14 11:50:06','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_repair values (2,'e6f4d2',3,'2','第二教学楼','1','1500','资产维修','2020-01-14 11:50:06','2020-01-14 11:50:06','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_repair values (3,'c377d8',2,'3','第三教学楼','2','1586.2','资产维修','2020-01-14 11:50:06','2020-01-14 11:50:06','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_repair values (4,'5e6a1b',2,'2','图书馆','1','624.33','资产维修','2020-01-14 11:50:06','2020-01-14 11:50:06','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+
+-- ----------------------------
+-- 28、资产转移表
+-- ----------------------------
+drop table if exists assets_transfer;
+create table assets_transfer(
+    transfer_id             int               not null auto_increment         comment '转移ID',
+    assets_number         varchar(15)       not null default ''             comment '资产编号',
+    transfer_userId       int               not null default 0              comment '负责人ID',
+    original_addr         varchar(50)       not null default ''             comment '原存放地点',
+    present_addr          varchar(50)       not null default ''             comment '现在存放地点',
+    remark                text                                              comment '备注',
+    transfer_time         timestamp         not null default current_timestamp      comment '转移日期',
+    create_by               varchar(64)         default ''          comment '创建者',
+    create_time              timestamp           not null default current_timestamp      comment '创建时间/登记时间',
+    update_by               varchar(64)         default ''          comment '更新者',
+    update_time              timestamp           not null default current_timestamp on update current_timestamp      comment '更新时间',
+    primary key (transfer_id)
+)engine = innodb default charset utf8 comment '资产转移表';
+-- ----------------------------
+-- 初始化-设备转移信息
+-- ----------------------------
+insert into assets_transfer values (1,'a9b7e8',2,'第二教学楼','第一教学楼','资产转移','2020-01-14 11:50:06','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_transfer values (2,'e6f4d2',3,'第三教学楼','第二教学楼','资产转移','2020-01-14 11:50:06','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_transfer values (3,'c377d8',2,'中巴软件园709','第三教学楼','资产转移','2020-01-14 11:50:06','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_transfer values (4,'5e6a1b',2,'学生活动中心','图书馆','资产转移','2020-01-14 11:50:06','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+
+-- ----------------------------
+-- 29、盘点任务表
+-- ----------------------------
+drop table if exists assets_check_task;
+create table assets_check_task
+(
+    task_id             int                 not null auto_increment        comment '盘点id',
+    check_number        varchar(20)         not null default ''            comment '盘点单号',
+    check_userId        int                 not null default 0             comment '盘点负责人',
+    check_addr          varchar(50)         not null default ''            comment '盘点地址',
+    target_num          int                 not null default 0             comment '应盘数量',
+    check_profit        int                                                comment '盘盈',
+    check_loss          int                                                comment '盘亏',
+    is_check            char(1)             not null default '0'           comment '是否盘点（0：未盘点 1：已盘点）',
+    check_status        char(1)                                            comment '已盘点后的任务状态（1：审核中 2：通过 3：驳回）',
+    create_by           varchar(64)                  default ''                    comment '创建者',
+    create_time         timestamp           not null default current_timestamp     comment '创建时间/登记时间',
+    update_by           varchar(64)                  default ''                    comment '更新者',
+    update_time         timestamp           not null default current_timestamp on update current_timestamp comment '更新时间',
+    primary key (task_id)
+)engine = innodb default charset utf8 comment '盘点任务表';
+-- ----------------------------
+-- 初始化-设备盘点信息
+-- ----------------------------
+insert into assets_check_task values (1,'20200209175100',2,'第一教学楼101教室',3,1,0,1,1,'admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_check_task values (2,'20200210132100',3,'中巴软件园708教室',3,0,0,1,2,'admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_check_task values (3,'20200211154100',2,'中巴软件园708教室',3,0,1,1,3,'admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_check_task values (4,'20200212111100',2,'中巴软件园708教室',3,1,0,1,2,'admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_check_task values (5,'20200213113100',2,'中巴软件园708教室',3,null,null,0,null,'admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+
+-- ----------------------------
+-- 30、盘点资产表
+-- ----------------------------
+drop table if exists assets_check_item;
+create table assets_check_item(
+      item_id           int                not null auto_increment comment '盘点id',
+      check_number      varchar(20)         not null default '' comment '盘点单号',
+      assets_number     varchar(15)         not null default '' comment '资产编号',
+      create_by         varchar(64)          default '' comment '创建者',
+      create_time       timestamp   not null default current_timestamp comment '创建时间/登记时间',
+      update_by         varchar(64)          default '' comment '更新者',
+      update_time       timestamp   not null default current_timestamp on update current_timestamp comment '更新时间',
+      primary key (item_id)
+)engine = innodb default charset utf8 comment '盘点资产表';
+-- ----------------------------
+-- 初始化-设备盘点信息
+-- ----------------------------
+insert into assets_check_item values (1,'20200209175100','a9b7e8','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_check_item values (2,'20200209175100','uusoc31','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_check_item values (3,'20200209175100','oedjaf30','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_check_item values (4,'20200209175100','5e6a1b','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+
+insert into assets_check_item values (5,'20200210132100','5e6a1b','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_check_item values (6,'20200210132100','esdc73','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_check_item values (7,'20200210132100','dd78aa3','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_check_item values (8,'20200210132100','5e6a1b','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+
+insert into assets_check_item values (9,'20200211154100','a9b7e8','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_check_item values (10,'20200211154100','c377d8','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_check_item values (11,'20200211154100','e6f4d2','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_check_item values (12,'20200211154100','5e6a1b','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+
+insert into assets_check_item values (13,'20200212111100','a9b7e8','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_check_item values (14,'20200212111100','c377d8','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_check_item values (15,'20200212111100','e6f4d2','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_check_item values (16,'20200212111100','5e6a1b','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+
+insert into assets_check_item values (17,'20200213113100','a9b7e8','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_check_item values (18,'20200213113100','c377d8','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_check_item values (19,'20200213113100','e6f4d2','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_check_item values (20,'20200213113100','5e6a1b','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+
+-- ----------------------------
+-- 31、资产存放地址表
+-- ----------------------------
+drop table if exists assets_storage_addr;
+create table assets_storage_addr(
+    addr_id           int                 not null auto_increment    comment '地点id',
+    addr_no           int                 not null default 0         comment '地址编号',
+    addr_name         varchar(50)         not null default ''         comment '地址名称',
+    create_by         varchar(64)          default '' comment '创建者',
+    create_time       timestamp   not null default current_timestamp comment '创建时间/登记时间',
+    update_by         varchar(64)          default '' comment '更新者',
+    update_time       timestamp   not null default current_timestamp on update current_timestamp comment '更新时间',
+    primary key (addr_id)
+)engine = innodb default charset utf8 comment '资产存放地址表';
+-- ----------------------------
+-- 初始化-资产存放地址表
+-- ----------------------------
+insert into assets_storage_addr values (1,10000,'第一教学楼101教室','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_storage_addr values (2,10001,'第二教学楼102教室','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_storage_addr values (3,10002,'第三教学楼103教室','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_storage_addr values (4,10003,'福慧图书馆电子阅览室','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_storage_addr values (5,10004,'中巴软件园708教室','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_storage_addr values (6,10005,'中巴软件园709教室','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_storage_addr values (7,10006,'学生活动中心','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_storage_addr values (8,10007,'学术大厅','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_storage_addr values (9,10008,'行政楼106室','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_storage_addr values (10,10009,'实验大楼305室','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_storage_addr values (11,10010,'实验大楼306室','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_storage_addr values (12,10011,'实验大楼411室','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+
+
+
 

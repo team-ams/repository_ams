@@ -89,16 +89,6 @@
                     field: 'createTime',
                     title: '创建时间',
                     visible: false
-                },
-                {
-                    title: '操作',
-                    align: 'center',
-                    formatter: function (value, row, index) {
-                        var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs" href="#"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs" href="#"><i class="fa fa-remove"></i>删除</a>');
-                        return actions.join('');
-                    }
                 }]
         };
         $.table.init(options);

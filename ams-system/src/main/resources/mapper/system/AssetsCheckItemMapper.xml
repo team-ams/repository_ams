@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ams.system.mapper.AssetsCheckItemMapper">
+
+    <resultMap type="com.ams.system.domain.AssetsCheckItem" id="AssetsCheckItemResult">
+        <id property="itemId" column="item_id"/>
+        <result property="checkNumber" column="check_number"/>
+        <result property="assetsNumber" column="item_assets_number"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <association property="assets" column="item_assets_number" javaType="com.ams.system.domain.Assets"
+                     resultMap="AssetsResult"/>
+    </resultMap>
+
+
+    <resultMap type="com.ams.system.domain.Assets" id="AssetsResult">
+        <id property="assetsId" column="assets_id"/>
+        <result property="assetsNumber" column="assets_number"/>
+        <result property="assetsName" column="assets_name"/>
+        <result property="assetsNature" column="assets_nature"/>
+        <result property="assetsType" column="assets_type"/>
+        <result property="assetsAmount" column="assets_amount"/>
+        <result property="measuringUnit" column="measuring_unit"/>
+        <result property="assetsPrice" column="assets_price"/>
+        <result property="storageUnit" column="storage_unit"/>
+        <result property="storageDepartment" column="storage_department"/>
+        <result property="custodian" column="custodian"/>
+        <result property="user" column="user"/>
+        <result property="storageAddr" column="storage_addr"/>
+        <result property="useStatus" column="use_status"/>
+        <result property="assetsSource" column="assets_source"/>
+        <result property="usefulLife" column="useful_life"/>
+        <result property="residualRate" column="residual_rate"/>
+        <result property="checkStatus" column="check_status"/>
+        <result property="assetsFormat" column="assets_format"/>
+        <result property="assetsModel" column="assets_model"/>
+        <result property="assetsBrand" column="assets_brand"/>
+        <result property="purchaseDate" column="purchase_date"/>
+        <result property="manufactureDate" column="manufacture_date"/>
+        <result property="warrantyDate" column="warranty_date"/>
+        <result property="delFlag" column="assets_del_flag"/>
+        <result property="mark" column="mark"/>
+        <result property="createTime" column="assets_create_time"/>
+        <result property="updateTime" column="assets_update_time"/>
+    </resultMap>
+
+    <sql id="selectAssetsCheckTaskVo">
+        select a.item_id,
+               a.check_number ,
+               a.assets_number as item.assets_number,
+               a.create_time ,
+               a.update_time ,
+        from assets_check_item a
+            left join assets_accounting b on a.assets_number = b.assets_number
+    </sql>
+
+    <select id="getCheckTargetNumByCheckNumber" parameterType="String" resultType="java.lang.Integer">
+        select count(1) from assets_check_item a where a.check_number = #{checkNumber}
+    </select>
+
+    <insert id="insertCheckItem" parameterType="com.ams.system.domain.AssetsCheckItem" useGeneratedKeys="true"
+            keyProperty="item_id">
+        insert into assets_check_item(
+        <if test="checkNumber != null and checkNumber != ''">check_number,</if>
+        <if test="assetsNumber != null and assetsNumber != ''">assets_number,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        create_time
+        )values(
+        <if test="checkNumber != null and checkNumber != ''">#{checkNumber},</if>
+        <if test="assetsNumber != null and assetsNumber != ''">#{assetsNumber},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        sysdate()
+        )
+    </insert>
+
+    <delete id="deleteCheckTaskByCheckNumber" parameterType="String">
+         delete from assets_check_item where item_id in(select temp.item_id from (select item_id from assets_check_item where check_number = #{checkNumber}) temp)
+    </delete>
+
+</mapper> 

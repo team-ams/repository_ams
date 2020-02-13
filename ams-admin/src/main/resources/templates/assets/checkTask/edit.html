@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('修改资产')" />
+	<th:block th:include="include :: select2-css" />
+</head>
+<body>
+    <div class="main-content">
+        <form id="form-assets-edit" class="form-horizontal" th:object="${checkTask}">
+            <input name="taskId" type="hidden" th:field="*{taskId}"/>
+            <div class="row">
+                <h4 class="col-lg-8" style="font-size: 26px;">修改盘点任务</h4>
+            </div>
+            <div class="row">
+                <label class="col-lg-3 control-label"><span
+                        style="color: red; ">*</span>盘点地点：</label>
+                <div class="col-lg-9">
+                    <input name="checkAddr" type="text" class="form-control" id="suggest-checkAddr" th:field="*{checkAddr}">
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-white dropdown-toggle"
+                                data-toggle="dropdown" style="display: none;">
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" style="height: 25px"></div>
+
+            <div class="row">
+                <label class="col-lg-3 control-label"><span style="color: red; ">*</span>负责人：</label>
+                <div class="col-lg-9">
+                    <div class="input-group">
+                        <input type="text" placeholder="ry..." class="form-control"
+                               id="suggest-user" th:field="*{user.loginName}" >
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-white dropdown-toggle"
+                                    data-toggle="dropdown">
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row">
+        <div class="col-sm-offset-5 col-sm-10">
+            <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler()"><i class="fa fa-check"></i>保 存</button>&nbsp;
+            <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭 </button>
+        </div>
+    </div>
+	<th:block th:include="include :: footer" />
+	<th:block th:include="include :: select2-js" />
+    <th:block th:include="include :: bootstrap-suggest-js"/>
+    <th:block th:include="include :: bootstrap-typeahead-js"/>
+	<script type="text/javascript">
+        var prefix = ctx + "assets/checkTask";
+        var checkUserId = 0;
+        var data = {};
+        function submitHandler() {
+	        if ($.validate.form()) {
+	        	data = $("#form-assets-edit").serializeArray();
+	        	if(checkUserId != 0){
+                    data.push({"name":"checkUserId","value":checkUserId});
+                }
+                $.operate.saveTab(prefix + "/edit", data);
+	        }
+	    }
+
+        $.get(prefix + "/collection", function (data) {
+            $("#suggest-checkAddr").typeahead({
+                source: data.value
+            });
+        }, 'json');
+        var testBsSuggest = $("#suggest-user").bsSuggest({
+            url: prefix + "/userModel",
+            showBtn: false,
+            idField: "userId",
+            keyField: "loginName"
+        }).on('onDataRequestSuccess', function (e, result) {
+            console.log('onDataRequestSuccess: ', result);
+        }).on('onSetSelectValue', function (e, keyword) {
+            console.log('onSetSelectValue: ', keyword);
+            checkUserId = keyword.id;
+        }).on('onUnsetSelectValue', function (e) {
+            console.log("onUnsetSelectValue");
+        });
+    </script>
+</body>
+</html>

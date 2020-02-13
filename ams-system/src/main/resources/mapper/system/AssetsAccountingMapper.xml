@@ -246,4 +246,16 @@
         </foreach>
     </select>
 
+    <select id="getCountByStorageAddr" parameterType="String" resultType="java.lang.Integer">
+        select count(1) from assets_accounting a where a.storage_addr = #{storageAddr}
+    </select>
+
+    <select id="getAssetsNumberListByStorageAddr" parameterType="String" resultType="java.lang.String">
+        select assets_number from assets_accounting a where a.storage_addr = #{storageAddr}
+    </select>
+
+    <select id="getStorageAddrAll" resultType="java.lang.String">
+        select distinct (storage_addr) from assets_accounting
+    </select>
+
 </mapper>

@@ -7,7 +7,7 @@
     <resultMap type="com.ams.system.domain.AssetsMaintain" id="AssetsMaintainResult">
         <id property="maintainId" column="maintain_id"/>
         <result property="assetsNumber" column="maintain_assets_number"/>
-        <result property="maintainUserId" column="maintain_userid"/>
+        <result property="maintainUserId" column="maintain_userId"/>
         <result property="maintainName" column="maintain_name"/>
         <result property="installationAddr" column="installation_addr"/>
         <result property="maintainTime" column="maintain_time"/>
@@ -89,7 +89,7 @@
     <sql id="selectAssetsMaintainVo">
         select a.maintain_id,
                a.assets_number as maintain_assets_number,
-               a.maintain_userid,
+               a.maintain_userId,
                a.remark,
                a.installation_addr,
                a.maintain_name,
@@ -153,7 +153,7 @@
                (select dept_name from sys_dept where dept_id = d.parent_id) parent_name
         from assets_maintain a
             left join assets_accounting b on a.assets_number = b.assets_number
-            left join sys_user u on a.maintain_userid =  u.user_id
+            left join sys_user u on a.maintain_userId =  u.user_id
             left join sys_dept d on d.dept_id = u.dept_id
     </sql>
 
@@ -175,7 +175,7 @@
         <foreach collection="list" item="item" separator=";">
             insert into assets_maintain(
             <if test="item.assetsNumber != null and item.assetsNumber != ''">assets_number,</if>
-            <if test="item.maintainUserId != null">maintain_userid,</if>
+            <if test="item.maintainUserId != null">maintain_userId,</if>
             <if test="item.maintainName != null and item.maintainName != ''">maintain_name,</if>
             <if test="item.installationAddr != null and item.installationAddr != ''">installation_addr,</if>
             <if test="item.maintainTime != null">maintain_time,</if>
@@ -201,7 +201,7 @@
             update assets_maintain
             <set>
                 <if test="assetsNumber != null and assetsNumber != ''">assets_number=#{assetsNumber},</if>
-                <if test="maintainUserId != null">maintain_userid=#{maintainUserId},</if>
+                <if test="maintainUserId != null">maintain_userId=#{maintainUserId},</if>
                 <if test="maintainName != null and maintainName != ''">maintain_name=#{maintainName},</if>
                 <if test="installationAddr != null and installationAddr != ''">installation_addr=#{installationAddr},</if>
                 <if test="remark != null and remark != ''">remark=#{remark},</if>

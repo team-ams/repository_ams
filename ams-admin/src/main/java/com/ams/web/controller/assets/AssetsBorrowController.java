@@ -40,6 +40,8 @@ import java.util.Map;
 public class AssetsBorrowController extends BaseController {
     private static List<String> assetsNumbers = new ArrayList<>();
     private static LinkedHashSet<Assets> assetsLinkedHashSet = new LinkedHashSet<>();
+    private static final String FID = "1";
+    private static final String MSG = "I'm from Server---borrow";
 
     private String prefix = "/assets/borrow";
 
@@ -69,13 +71,13 @@ public class AssetsBorrowController extends BaseController {
         if (currentSysUser != null) {
             //当前系统用户不是管理员，资产领用信息
             if (!currentSysUser.isAdmin()) {
-                startPage();
                 List<AssetsBorrow> borrowListByUserId = borrowService.getBorrowListByUserId(currentSysUser.getUserId().toString());
+                startPage();
                 return getDataTable(borrowListByUserId);
             }
             //当前系统用户是管理员，待审批信息
-            startPage();
             List<AssetsBorrow> borrowListAll = borrowService.getBorrowListAll();
+            startPage();
             return getDataTable(borrowListAll);
         }
         return getDataTable(new ArrayList<>());
@@ -111,13 +113,6 @@ public class AssetsBorrowController extends BaseController {
         return util.importTemplateExcel("资产数据");
     }
 
-    /**
-     * 新增资产
-     */
-    @GetMapping("/add")
-    public String add(ModelMap mmap) {
-        return prefix + "/borrowAssets";
-    }
 
     /**
      * 新增保存资产
@@ -139,7 +134,7 @@ public class AssetsBorrowController extends BaseController {
      */
     @GetMapping("/edit/{borrowId}")
     public String edit(@PathVariable("borrowId") String borrowId, ModelMap mmap) {
-        mmap.put("borrow",borrowService.getBorrowById(borrowId));
+        mmap.put("borrow", borrowService.getBorrowById(borrowId));
         return prefix + "/edit";
     }
 
@@ -168,12 +163,22 @@ public class AssetsBorrowController extends BaseController {
         }
     }
 
+    /**
+     * 新增（模态框）
+     *
+     * @param fid
+     * @param mmap
+     * @param request
+     * @return
+     */
     @GetMapping("/borrowModal/{fid}")
     public String borrowModal(@PathVariable("fid") String fid, ModelMap mmap, HttpServletRequest request) {
+        mmap.put("tableData", "info");
         mmap.put("basePath", request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/");
         mmap.put("fid", fid);
         return prefix + "/borrowAssets";
     }
+
     /**
      * MFRC522通过ESP8266将ID卡号发送过来，提供给esp8266调用的接口
      *
@@ -188,7 +193,7 @@ public class AssetsBorrowController extends BaseController {
         System.out.println(parameterMap);
 
         //通知前端页面有新数据
-        pushToWeb("1","I'm from Server---borrow");
+        pushToWeb(FID, MSG);
         mmap.put("content", "传过来的：" + assetsNumber);
         return prefix + "/borrowAssets";
     }
@@ -196,7 +201,7 @@ public class AssetsBorrowController extends BaseController {
 
     @PostMapping("/borrowList")
     @ResponseBody
-    public TableDataInfo borrowList(){
+    public TableDataInfo borrowList() {
         if (assetsNumbers.size() == 0) {
             return getDataTable(new ArrayList<>());
             //todo 待定等待卡号发送过来
@@ -213,19 +218,19 @@ public class AssetsBorrowController extends BaseController {
 
     @PostMapping("/borrowConfirm")
     @ResponseBody
-    public AjaxResult borrowConfirm(AssetsBorrow borrowData){
+    public AjaxResult borrowConfirm(AssetsBorrow borrowData) {
         //清除卡号，复位
         assetsNumbers.clear();
         //清空表格信息，复位，避免下次把之前的数据重新显示出来
         assetsLinkedHashSet.clear();
         //点击“确认”后 通知前端页面刷新表格
-        pushToWeb("1","I'm from Server Please refresh table-----borrow");
+        pushToWeb(FID, MSG);
         return borrowSave(borrowData);
 
     }
 
     public AjaxResult borrowSave(AssetsBorrow borrowData) {
-        if(borrowData == null){
+        if (borrowData == null) {
             return error();
         }
         SysUser currentSysUser = ShiroUtils.getSysUser();
@@ -233,7 +238,7 @@ public class AssetsBorrowController extends BaseController {
             int allocateUserId = currentSysUser.getUserId().intValue();
             String createBy = currentSysUser.getLoginName();
             try {
-                return toAjax(assetsService.borrowAssets(allocateUserId,createBy, borrowData));
+                return toAjax(assetsService.borrowAssets(allocateUserId, createBy, borrowData));
             } catch (Exception e) {
                 e.printStackTrace();
                 return error();

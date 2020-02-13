@@ -46,21 +46,21 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.addTab()" shiro:hasPermission="assets:accounting:add">
+                <a class="btn btn-success" onclick="clickToMaintain()" shiro:hasPermission="assets:repair:add">
                     <i class="fa fa-plus"></i> 新增
                 </a>
                 <a class="btn btn-primary single disabled" onclick="$.operate.editTab()"
-                   shiro:hasPermission="assets:accounting:edit">
+                   shiro:hasPermission="assets:repair:edit">
                     <i class="fa fa-edit"></i> 修改
                 </a>
                 <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
-                   shiro:hasPermission="assets:accounting:remove">
+                   shiro:hasPermission="assets:repair:remove">
                     <i class="fa fa-remove"></i> 删除
                 </a>
-                <a class="btn btn-info" onclick="$.table.importExcel()" shiro:hasPermission="assets:accounting:import">
+                <a class="btn btn-info" onclick="$.table.importExcel()" shiro:hasPermission="assets:repair:import">
                     <i class="fa fa-upload"></i> 导入
                 </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="assets:accounting:export">
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="assets:repair:export">
                     <i class="fa fa-download"></i> 导出
                 </a>
             </div>
@@ -75,9 +75,11 @@
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: layout-latest-js"/>
 <script th:inline="javascript">
-    var editFlag = [[${@permission.hasPermi('assets:accounting:edit')}]];
-    var removeFlag = [[${@permission.hasPermi('assets:accounting:remove')}]];
-    var prefix = ctx + "assets/accounting";
+    var editFlag = [[${@permission.hasPermi('assets:repair:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('assets:repair:remove')}]];
+    var datas_grade = [[${@dict.getType('repair_grade')}]];
+    var datas_status = [[${@dict.getType('repair_status')}]];
+    var prefix = ctx + "assets/repair";
 
     $(function () {
         var panehHidden = false;
@@ -86,7 +88,7 @@
         }
         $('body').layout({initClosed: panehHidden, west__size: 185});
         queryUserList();
-     });
+    });
 
     function queryUserList() {
         var options = {
@@ -104,83 +106,85 @@
                 checkbox: true
             },
                 {
+                    field: 'repairId',
+                    title: '保养id',
+                    sortable: true,
+                    align: 'center'
+                },
+                {
                     field: 'assetsNumber',
                     title: '资产编号',
-                    sortable: true
+                    sortable: true,
+                    align: 'center'
                 },
                 {
-                    field: 'assetsName',
-                    title: '资产名称'
+                    field: 'assets.assetsName',
+                    title: '资产名称',
+                    align: 'center'
                 },
                 {
-                    field: 'assetsType',
-                    title: '资产类别'
+                    field: 'user.userName',
+                    title: '保养人姓名',
+                    align: 'center'
                 },
                 {
-                    field: 'assetsAmount',
-                    title: '数量'
+                    field: 'user.cardNumber',
+                    title: '保养人卡号',
+                    align: 'center'
                 },
                 {
-                    field: 'measuringUnit',
-                    title: '计量单位'
-                },
-				{
-					field: 'assetsPrice',
-					title: '单价'
-				},
-				{
-					field: 'storageDepartment',
-					title: '保管部门'
-				},
-				{
-					field: 'custodian',
-					title: '保管人',
-                    visible: false
-				},
-				{
-					field: 'user',
-					title: '使用人'
-				},
-				{
-					field: 'storageAddr',
-					title: '存放地点'
-				},
-				{
-					field: 'useStatus',
-					title: '使用情况'
-				},
-				{
-					field: 'assetsSource',
-					title: '资产来源'
-				},
-				{
-					field: 'usefulLife',
-					title: '使用年限'
-				},
-				{
-					field: 'assetsModel',
-					title: '型号'
-				},
-				{
-					field: 'assetsBrand',
-					title: '品牌'
-				},
-                {
-                    field: 'purchaseDate',
-                    title: '购入日期'
+                    field: 'user.dept.parentName',
+                    title: '所在学院',
+                    align: 'center'
                 },
                 {
-                    field: 'createTime',
-                    title: '创建时间',
-                    sortable: true
+                    field: 'user.dept.deptName',
+                    title: '所属专业',
+                    align: 'center'
+                },
+                {
+                    field: 'repairGrade',
+                    title: '维修级别',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(datas_grade, value);
+                    }
+                },
+                {
+                    field: 'repairStatus',
+                    title: '修复状态',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(datas_status, value);
+                    }
+                },
+                {
+                    field: 'installationAddr',
+                    title: '安装地点',
+                    align: 'center'
+                },
+                {
+                    field: 'repairFees',
+                    title: '维修费用',
+                    align: 'center'
+                },
+                {
+                    field: 'sentTime',
+                    title: '送修时间',
+                    align: 'center'
+                },
+                {
+                    field: 'repairTime',
+                    title: '维修时间',
+                    align: 'center'
                 },
                 {
                     title: '操作',
                     align: 'center',
                     formatter: function (value, row, index) {
                         var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.editTab(\'' + row.assetsNumber + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.assetsNumber + '\')"><i class="fa fa-remove"></i>删除</a> ');
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.editTab(\'' + row.repairId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.repairId + '\')"><i class="fa fa-remove"></i>删除</a> ');
                         return actions.join('');
                     }
                 }]
@@ -188,6 +192,9 @@
         $.table.init(options);
     }
 
+    function clickToMaintain(){
+        $.modal.open("选择资产", prefix + "/repairModal/3");
+    }
 </script>
 </body>
 <!-- 导入区域 -->

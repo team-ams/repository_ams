@@ -158,4 +158,19 @@ public class AssetsAccountingServiceImpl implements IAssetsAccountingService {
         return assetsList;
     }
 
+    @Override
+    public int getCountByStorageAddr(String storageAddr) {
+        return assetsAccountingMapper.getCountByStorageAddr(storageAddr);
+    }
+
+    @Override
+    public List<String> getAssetsNumberListByStorageAddr(String storageAddr) {
+        return assetsAccountingMapper.getAssetsNumberListByStorageAddr(storageAddr);
+    }
+
+    @Override
+    public List<String> getStorageAddrAll() {
+        return assetsAccountingMapper.getStorageAddrAll();
+    }
+
 }

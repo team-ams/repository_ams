@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ams.system.mapper.AssetsTransferMapper">
+
+    <resultMap type="com.ams.system.domain.AssetsTransfer" id="AssetsTransferResult">
+        <id property="transferId" column="transfer_id"/>
+        <result property="assetsNumber" column="transfer_assets_number"/>
+        <result property="transferUserId" column="transfer_userId"/>
+        <result property="originalAddr" column="original_addr"/>
+        <result property="presentAddr" column="present_addr"/>
+        <result property="transferTime" column="transfer_time"/>
+        <result property="remark" column="remark"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <association property="assets" column="transfer_assets_number" javaType="com.ams.system.domain.Assets"
+                     resultMap="AssetsResult"/>
+        <association property="user" column="transfer_userId" javaType="com.ams.system.domain.SysUser"
+                     resultMap="SysUserResult"/>
+    </resultMap>
+
+    <resultMap type="com.ams.system.domain.Assets" id="AssetsResult">
+        <id property="assetsId" column="assets_id"/>
+        <result property="assetsNumber" column="assets_number"/>
+        <result property="assetsName" column="assets_name"/>
+        <result property="assetsNature" column="assets_nature"/>
+        <result property="assetsType" column="assets_type"/>
+        <result property="assetsAmount" column="assets_amount"/>
+        <result property="measuringUnit" column="measuring_unit"/>
+        <result property="assetsPrice" column="assets_price"/>
+        <result property="storageUnit" column="storage_unit"/>
+        <result property="storageDepartment" column="storage_department"/>
+        <result property="custodian" column="custodian"/>
+        <result property="user" column="user"/>
+        <result property="storageAddr" column="storage_addr"/>
+        <result property="useStatus" column="use_status"/>
+        <result property="assetsSource" column="assets_source"/>
+        <result property="usefulLife" column="useful_life"/>
+        <result property="residualRate" column="residual_rate"/>
+        <result property="checkStatus" column="check_status"/>
+        <result property="assetsFormat" column="assets_format"/>
+        <result property="assetsModel" column="assets_model"/>
+        <result property="assetsBrand" column="assets_brand"/>
+        <result property="purchaseDate" column="purchase_date"/>
+        <result property="manufactureDate" column="manufacture_date"/>
+        <result property="warrantyDate" column="warranty_date"/>
+        <result property="delFlag" column="assets_del_flag"/>
+        <result property="mark" column="mark"/>
+        <result property="createTime" column="assets_create_time"/>
+        <result property="updateTime" column="assets_update_time"/>
+    </resultMap>
+
+    <resultMap type="com.ams.system.domain.SysUser" id="SysUserResult">
+        <id property="userId" column="user_id"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="loginName" column="login_name"/>
+        <result property="userName" column="user_name"/>
+        <result property="email" column="email"/>
+        <result property="phonenumber" column="phonenumber"/>
+        <result property="sex" column="sex"/>
+        <result property="cardNumber" column="card_number"/>
+        <result property="avatar" column="avatar"/>
+        <result property="password" column="password"/>
+        <result property="salt" column="salt"/>
+        <result property="status" column="status"/>
+        <result property="delFlag" column="user_del_flag"/>
+        <result property="loginIp" column="login_ip"/>
+        <result property="loginDate" column="login_date"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="user_create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="user_remark"/>
+        <association property="dept" column="dept_id" javaType="com.ams.system.domain.SysDept" resultMap="deptResult"/>
+    </resultMap>
+
+    <resultMap id="deptResult" type="com.ams.system.domain.SysDept">
+        <id property="deptId" column="dept_id"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="deptName" column="dept_name"/>
+        <result property="orderNum" column="order_num"/>
+        <result property="leader" column="leader"/>
+        <result property="status" column="dept_status"/>
+        <result property="parentName" column="parent_name"/>
+    </resultMap>
+
+    <sql id="selectAssetsTransferVo">
+        select a.transfer_id,
+               a.assets_number as transfer_assets_number,
+               a.transfer_userId,
+               a.remark,
+               a.original_addr,
+               a.present_addr,
+               a.transfer_time,
+               a.create_time,
+               a.update_time,
+
+               b.assets_id,
+               b.assets_number,
+               b.assets_name,
+               b.assets_nature,
+               b.assets_type,
+               b.assets_amount,
+               b.measuring_unit,
+               b.assets_price,
+               b.storage_unit,
+               b.storage_department,
+               b.custodian,
+               b.user,
+               b.storage_addr,
+               b.use_status,
+               b.assets_source,
+               b.useful_life,
+               b.residual_rate,
+               b.check_status,
+               b.assets_format,
+               b.assets_model,
+               b.assets_brand,
+               b.purchase_date,
+               b.manufacture_date,
+               b.warranty_date,
+               b.del_flag as assets_del_flag,
+               b.create_time as assets_create_time,
+               b.update_time as assets_update_time,
+
+               u.user_id,
+               u.dept_id,
+               u.login_name,
+               u.user_name,
+               u.email,
+               u.avatar,
+               u.phonenumber,
+               u.sex,
+               u.card_number,
+               u.password,
+               u.salt,
+               u.status,
+               u.del_flag as user_del_flag,
+               u.login_ip,
+               u.login_date,
+               u.create_time as user_create_time,
+               u.remark as user_remark,
+
+               d.dept_id,
+               d.parent_id,
+               d.dept_name,
+               d.order_num,
+               d.leader,
+               d.status as dept_status,
+               (select dept_name from sys_dept where dept_id = d.parent_id) parent_name
+        from assets_transfer a
+            left join assets_accounting b on a.assets_number = b.assets_number
+            left join sys_user u on a.transfer_userId =  u.user_id
+            left join sys_dept d on d.dept_id = u.dept_id
+    </sql>
+
+    <select id="getTransferListByUserId" parameterType="String" resultMap="AssetsTransferResult">
+        <include refid="selectAssetsTransferVo"/>
+        where a.transfer_userId = #{userId}
+    </select>
+
+    <select id="getTransferById" parameterType="String" resultMap="AssetsTransferResult">
+        <include refid="selectAssetsTransferVo"/>
+        where a.transfer_id = #{transferId}
+    </select>
+
+    <select id="getTransferListAll" resultMap="AssetsTransferResult">
+        <include refid="selectAssetsTransferVo"/>
+    </select>
+
+    <insert id="insertTransferList" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="transfer_id">
+        <foreach collection="list" item="item" separator=";">
+            insert into assets_transfer(
+            <if test="item.assetsNumber != null and item.assetsNumber != ''">assets_number,</if>
+            <if test="item.transferUserId != null">transfer_userId,</if>
+            <if test="item.originalAddr != null and item.originalAddr != ''">original_addr,</if>
+            <if test="item.presentAddr != null and item.presentAddr != ''">present_addr,</if>
+            <if test="item.transferTime != null">transfer_time,</if>
+            <if test="item.remark != null and item.remark!= ''">remark,</if>
+            <if test="item.createBy != null and item.createBy != ''">create_by,</if>
+            create_time
+            )values(
+            <if test="item.assetsNumber != null and item.assetsNumber != ''">#{item.assetsNumber},</if>
+            <if test="item.transferUserId != null">#{item.transferUserId},</if>
+            <if test="item.originalAddr != null and item.originalAddr!= ''">#{item.originalAddr},</if>
+            <if test="item.presentAddr != null and item.presentAddr != ''">#{item.presentAddr},</if>
+            <if test="item.transferTime != null">#{item.transferTime},</if>
+            <if test="item.remark != null and item.remark!= ''">#{item.remark},</if>
+            <if test="item.createBy != null and item.createBy != ''">#{item.createBy},</if>
+            sysdate()
+            )
+        </foreach>
+    </insert>
+
+    <update id="updateTransferInfo" parameterType="com.ams.system.domain.AssetsTransfer">
+        update assets_transfer
+        <set>
+            <if test="assetsNumber != null and assetsNumber != ''">assets_number=#{assetsNumber},</if>
+            <if test="transferUserId != null">transfer_userId=#{transferUserId},</if>
+            <if test="originalAddr != null and originalAddr != ''">original_addr=#{originalAddr},</if>
+            <if test="remark != null and remark != ''">remark=#{remark},</if>
+            <if test="presentAddr != null and presentAddr != ''">present_addr=#{presentAddr},</if>
+            <if test="transferTime != null and transferTime != ''">transfer_time=#{transferTime},</if>
+            <if test="updateBy != null and updateBy != ''">update_by=#{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where transfer_id = #{transferId}
+    </update>
+
+    <delete id="deleteByTransferId" parameterType="String">
+        delete from assets_transfer where transfer_id = #{transferId}
+    </delete>
+
+</mapper> 

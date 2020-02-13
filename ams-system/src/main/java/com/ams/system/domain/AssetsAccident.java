@@ -48,9 +48,16 @@ public class AssetsAccident extends BaseEntity {
     /**
      * '事故发生日期'
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date accidentTime;
+    private String accidentTime;
 
+    /**
+     * 资产详情
+     */
+    private Assets assets;
+    /**
+     * 申请人详情
+     */
+    private SysUser user;
 
 }
 

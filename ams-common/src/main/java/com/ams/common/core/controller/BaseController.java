@@ -14,8 +14,9 @@ import com.ams.common.core.domain.RestResult;
 import com.ams.common.core.websocket.WebSocketServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.ams.common.core.domain.AjaxResult;
@@ -27,9 +28,6 @@ import com.ams.common.utils.DateUtils;
 import com.ams.common.utils.ServletUtils;
 import com.ams.common.utils.StringUtils;
 import com.ams.common.utils.sql.SqlUtil;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -222,4 +220,6 @@ public class BaseController
         }
         return parameterMap;
     }
+
+
 }
