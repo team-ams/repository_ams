@@ -86,15 +86,12 @@
             sortOrder: "desc",
             modalName: "已盘点",
             columns: [{
-                checkbox: true
+                field: 'taskId',
+                title: '盘点任务id',
+                sortable: true,
+                visible: false,
+                align: 'center'
             },
-                {
-                    field: 'taskId',
-                    title: '盘点任务id',
-                    sortable: true,
-                    visible: false,
-                    align: 'center'
-                },
                 {
                     field: 'checkNumber',
                     title: '盘点单号',
@@ -169,6 +166,7 @@
                         var actions = [];
                         var reCheckFlag = row.checkStatus === "3" ? '' : 'hidden';
                         actions.push('<a class="btn btn-success btn-xs ' + reCheckFlag + ' " href="javascript:void(0)" onclick="clickToReCheck(\'' + row.taskId + '\')"><i class="fa fa-edit"></i>重新盘点</a> ');
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="clickToDetails(\'' + row.checkNumber + '\')"><i class="fa fa-search"></i>详情</a> ');
                         return actions.join('');
                     }
                 }]
@@ -178,8 +176,13 @@
 
     function clickToReCheck(taskId) {
         if ($.common.isNotEmpty(taskId)) {
-            $.modal.open("开始盘点", prefix + "/checkBegin/6/" + taskId);
+            $.modal.open("开始盘点", prefix + "/reCheck/7/" + taskId);
         }
+    }
+
+    function clickToDetails(checkNumber) {
+
+        $.modal.openTab(table.options.modalName + "详情", prefix + "/checkDetails/" + checkNumber);
     }
 
 

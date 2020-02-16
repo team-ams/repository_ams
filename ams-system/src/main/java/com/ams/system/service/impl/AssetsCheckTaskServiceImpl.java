@@ -72,7 +72,7 @@ public class AssetsCheckTaskServiceImpl implements IAssetsCheckTaskService {
                 return 0;
             }
             String checkNumber = task.getCheckNumber();
-            int deleteRows = checkItemMapper.deleteCheckTaskByCheckNumber(checkNumber);
+            int deleteRows = checkItemMapper.deleteCheckItemByCheckNumber(checkNumber);
             if(deleteRows == 0){
                 return 0;
             }

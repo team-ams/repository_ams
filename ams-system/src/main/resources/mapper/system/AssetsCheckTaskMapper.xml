@@ -177,12 +177,11 @@
 
     <select id="getCheckTaskAll" resultMap="AssetsCheckTaskResult">
         <include refid="selectAssetsCheckTaskVo"/>
-        where a.is_check = 0;
     </select>
 
     <select id="getCheckedAll" resultMap="AssetsCheckTaskResult">
         <include refid="selectAssetsCheckTaskVo"/>
-        where a.is_check = 1;
+        where a.is_check = 1 and a.check_status = 1;
     </select>
 
     <select id="getCheckTaskByUserId" parameterType="java.lang.Integer" resultMap="AssetsCheckTaskResult">

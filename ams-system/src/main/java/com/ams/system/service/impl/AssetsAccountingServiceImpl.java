@@ -6,6 +6,7 @@ import com.ams.common.enums.AssetsStatus;
 import com.ams.common.exception.BusinessException;
 import com.ams.common.utils.StringUtils;
 import com.ams.system.domain.Assets;
+import com.ams.system.domain.RuKu;
 import com.ams.system.mapper.AssetsAccountingMapper;
 import com.ams.system.service.IAssetsAccountingService;
 import org.slf4j.Logger;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author zengchao
@@ -171,6 +173,11 @@ public class AssetsAccountingServiceImpl implements IAssetsAccountingService {
     @Override
     public List<String> getStorageAddrAll() {
         return assetsAccountingMapper.getStorageAddrAll();
+    }
+
+    @Override
+    public List<RuKu> getCountGroupByName(String startTime,String endTime) {
+        return assetsAccountingMapper.getCountGroupByName(startTime,endTime);
     }
 
 }

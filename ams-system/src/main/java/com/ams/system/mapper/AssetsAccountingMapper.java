@@ -1,8 +1,12 @@
 package com.ams.system.mapper;
 
 import com.ams.system.domain.Assets;
+import com.ams.system.domain.RuKu;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author zengchao
@@ -106,5 +110,12 @@ public interface AssetsAccountingMapper {
      * @return
      */
     List<String> getStorageAddrAll();
+
+    /**
+     * 根据资产名称统计金额
+     *
+     * @return
+     */
+    List<RuKu> getCountGroupByName(@Param("startTime") String startTime, @Param("endTime") String endTime);
 
 }

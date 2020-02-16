@@ -35,6 +35,13 @@
         <result property="updateTime" column="update_time"/>
     </resultMap>
 
+    <resultMap id="ruKuMap" type="com.ams.system.domain.RuKu">
+        <id property="assetsName" column="assets_name"/>
+        <result property="totalMoney" column="total"/>
+        <result property="assetsCount" column="assetsCount"/>
+    </resultMap>
+
+
     <sql id="selectAssetsVo">
         select a.assets_id,
                a.assets_number,
@@ -65,6 +72,7 @@
                a.update_time
         from assets_accounting a
     </sql>
+
 
 
     <select id="getAssetsByAssetsNumber" parameterType="String" resultMap="AssetsResult">
@@ -256,6 +264,18 @@
 
     <select id="getStorageAddrAll" resultType="java.lang.String">
         select distinct (storage_addr) from assets_accounting
+    </select>
+
+    <select id="getCountGroupByName" parameterType="String" resultMap="ruKuMap">
+        SELECT assets_name,sum(assets_price) as total, count(assets_number) AS assetsCount FROM assets_accounting
+        WHERE del_flag = 0
+        <if test="startTime != null and startTime != ''">
+            AND create_time &gt;= #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            AND create_time &lt;= #{endTime}
+        </if>
+        GROUP BY assets_name
     </select>
 
 </mapper>

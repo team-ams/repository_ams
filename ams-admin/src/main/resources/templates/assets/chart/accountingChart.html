@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('资产Charts')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="user-form">
+                <div class="select-list">
+                    <ul>
+                        <li class="select-time">
+                            <label>入库时间： </label>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                                   name="params[beginTime]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                   name="params[endTime]"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="chartSearch()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-sm-12 select-table table-striped">
+            <div class="ibox-content">
+                <div class="echarts" style="height: 450px" id="echarts-bar-chart"></div>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: echarts-js"/>
+<script type="text/javascript">
+    var prefix = ctx + "assets/chart";
+    var barChart = echarts.init(document.getElementById("echarts-bar-chart"));
+    var query_params = {};
+
+    getData(query_params);
+
+
+    function chartSearch() {
+        query_params = $.common.formToJSON("user-form");
+        getData(query_params);
+    }
+
+    function getData(params) {
+        $.ajax({
+            url: prefix + "/ruKu",
+            type: 'post',
+            data: params,
+            dataType: "JSON",
+            success: function (data) {
+                var list = data;
+                var assetsName = [];
+                var totalMoney = [];
+                var assetsCount = [];
+
+                for (var i = 0; i < list.length; i++) {
+                    assetsName.push(list[i].assetsName);
+                    totalMoney.push(list[i].totalMoney);
+                    assetsCount.push(list[i].assetsCount);
+                }
+
+                var option = drawBar(assetsName, totalMoney, assetsCount);
+                if (option && typeof option === "object") {
+                    barChart.setOption(option);
+                    window.onresize = barChart.resize;
+
+                }
+            }
+        })
+
+    }
+
+    function drawBar(assetsName, totalMoney, assetsCount) {
+
+        var baroption = {
+            title: {
+                text: '入库报表'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            //显示工具栏
+            toolbox: {
+                show: true,
+                showTitle: true,
+                top: 'auto',
+                feature: {
+                    dataView: {//数据视图
+                        show: true
+                    },
+                    dataZoom: {
+                        show: true
+                    },
+                    restore: {
+                        show: true
+                    },
+                    magicType: {
+                        type: ['line', 'bar']
+                    },
+                    saveAsImage: {
+                        show: true
+                    }
+
+                }
+            },
+            legend: {
+                data: ['金额', '数量']
+            },
+            grid: {
+                x: 48,
+                x2: 48
+            },
+            calculable: true,
+            xAxis: [
+                {
+                    type: 'category',
+                    data: assetsName,
+                    axisLabel: {
+                        interval: 0,
+                        rotate: 20
+                    },
+                }
+
+            ],
+
+            yAxis: [
+                {
+                    type: 'value',
+                    axisLabel: {
+                        show: true,
+                        interval: 0
+                    },
+                }
+            ],
+            series: [
+                {
+                    name: '金额',
+                    type: 'bar',
+                    data: totalMoney,
+                    markPoint: {
+                        data: [
+                            {type: 'max', name: '最大值'},
+                            {type: 'min', name: '最小值'}
+                        ]
+                    },
+                    markLine: {
+                        data: [
+                            {type: 'average', name: '平均值'}
+                        ]
+                    }
+                },
+                {
+                    name: '数量',
+                    type: 'bar',
+                    data: assetsCount,
+                    markPoint: {
+                        data: [
+                            {type: 'max', name: '最大值'},
+                            {type: 'min', name: '最小值'}
+                        ]
+                    },
+                    markLine: {
+                        data: [
+                            {type: 'average', name: '平均值'}
+                        ]
+                    }
+                }
+            ]
+        };
+        return baroption;
+
+    }
+
+</script>
+</body>

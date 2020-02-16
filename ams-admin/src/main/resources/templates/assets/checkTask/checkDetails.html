@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('资产列表')"/>
+    <th:block th:include="include :: layout-latest-css"/>
+</head>
+<body class="gray-bg" onload="showFooter()">
+
+<div class="ui-layout-center">
+    <div class="container-div">
+        <div class="row">
+
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+            <div class="col-sm-4">应盘：<span id="targetNum"></span>
+                &nbsp;&nbsp;盘到：<span id="getNum"></span>
+                &nbsp;&nbsp;盘盈：<span id="checkProfit"></span>
+                &nbsp;&nbsp;盘亏：<span id="checkLoss"></span></div>
+        </div>
+    </div>
+</div>
+
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: layout-latest-js"/>
+<th:block th:include="include :: bootstrap-suggest-js"/>
+<th:block th:include="include :: bootstrap-typeahead-js"/>
+<script th:inline="javascript">
+    var checkNumber = [[${checkNumber}]];
+    var prefix = ctx + "assets/checkTask";
+    var textColor = "";
+    var targetNum = 0;
+    var getNum = 0;
+    var checkProfit = 0;
+    var checkLoss = 0;
+
+    $(function () {
+        var panehHidden = false;
+        if ($(this).width() < 769) {
+            panehHidden = true;
+        }
+        $('body').layout({initClosed: panehHidden, west__size: 185});
+        queryUserList();
+
+    });
+
+    function queryUserList() {
+        var options = {
+            url: prefix + "/checkDetailsList/" + checkNumber,
+            sortName: "updateTime",
+            sortOrder: "desc",
+            showSearch: false,
+            showFooter: false,
+            pagination: false,
+            modalName: "盘点详情",
+            columns: [{
+                field: 'itemId',
+                title: '盘点任务id',
+                sortable: true,
+                visible: false,
+                align: 'center'
+            },
+                {
+                    field: 'checkItemStatus',
+                    title: '盘点状态',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var content = "";
+                        if (value == "1") {
+                            content = '<span style="color:#4b646f;"><i class="glyphicon glyphicon-ok-circle" aria-hidden="true"></i>盘到</span>';
+                            textColor = "gray";
+                            getNum += 1;
+                        } else if (value == "2") {
+                            content = '<span style="color:#c1010b;"><i class="glyphicon glyphicon-remove-circle" aria-hidden="true"></i>盘亏</span>';
+                            textColor = "red";
+                            checkLoss += 1;
+                        } else if (value == "3") {
+                            content = '<span style="color:#1bc100;"><i class="glyphicon glyphicon-question-sign" aria-hidden="true"></i>盘盈</span>';
+                            textColor = "green";
+                            checkProfit += 1;
+                        }
+                        return content;
+                    }
+                },
+                {
+                    field: 'assets.assetsNumber',
+                    title: '资产编号',
+                    align: 'center',
+                    formatter: displayColor
+                },
+                {
+                    field: 'assets.assetsName',
+                    title: '资产名称',
+                    align: 'center',
+                    formatter: displayColor
+                },
+                {
+                    field: 'assets.assetsModel',
+                    title: '资产规格',
+                    align: 'center',
+                    formatter: displayColor
+                },
+                {
+                    field: 'assets.assetsBrand',
+                    title: '品牌',
+                    align: 'center',
+                    formatter: displayColor
+                },
+                {
+                    field: 'assets.purchaseDate',
+                    title: '购入日期',
+                    align: 'center',
+                    formatter: displayColor
+                },
+                {
+                    field: 'assets.custodian',
+                    title: '保管人',
+                    align: 'center',
+                    formatter: displayColor
+                },
+                {
+                    field: 'assets.assetsPrice',
+                    title: '资产价值',
+                    align: 'center',
+                    formatter: displayColor
+                },
+                {
+                    field: 'assets.storageAddr',
+                    title: '存放地点',
+                    align: 'center',
+                    formatter: displayColor
+                },
+                {
+                    field: 'assets.assetsSource',
+                    title: '资产来源',
+                    align: 'center',
+                    formatter: displayColor
+                },
+                {
+                    field: 'assets.assetsType',
+                    title: '资产类别',
+                    align: 'center',
+                    formatter: displayColor
+                },
+                {
+                    field: 'assets.assetsNature',
+                    title: '资产性质',
+                    align: 'center',
+                    formatter: displayColor
+                },
+                {
+                    field: 'updateTime',
+                    title: '盘点时间',
+                    align: 'center',
+                    formatter: displayColor
+                }]
+        };
+        $.table.init(options);
+
+    }
+
+    function displayColor(value, row, index) {
+        var content = "";
+        if (textColor == "red") {
+            content = '<span style="color:#c1010b;">' + value + '</span>';
+        } else if (textColor == "green") {
+            content = '<span style="color:#1bc100;">' + value + '</span>';
+        } else if (textColor == "gray") {
+            content = '<span style="color:#4b646f;">' + value + '</span>';
+        }
+        return content;
+    }
+
+    function showFooter() {
+        targetNum = getNum + checkLoss;
+        document.getElementById("targetNum").innerText = targetNum;
+        document.getElementById("getNum").innerText = getNum;
+        document.getElementById("checkProfit").innerText = checkProfit;
+        document.getElementById("checkLoss").innerText = checkLoss;
+    }
+
+
+</script>
+</body>
+</html>

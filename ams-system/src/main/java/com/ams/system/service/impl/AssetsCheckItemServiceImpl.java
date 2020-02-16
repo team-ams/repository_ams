@@ -31,7 +31,22 @@ public class AssetsCheckItemServiceImpl implements IAssetsCheckItemService {
 
 
     @Override
-    public int deleteCheckTaskBycheckNumber(String checkNumber) {
-        return checkItemMapper.deleteCheckTaskByCheckNumber(checkNumber);
+    public int deleteCheckItemByCheckNumber(String checkNumber) {
+        return checkItemMapper.deleteCheckItemByCheckNumber(checkNumber);
+    }
+
+    @Override
+    public int deleteCheckProfitItemByCheckNumber(String checkNumber) {
+        return checkItemMapper.deleteCheckProfitItemByCheckNumber(checkNumber);
+    }
+
+    @Override
+    public List<AssetsCheckItem> getCheckItemByCheckNumber(String checkNumber) {
+        return checkItemMapper.getCheckItemByCheckNumber(checkNumber);
+    }
+
+    @Override
+    public int updateCheckItemStatus(AssetsCheckItem checkItem) {
+        return checkItemMapper.updateCheckItemStatus(checkItem);
     }
 }

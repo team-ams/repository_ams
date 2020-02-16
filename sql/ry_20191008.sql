@@ -43,7 +43,7 @@ insert into sys_dept values(1113,  101, '0,100,101',  '计算机科学与技术'
 insert into sys_dept values(1114,  101, '0,100,101',  '软件工程',   2, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
 insert into sys_dept values(1115,  101, '0,100,101',  '网络工程',   3, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
 insert into sys_dept values(1116,  101, '0,100,101',  '物联网工程',   4, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
-insert into sys_dept values(117,  101, '0,100,101',  '数据科学与大数据技术',   5, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
+insert into sys_dept values(1117,  101, '0,100,101',  '数据科学与大数据技术',   5, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
 
 insert into sys_dept values(1118,  102, '0,100,102',  '产品设计',   1, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
 insert into sys_dept values(1119,  102, '0,100,102',  '动画',   2, 'AMS', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00');
@@ -230,7 +230,7 @@ create table sys_menu (
 insert into sys_menu values('1', '系统管理', '0', '1', '#', '', 'M', '0', '', 'fa fa-gear',         'admin', '2018-03-16 11-33-00', 'zengchao', '2018-03-16 11-33-00', '系统管理目录');
 insert into sys_menu values('2', '系统监控', '0', '2', '#', '', 'M', '0', '', 'fa fa-video-camera', 'admin', '2018-03-16 11-33-00', 'zengchao', '2018-03-16 11-33-00', '系统监控目录');
 insert into sys_menu values('3', '系统工具', '0', '3', '#', '', 'M', '0', '', 'fa fa-bars',         'admin', '2018-03-16 11-33-00', 'zengchao', '2018-03-16 11-33-00', '系统工具目录');
-insert into sys_menu values('4','资产管理','0','4','#','','M','0','','fa fa-hospital-o','admin','2019-12-24 19-57-11','zengchao','2019-12-24 19-57-22','资产管理目录');
+insert into sys_menu values('4', '资产管理', '0', '4', '#', '', 'M', '0', '', 'fa fa-hospital-o','admin','2019-12-24 19-57-11','zengchao','2019-12-24 19-57-22','资产管理目录');
 -- 二级菜单
 insert into sys_menu values('100',  '用户管理', '1', '1', '/system/user',          '', 'C', '0', 'system:user:view',         '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '用户管理菜单');
 insert into sys_menu values('101',  '角色管理', '1', '2', '/system/role',          '', 'C', '0', 'system:role:view',         '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '角色管理菜单');
@@ -249,7 +249,6 @@ insert into sys_menu values('112',  '服务监控', '2', '3', '/monitor/server',
 insert into sys_menu values('113',  '表单构建', '3', '1', '/tool/build',           '', 'C', '0', 'tool:build:view',          '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '表单构建菜单');
 insert into sys_menu values('114',  '代码生成', '3', '2', '/tool/gen',             '', 'C', '0', 'tool:gen:view',            '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '代码生成菜单');
 insert into sys_menu values('115',  '系统接口', '3', '3', '/tool/swagger',         '', 'C', '0', 'tool:swagger:view',        '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '系统接口菜单');
-
 insert into sys_menu values('116',  '入账管理', '4', '1', '/assets/accounting',                      '', 'C', '0', 'assets:accounting:view',         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '入账管理菜单');
 insert into sys_menu values('117',  '领用管理', '4', '2', '/assets/allocate',                      '', 'C', '0', 'assets:allocate:view',         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '领用管理菜单');
 insert into sys_menu values('118',  '借还管理', '4', '3', '/assets/borrow',                      '', 'C', '0', 'assets:borrow:view',         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '借出管理菜单');
@@ -259,10 +258,18 @@ insert into sys_menu values('121',  '维修管理', '4', '6', '/assets/repair', 
 insert into sys_menu values('122',  '事故管理', '4', '7', '/assets/accident',                      '', 'C', '0', 'assets:accident:view',       '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '报废管理菜单');
 insert into sys_menu values('123',  '报警管理', '4', '8', '/assets/alarm',                      '', 'C', '0', 'assets:alarm:view',       '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '报警管理菜单');
 insert into sys_menu values('124',  '盘点管理', '4', '9', '/assets/checkTask',                     '', 'C', '0', 'assets:checkTask:view',                         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '盘点管理菜单');
-insert into sys_menu values('125',  '报表管理', '4', '10','/assets/chart',                     '', 'C', '0', 'assets:chart:view',                         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '报表管理菜单');
+insert into sys_menu values('125',  '报表管理', '4', '10','#',                                     '', 'M', '0', '',                         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '报表管理菜单');
 -- 三级菜单
 insert into sys_menu values('500',  '操作日志', '108', '1', '/monitor/operlog',    '', 'C', '0', 'monitor:operlog:view',     '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '操作日志菜单');
 insert into sys_menu values('501',  '登录日志', '108', '2', '/monitor/logininfor', '', 'C', '0', 'monitor:logininfor:view',  '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '登录日志菜单');
+insert into sys_menu values('600',  '入库报表', '125', '1', '/assets/chart/ruKu',    '', 'C', '0', 'chart:ruKu:view',     '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '入库报表菜单');
+insert into sys_menu values('601',  '领用报表', '125', '2', '/assets/chart/lingYong', '', 'C', '0', 'chart:lingYong:view',  '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '领用报表菜单');
+insert into sys_menu values('602',  '库存报表', '125', '3', '/assets/chart/kuCun',    '', 'C', '0', 'chart:kuCun:view',     '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '库存报表菜单');
+insert into sys_menu values('603',  '资产报表', '125', '4', '/assets/chart/ziChan', '', 'C', '0', 'chart:ziChan:view',  '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '资产报表菜单');
+insert into sys_menu values('604',  '借还报表', '125', '5', '/assets/chart/jieHuan',    '', 'C', '0', 'chart:jieHuan:view',     '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '借还报表菜单');
+insert into sys_menu values('605',  '维修报表', '125', '6', '/assets/chart/weiXiu', '', 'C', '0', 'chart:weiXiu:view',  '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '维修报表菜单');
+insert into sys_menu values('606',  '盘点报表', '125', '7', '/assets/chart/panDian', '', 'C', '0', 'chart:panDian:view',  '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '盘点报表菜单');
+
 -- 用户管理按钮
 insert into sys_menu values('1000', '用户查询', '100', '1',  '#', '',  'F', '0', 'system:user:list',        '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
 insert into sys_menu values('1001', '用户新增', '100', '2',  '#', '',  'F', '0', 'system:user:add',         '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
@@ -717,9 +724,10 @@ insert into sys_dict_data values(66,  2,  '中等事故',     '2',       'accide
 insert into sys_dict_data values(67,  3,  '重大事故',     '3',       'accident_grade',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '重大事故状态');
 insert into sys_dict_data values(68,  1,  '未盘点',     '0',       'is_check',        '',   '',        'Y', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '未盘点状态');
 insert into sys_dict_data values(69,  2,  '已盘点',     '1',       'is_check',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '已盘点状态');
-insert into sys_dict_data values(70,  1,  '审核中',     '1',       'check_status',        '',   '',        'Y', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '审核中状态');
-insert into sys_dict_data values(71,  2,  '同意',     '2',       'check_status',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '同意状态');
-insert into sys_dict_data values(72,  3,  '驳回',     '3',       'check_status',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '驳回状态');
+insert into sys_dict_data values(70,  1,  '未开始',     '0',       'check_status',        '',   '',        'Y', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '未开始状态');
+insert into sys_dict_data values(71,  2,  '审核中',     '1',       'check_status',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '审核中状态');
+insert into sys_dict_data values(72,  3,  '同意',     '2',       'check_status',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '同意状态');
+insert into sys_dict_data values(73,  4,  '驳回',     '3',       'check_status',        '',   '',        'N', '0', 'admin', '2020-01-16 11-33-00', 'zc', '2020-01-16 11-33-00', '驳回状态');
 
 
 
@@ -1175,7 +1183,7 @@ create table assets_check_task
     check_profit        int                                                comment '盘盈',
     check_loss          int                                                comment '盘亏',
     is_check            char(1)             not null default '0'           comment '是否盘点（0：未盘点 1：已盘点）',
-    check_status        char(1)                                            comment '已盘点后的任务状态（1：审核中 2：通过 3：驳回）',
+    check_status        char(1)             not null default '0'           comment '已盘点后的任务状态（0：未开始 1：审核中 2：通过 3：驳回）',
     create_by           varchar(64)                  default ''                    comment '创建者',
     create_time         timestamp           not null default current_timestamp     comment '创建时间/登记时间',
     update_by           varchar(64)                  default ''                    comment '更新者',
@@ -1189,49 +1197,50 @@ insert into assets_check_task values (1,'20200209175100',2,'第一教学楼101�
 insert into assets_check_task values (2,'20200210132100',3,'中巴软件园708教室',3,0,0,1,2,'admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
 insert into assets_check_task values (3,'20200211154100',2,'中巴软件园708教室',3,0,1,1,3,'admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
 insert into assets_check_task values (4,'20200212111100',2,'中巴软件园708教室',3,1,0,1,2,'admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
-insert into assets_check_task values (5,'20200213113100',2,'中巴软件园708教室',3,null,null,0,null,'admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_check_task values (5,'20200213113100',2,'中巴软件园708教室',3,null,null,0,0,'admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
 
 -- ----------------------------
 -- 30、盘点资产表
 -- ----------------------------
 drop table if exists assets_check_item;
 create table assets_check_item(
-      item_id           int                not null auto_increment comment '盘点id',
+      item_id           int                 not null auto_increment comment '盘点id',
       check_number      varchar(20)         not null default '' comment '盘点单号',
       assets_number     varchar(15)         not null default '' comment '资产编号',
-      create_by         varchar(64)          default '' comment '创建者',
-      create_time       timestamp   not null default current_timestamp comment '创建时间/登记时间',
-      update_by         varchar(64)          default '' comment '更新者',
-      update_time       timestamp   not null default current_timestamp on update current_timestamp comment '更新时间',
+      check_item_status   char(1)             not null default '0' comment '盘点状态（1：盘到 2：盘亏 3：盘盈）',
+      create_by         varchar(64)                  default '' comment '创建者',
+      create_time       timestamp           not null default current_timestamp comment '创建时间/登记时间',
+      update_by         varchar(64)                  default '' comment '更新者',
+      update_time       timestamp           not null default current_timestamp on update current_timestamp comment '更新时间',
       primary key (item_id)
 )engine = innodb default charset utf8 comment '盘点资产表';
 -- ----------------------------
 -- 初始化-设备盘点信息
 -- ----------------------------
-insert into assets_check_item values (1,'20200209175100','a9b7e8','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
-insert into assets_check_item values (2,'20200209175100','uusoc31','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
-insert into assets_check_item values (3,'20200209175100','oedjaf30','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
-insert into assets_check_item values (4,'20200209175100','5e6a1b','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_check_item values (1,'20200209175100','a9b7e8','0','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_check_item values (2,'20200209175100','uusoc31','0','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_check_item values (3,'20200209175100','oedjaf30','0','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_check_item values (4,'20200209175100','5e6a1b','0','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
 
-insert into assets_check_item values (5,'20200210132100','5e6a1b','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
-insert into assets_check_item values (6,'20200210132100','esdc73','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
-insert into assets_check_item values (7,'20200210132100','dd78aa3','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
-insert into assets_check_item values (8,'20200210132100','5e6a1b','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_check_item values (5,'20200210132100','5e6a1b','0','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_check_item values (6,'20200210132100','esdc73','0','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_check_item values (7,'20200210132100','dd78aa3','0','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_check_item values (8,'20200210132100','5e6a1b','0','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
 
-insert into assets_check_item values (9,'20200211154100','a9b7e8','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
-insert into assets_check_item values (10,'20200211154100','c377d8','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
-insert into assets_check_item values (11,'20200211154100','e6f4d2','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
-insert into assets_check_item values (12,'20200211154100','5e6a1b','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_check_item values (9,'20200211154100','a9b7e8','0','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_check_item values (10,'20200211154100','c377d8','0','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_check_item values (11,'20200211154100','e6f4d2','0','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_check_item values (12,'20200211154100','5e6a1b','0','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
 
-insert into assets_check_item values (13,'20200212111100','a9b7e8','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
-insert into assets_check_item values (14,'20200212111100','c377d8','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
-insert into assets_check_item values (15,'20200212111100','e6f4d2','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
-insert into assets_check_item values (16,'20200212111100','5e6a1b','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_check_item values (13,'20200212111100','a9b7e8','0','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_check_item values (14,'20200212111100','c377d8','0','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_check_item values (15,'20200212111100','e6f4d2','0','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_check_item values (16,'20200212111100','5e6a1b','0','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
 
-insert into assets_check_item values (17,'20200213113100','a9b7e8','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
-insert into assets_check_item values (18,'20200213113100','c377d8','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
-insert into assets_check_item values (19,'20200213113100','e6f4d2','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
-insert into assets_check_item values (20,'20200213113100','5e6a1b','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_check_item values (17,'20200213113100','a9b7e8','0','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_check_item values (18,'20200213113100','c377d8','0','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_check_item values (19,'20200213113100','e6f4d2','0','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_check_item values (20,'20200213113100','5e6a1b','0','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
 
 -- ----------------------------
 -- 31、资产存放地址表

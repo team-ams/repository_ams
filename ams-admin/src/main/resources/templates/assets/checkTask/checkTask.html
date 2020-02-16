@@ -138,9 +138,9 @@
 <th:block th:include="include :: bootstrap-suggest-js"/>
 <th:block th:include="include :: bootstrap-typeahead-js"/>
 <script th:inline="javascript">
-    var editFlag = [[${@permission.hasPermi('assets:checkTask:edit')}]];
-    var removeFlag = [[${@permission.hasPermi('assets:checkTask:remove')}]];
+
     var datas = [[${@dict.getType('is_check')}]];
+    var checkStatusDatas = [[${@dict.getType('check_status')}]]
     var prefix = ctx + "assets/checkTask";
 
     $(function () {
@@ -171,7 +171,7 @@
                     field: 'taskId',
                     title: '盘点任务id',
                     sortable: true,
-                    visible:false,
+                    visible: false,
                     align: 'center'
                 },
                 {
@@ -211,6 +211,14 @@
                     align: 'center'
                 },
                 {
+                    field: 'checkStatus',
+                    title: '盘点进度',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(checkStatusDatas, value);
+                    }
+                },
+                {
                     field: 'isCheck',
                     title: '是否盘点',
                     align: 'center',
@@ -238,8 +246,12 @@
                     align: 'center',
                     formatter: function (value, row, index) {
                         var actions = [];
+                        var editFlag = row.checkStatus === "0" ? '' : 'hidden';
+                        var removeFlag = editFlag;
+                        var detailsFlag = row.checkStatus === "0" ? 'hidden' : '';
                         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.editTab(\'' + row.taskId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.taskId + '\')"><i class="fa fa-remove"></i>删除</a> ');
+                        actions.push('<a class="btn btn-success btn-xs ' + detailsFlag + '" href="javascript:void(0)" onclick="clickToDetails(\'' + row.checkNumber + '\')"><i class="fa fa-search"></i>详情</a> ');
                         return actions.join('');
                     }
                 }]
@@ -249,7 +261,12 @@
 
     function checkExamine() {
         table.set();
-        $.modal.openTab(table.options.modalName, prefix + "/adminExamine")
+        $.modal.openTab("盘点审核", prefix + "/adminExamine")
+    }
+
+    function clickToDetails(checkNumber) {
+
+        $.modal.openTab(table.options.modalName + "详情", prefix + "/checkDetails/" + checkNumber);
     }
 
     $.get(prefix + "/collection", function (data) {

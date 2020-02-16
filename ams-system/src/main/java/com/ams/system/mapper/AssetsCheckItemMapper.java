@@ -26,10 +26,34 @@ public interface AssetsCheckItemMapper {
 
 
     /**
-     * 根据盘点号删除盘点项
+     * 删除所有的符合该盘点单号的盘点项
      *
      * @param checkNumber
      * @return
      */
-    int deleteCheckTaskByCheckNumber(String checkNumber);
+    int deleteCheckItemByCheckNumber(String checkNumber);
+
+    /**
+     * 删除所有符合盘点单号且为盘盈项的盘点项
+     *
+     * @param checkNumber
+     * @return
+     */
+    int deleteCheckProfitItemByCheckNumber(String checkNumber);
+
+    /**
+     * 根据checkNumber查询得到checkItem
+     *
+     * @param checkNumber
+     * @return
+     */
+    List<AssetsCheckItem> getCheckItemByCheckNumber(String checkNumber);
+
+    /**
+     * 更新盘点状态
+     *
+     * @param checkItem
+     * @return
+     */
+    int updateCheckItemStatus(AssetsCheckItem checkItem);
 }

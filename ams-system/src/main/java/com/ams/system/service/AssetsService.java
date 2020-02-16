@@ -379,20 +379,54 @@ public class AssetsService {
         }
         //获取该盘点任务应盘的 资产编号
         List<AssetsCheckItem> checkItems = checkTask.getCheckItems();
-        if (checkItems.size() == 0) {
+        String checkNumber = checkTask.getCheckNumber();
+        if (checkItems.size() == 0 || checkNumber.equals("")) {
             return 0;
         }
         //获得 资产编号
-        List<String> targetList = checkItems.stream().map(AssetsCheckItem::getAssetsNumber).collect(Collectors.toList());
+        List<String> targetList = accountingService.getAssetsNumberListByStorageAddr(checkTask.getCheckAddr());
         //计算盘盈 通过差集（checkResultList - targetList）
         List<String> checkProfit = checkResultList.stream().filter(checkResult -> !targetList.contains(checkResult)).collect(Collectors.toList());
         int checkProfitCount = checkProfit.size();
+        //盘盈项 入库做好记录
+        for (String assetsNumber : checkProfit) {
+            AssetsCheckItem checkItem = new AssetsCheckItem();
+            checkItem.setCheckNumber(checkNumber);
+            checkItem.setAssetsNumber(assetsNumber);
+            //3  为盘盈标志
+            checkItem.setCheckItemStatus("3");
+            checkItemService.insertCheckItem(checkItem);
+        }
 
         //计算盘亏 通过差集（targetList - checkResultList）
         List<String> checkLoss = targetList.stream().filter(target -> !checkResultList.contains(target)).collect(Collectors.toList());
         int checkLossCount = checkLoss.size();
 
-        //更新盘点任务  根据盘点任务id更新  更新状态为 已盘点、盘盈、盘亏、盘点后状态
+        //计算盘到
+        List<String> checked = targetList.stream().filter(target -> checkResultList.contains(target)).collect(Collectors.toList());
+        //盘亏项 更新应盘状态为盘亏
+        for (AssetsCheckItem checkItem : checkItems) {
+            for (String assetsNumber : checkLoss) {
+                //盘亏匹配
+                if (checkItem.getAssetsNumber().equals(assetsNumber)) {
+                    //2 为盘亏状态
+                    checkItem.setCheckItemStatus("2");
+                    checkItemService.updateCheckItemStatus(checkItem);
+                    break;
+                }
+            }
+            for (String assetsNumber : checked) {
+                //盘到匹配
+                if (checkItem.getAssetsNumber().equals(assetsNumber)) {
+                    //1 为盘到
+                    checkItem.setCheckItemStatus("1");
+                    checkItemService.updateCheckItemStatus(checkItem);
+                    break;
+                }
+            }
+        }
+
+        //更新盘点任务  根据盘点任务id更新  更新状态为 已盘点(1)、盘盈、盘亏、盘点后状态
         checkTask.setIsCheck("1");
         checkTask.setCheckProfit(checkProfitCount);
         checkTask.setCheckLoss(checkLossCount);
@@ -440,7 +474,6 @@ public class AssetsService {
         if (checkTask == null) {
             return 0;
         }
-
 
         //更新任务状态为驳回
         checkTask.setCheckStatus(AssetsCheckStatus.REJECT.getCode());

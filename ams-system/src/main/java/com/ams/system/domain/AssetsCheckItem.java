@@ -19,6 +19,10 @@ public class AssetsCheckItem extends BaseEntity {
      */
     private String assetsNumber;
     /**
+     * 盘点状态
+     */
+    private String checkItemStatus;
+    /**
      * 资产详情
      */
     private Assets assets;

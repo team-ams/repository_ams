@@ -2,8 +2,11 @@ package com.ams.system.service;
 
 import com.ams.system.domain.Assets;
 import com.ams.system.domain.AssetsAllocate;
+import com.ams.system.domain.RuKu;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author zengchao
@@ -115,4 +118,11 @@ public interface IAssetsAccountingService {
      * @return
      */
     List<String> getStorageAddrAll();
+
+    /**
+     * 根据资产名称统金额
+     *
+     * @return
+     */
+    List<RuKu> getCountGroupByName(String startTime,String endTime);
 }

@@ -7,10 +7,11 @@
     <resultMap type="com.ams.system.domain.AssetsCheckItem" id="AssetsCheckItemResult">
         <id property="itemId" column="item_id"/>
         <result property="checkNumber" column="check_number"/>
-        <result property="assetsNumber" column="item_assets_number"/>
+        <result property="assetsNumber" column="assets_number"/>
+        <result property="checkItemStatus" column="check_item_status"/>
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
-        <association property="assets" column="item_assets_number" javaType="com.ams.system.domain.Assets"
+        <association property="assets" column="assets_number" javaType="com.ams.system.domain.Assets"
                      resultMap="AssetsResult"/>
     </resultMap>
 
@@ -46,12 +47,41 @@
         <result property="updateTime" column="assets_update_time"/>
     </resultMap>
 
-    <sql id="selectAssetsCheckTaskVo">
+    <sql id="selectAssetsCheckItemVo">
         select a.item_id,
                a.check_number ,
-               a.assets_number as item.assets_number,
+               a.assets_number,
+               a.check_item_status,
                a.create_time ,
-               a.update_time ,
+               a.update_time,
+
+               b.assets_id,
+               b.assets_number,
+               b.assets_name,
+               b.assets_nature,
+               b.assets_type,
+               b.assets_amount,
+               b.measuring_unit,
+               b.assets_price,
+               b.storage_unit,
+               b.storage_department,
+               b.custodian,
+               b.user,
+               b.storage_addr,
+               b.use_status,
+               b.assets_source,
+               b.useful_life,
+               b.residual_rate,
+               b.check_status,
+               b.assets_format,
+               b.assets_model,
+               b.assets_brand,
+               b.purchase_date,
+               b.manufacture_date,
+               b.warranty_date,
+               b.del_flag as assets_del_flag,
+               b.create_time as assets_create_time,
+               b.update_time as assets_update_time
         from assets_check_item a
             left join assets_accounting b on a.assets_number = b.assets_number
     </sql>
@@ -65,18 +95,40 @@
         insert into assets_check_item(
         <if test="checkNumber != null and checkNumber != ''">check_number,</if>
         <if test="assetsNumber != null and assetsNumber != ''">assets_number,</if>
+        <if test="checkItemStatus != null and checkItemStatus != '0'">check_item_status,</if>
         <if test="createBy != null and createBy != ''">create_by,</if>
         create_time
         )values(
         <if test="checkNumber != null and checkNumber != ''">#{checkNumber},</if>
         <if test="assetsNumber != null and assetsNumber != ''">#{assetsNumber},</if>
+        <if test="checkItemStatus != null and checkItemStatus != '0'">#{checkItemStatus},</if>
         <if test="createBy != null and createBy != ''">#{createBy},</if>
         sysdate()
         )
     </insert>
 
-    <delete id="deleteCheckTaskByCheckNumber" parameterType="String">
+    <delete id="deleteCheckItemByCheckNumber" parameterType="String">
          delete from assets_check_item where item_id in(select temp.item_id from (select item_id from assets_check_item where check_number = #{checkNumber}) temp)
     </delete>
+
+    <delete id="deleteCheckProfitItemByCheckNumber" parameterType="String">
+         delete from assets_check_item where item_id in(select temp.item_id from (select item_id from assets_check_item where check_number = #{checkNumber} and check_item_status=3) temp)
+    </delete>
+
+    <select id="getCheckItemByCheckNumber" parameterType="String" resultMap="AssetsCheckItemResult">
+        <include refid="selectAssetsCheckItemVo"/>
+        where a.check_number = #{checkNumber}
+    </select>
+    <update id="updateCheckItemStatus" parameterType="com.ams.system.domain.AssetsCheckItem">
+        update assets_check_item
+        <set>
+            <if test="checkNumber != null and checkNumber != ''">check_number=#{checkNumber},</if>
+            <if test="assetsNumber != null and assetsNumber != ''">assets_number=#{assetsNumber},</if>
+            <if test="checkItemStatus != null and checkItemStatus != '0'">check_item_status=#{checkItemStatus},</if>
+            <if test="updateBy != null and updateBy != ''">update_by=#{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where item_id = #{itemId}
+    </update>
 
 </mapper> 

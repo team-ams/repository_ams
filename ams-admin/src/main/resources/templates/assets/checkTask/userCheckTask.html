@@ -89,15 +89,12 @@
             sortOrder: "desc",
             modalName: "盘点任务",
             columns: [{
-                checkbox: true
+                field: 'taskId',
+                title: '盘点任务id',
+                sortable: true,
+                visible: false,
+                align: 'center'
             },
-                {
-                    field: 'taskId',
-                    title: '盘点任务id',
-                    sortable: true,
-                    visible: false,
-                    align: 'center'
-                },
                 {
                     field: 'checkNumber',
                     title: '盘点单号',
@@ -167,8 +164,8 @@
     }
 
     function checkRecord() {
-       // table.set();
-        $.modal.openTab("我的" + table.options.modalName, prefix + "/checkRecord")
+        // table.set();
+        $.modal.openTab("我的" + table.options.modalName, prefix + "/checkRecord");
     }
 
     /* 提交 */

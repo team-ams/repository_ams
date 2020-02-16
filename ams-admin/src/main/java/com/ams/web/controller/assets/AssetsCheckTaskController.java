@@ -5,9 +5,11 @@ import com.ams.common.core.controller.BaseController;
 import com.ams.common.core.domain.AjaxResult;
 import com.ams.common.core.page.TableDataInfo;
 import com.ams.common.enums.BusinessType;
+import com.ams.common.utils.StringUtils;
 import com.ams.common.utils.poi.ExcelUtil;
 import com.ams.framework.util.ShiroUtils;
 import com.ams.system.domain.Assets;
+import com.ams.system.domain.AssetsCheckItem;
 import com.ams.system.domain.AssetsCheckTask;
 import com.ams.system.domain.SysUser;
 import com.ams.system.service.*;
@@ -45,7 +47,7 @@ public class AssetsCheckTaskController extends BaseController {
     private IAssetsCheckTaskService checkTaskService;
 
     @Autowired
-    private IAssetsStorageAddrService storageAddrService;
+    private IAssetsCheckItemService checkItemService;
 
     @Autowired
     private ISysUserService userService;
@@ -220,22 +222,48 @@ public class AssetsCheckTaskController extends BaseController {
     }
 
     /**
+     * 新增（模态框）
+     *
+     * @param fid
+     * @param mmap
+     * @param request
+     * @return
+     */
+    @GetMapping("/reCheck/{fid}/{checkTaskId}")
+    public String reCheckModal(@PathVariable("fid") String fid,
+                               @PathVariable("checkTaskId") String checkTaskId,
+                               ModelMap mmap,
+                               HttpServletRequest request) {
+        //打开模态窗口时先清除上次残留的数据
+        if (assetsNumbers.size() > 0) {
+            assetsNumbers.clear();
+        }
+        if (assetsLinkedHashSet.size() > 0) {
+            assetsLinkedHashSet.clear();
+        }
+        mmap.put("basePath", request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/");
+        mmap.put("fid", fid);
+        mmap.put("checkTask", checkTaskService.getCheckTaskByTaskId(Integer.parseInt(checkTaskId)));
+        return prefix + "/reCheckAssets";
+    }
+
+    /**
      * MFRC522通过ESP8266将ID卡号发送过来，提供给esp8266调用的接口
      *
      * @param request
      */
-    @RequestMapping("/getMsg")
+    @RequestMapping("/getMsg/{fid}")
     @ResponseBody
-    public String getMsg(HttpServletRequest request, ModelMap mmap) {
+    public String getMsg(@PathVariable("fid") String fid, HttpServletRequest request, ModelMap mmap) {
         Map<String, String> parameterMap = getParameterMap();
         String assetsNumber = parameterMap.get("assetsNumber");
         assetsNumbers.add(assetsNumber);
         System.out.println(parameterMap);
 
         //通知前端页面有新数据
-        pushToWeb(FID, MSG);
+        pushToWeb(fid, MSG);
         mmap.put("content", "传过来的：" + assetsNumber);
-        return prefix + "/checkTaskAssets";
+        return prefix + "";
     }
 
 
@@ -286,6 +314,43 @@ public class AssetsCheckTaskController extends BaseController {
         return error();
     }
 
+    @PostMapping("/reCheckConfirm")
+    @ResponseBody
+    public AjaxResult reCheckConfirm(HttpServletRequest request) {
+        //清除卡号，复位
+        assetsNumbers.clear();
+        //清空表格信息，复位，避免下次把之前的数据重新显示出来
+        assetsLinkedHashSet.clear();
+        String checkNumber = request.getParameter("checkNumber");
+        if (checkNumber == null || checkNumber.equals("")) {
+            return error();
+        }
+        //删掉上次盘点 为盘盈状态的盘点项
+        checkItemService.deleteCheckProfitItemByCheckNumber(checkNumber);
+        //获得当前用户登录名 作 更新者
+        SysUser currentSysUser = ShiroUtils.getSysUser();
+        String updateBy = currentSysUser.getLoginName();
+        //盘点得到的资产编号
+        String assetsNumbers = request.getParameter("assetsNumber");
+        if (assetsNumbers == null || assetsNumbers.equals("")) {
+            return error();
+        }
+        String[] split = assetsNumbers.split(",");
+        List<String> checkResultList = Arrays.asList(split);
+        //盘点任务id
+        String taskId = request.getParameter("taskId");
+        if (taskId == null || taskId.equals("")) {
+            return error();
+        }
+        try {
+            return toAjax(assetsService.checkFinish(Integer.parseInt(taskId), checkResultList, updateBy));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return error();
+    }
+
+
     @PostMapping("closeModal")
     public void closeModal() {
         //清除卡号，复位
@@ -321,6 +386,33 @@ public class AssetsCheckTaskController extends BaseController {
             }
         }
         return error();
+    }
+
+    @GetMapping("/checkDetails/{checkNumber}")
+    public String checkDetails(@PathVariable("checkNumber") String checkNumber, ModelMap mmap) {
+        mmap.put("checkNumber", checkNumber);
+        return prefix + "/checkDetails";
+    }
+
+    @PostMapping("/checkDetailsList/{checkNumber}")
+    @ResponseBody
+    public TableDataInfo checkDetailsList(@PathVariable("checkNumber") String checkNumber) {
+        List<AssetsCheckItem> checkItemList = checkItemService.getCheckItemByCheckNumber(checkNumber);
+        startPage();
+        return getDataTable(checkItemList);
+    }
+
+    @PostMapping("/childTableList")
+    @ResponseBody
+    public TableDataInfo childTableList(HttpServletRequest request) {
+        String checkNumber = request.getParameter("checkNumber");
+        if (StringUtils.isNotEmpty(checkNumber)) {
+
+            List<AssetsCheckItem> checkItemList = checkItemService.getCheckItemByCheckNumber(checkNumber);
+            startPage();
+            return getDataTable(checkItemList);
+        }
+        return getDataTable(new ArrayList<>());
     }
 
     /**
