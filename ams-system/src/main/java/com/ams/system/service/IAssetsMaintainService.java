@@ -1,5 +1,6 @@
 package com.ams.system.service;
 
+import com.ams.system.domain.AssetsBorrow;
 import com.ams.system.domain.AssetsMaintain;
 import com.ams.system.domain.AssetsMaintain;
 
@@ -48,10 +49,41 @@ public interface IAssetsMaintainService {
     int updateMaintainInfo(AssetsMaintain maintain);
 
     /**
+     * 更新资产保养信息（根据保养单号，可批量更新）
+     *
+     * @param maintain
+     * @return
+     */
+    int updateMaintainByOrderNum(AssetsMaintain maintain);
+
+    /**
      * 根据保养id删除保养信息
      *
      * @param maintainId
      * @return
      */
     int deleteByMaintainId(String maintainId);
+
+    /**
+     * 根据单号查找
+     *
+     * @param orderNum
+     * @return
+     */
+    List<AssetsMaintain> getMaintainListByOrderNum(String orderNum);
+
+    /**
+     * 获得审批列表
+     *
+     * @return
+     */
+    List<AssetsMaintain> getMyExamineList();
+
+    /**
+     * 根据保养单号删除（可批量删除）
+     *
+     * @param orderNum
+     * @return
+     */
+    int deleteMaintainByOrderNum(String orderNum);
 }

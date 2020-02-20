@@ -54,8 +54,8 @@
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: layout-latest-js"/>
 <script th:inline="javascript">
-    var allocateFlag = [[${@permission.hasPermi('assets:accounting:allocate')}]];
     var prefix = ctx + "assets/allocate";
+    var examineStatus = [[${@dict.getType('examine_status')}]];
 
     $(function () {
         var panehHidden = false;
@@ -64,11 +64,15 @@
         }
         $('body').layout({initClosed: panehHidden, west__size: 185});
         queryUserList();
-     });
+    });
 
     function queryUserList() {
         var options = {
             url: prefix + "/myAllocateExamineList",
+            detailView: true,
+            onExpandRow: function (index, row, $detail) {
+                initChildTable(index, row, $detail);
+            },
             sortName: "createTime",
             sortOrder: "desc",
             modalName: "我的资产审批记录",
@@ -76,51 +80,120 @@
                 checkbox: true
             },
                 {
-                    field: 'assetsNumber',
-                    title: '资产编号',
-                    sortable: true
-                },
-                {
-                    field: 'assets.assetsName',
-                    title: '资产名称',
-
-                },
-                {
-                    field: 'assets.assetsType',
-                    title: '资产类别'
-                },
-                {
-                    field: 'assets.assetsPrice',
-                    title: '单价'
-                },
-                {
-                    field: 'assets.usefulLife',
-                    title: '使用年限'
-                },
-                {
-                    field: 'assets.assetsModel',
-                    title: '型号'
-                },
-                {
-                    field: 'assets.assetsBrand',
-                    title: '品牌'
+                    field: 'allocateOrderNum',
+                    title: '领用单号',
+                    sortable: true,
+                    align: 'center'
                 },
                 {
                     field: 'user.userName',
-                    title: '申请人'
+                    title: '申请人',
+                    align: 'center'
+                },
+                {
+                    field: 'user.dept.parentName',
+                    title: '所在学院',
+                    align: 'center'
+                },
+                {
+                    field: 'user.dept.deptName',
+                    title: '所属专业',
+                    align: 'center'
+                },
+                {
+                    field: 'user.userId',
+                    title: '申请人Id',
+                    visible: false
                 },
                 {
                     field: 'createTime',
-                    title: '申请时间',
-                    sortable: true
+                    title: '申请领用时间',
+                    align: 'center'
                 },
                 {
                     field: 'status',
-                    title: '审批结果'
+                    title: '审批结果',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(examineStatus, value);
+                    }
                 }]
         };
         $.table.init(options);
     }
+
+    initChildTable = function (index, row, $detail) {
+        var cur_table = $detail.html('<table style="table-layout:fixed"></table>').find('table');
+        $(cur_table).bootstrapTable({
+            url: prefix + "/childTableList",
+            method: 'post',
+            sidePagination: "server",
+            contentType: "application/x-www-form-urlencoded",   // 编码类型
+            queryParams: {
+                orderNum: row.allocateOrderNum
+            },
+            columns: [{
+                field: 'assets.assetsNumber',
+                title: '资产编号',
+                align: 'center',
+            },
+                {
+                    field: 'assets.assetsName',
+                    title: '资产名称',
+                    align: 'center',
+                },
+                {
+                    field: 'assets.assetsModel',
+                    title: '资产规格',
+                    align: 'center',
+                },
+                {
+                    field: 'assets.assetsBrand',
+                    title: '品牌',
+                    align: 'center',
+                },
+                {
+                    field: 'assets.purchaseDate',
+                    title: '购入日期',
+                    align: 'center',
+                },
+                {
+                    field: 'assets.custodian',
+                    title: '保管人',
+                    align: 'center',
+                },
+                {
+                    field: 'assets.assetsPrice',
+                    title: '资产价值',
+                    align: 'center',
+                },
+                {
+                    field: 'assets.storageAddr',
+                    title: '存放地点',
+                    align: 'center',
+                },
+                {
+                    field: 'assets.assetsSource',
+                    title: '资产来源',
+                    align: 'center',
+                },
+                {
+                    field: 'assets.assetsType',
+                    title: '资产类别',
+                    align: 'center',
+                },
+                {
+                    field: 'assets.assetsNature',
+                    title: '资产性质',
+                    align: 'center',
+                },
+                {
+                    field: 'updateTime',
+                    title: '盘点时间',
+                    align: 'center',
+                }]
+        });
+    };
 
 
 </script>

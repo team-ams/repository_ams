@@ -5,7 +5,9 @@ import com.ams.common.constant.UserConstants;
 import com.ams.common.core.controller.BaseController;
 import com.ams.common.core.domain.AjaxResult;
 import com.ams.common.core.page.TableDataInfo;
+import com.ams.common.enums.AssetsExamineStatus;
 import com.ams.common.enums.BusinessType;
+import com.ams.common.utils.StringUtils;
 import com.ams.common.utils.poi.ExcelUtil;
 import com.ams.framework.util.ShiroUtils;
 import com.ams.system.domain.Assets;
@@ -60,7 +62,15 @@ public class AssetsBorrowController extends BaseController {
     @RequiresPermissions("assets:borrow:view")
     @GetMapping()
     public String assets() {
-        return prefix + "/borrow";
+        SysUser currentSysUser = ShiroUtils.getSysUser();
+        if (currentSysUser != null) {
+            //当前用户不是管理员，返回领用界面
+            if (!currentSysUser.isAdmin()) {
+                return prefix + "/borrow";
+            }
+        }
+        //管理员返回管理员页面
+        return prefix + "/borrowAdmin";
     }
 
     @RequiresPermissions("assets:borrow:list")
@@ -69,11 +79,11 @@ public class AssetsBorrowController extends BaseController {
     public TableDataInfo list(Assets assets) {
         SysUser currentSysUser = ShiroUtils.getSysUser();
         if (currentSysUser != null) {
-            //当前系统用户不是管理员，资产领用信息
+            //当前系统用户不是管理员，可借用的资产信息
             if (!currentSysUser.isAdmin()) {
-                List<AssetsBorrow> borrowListByUserId = borrowService.getBorrowListByUserId(currentSysUser.getUserId().toString());
+                List<Assets> assetsList0 = accountingService.getAssetsList0(assets);
                 startPage();
-                return getDataTable(borrowListByUserId);
+                return getDataTable(assetsList0);
             }
             //当前系统用户是管理员，待审批信息
             List<AssetsBorrow> borrowListAll = borrowService.getBorrowListAll();
@@ -141,26 +151,48 @@ public class AssetsBorrowController extends BaseController {
     /**
      * 修改保存资产
      */
-    @RequiresPermissions("assets:borrow:edit")
     @Log(title = "资产管理", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editSave(@Validated AssetsBorrow borrow) {
         borrow.setUpdateBy(ShiroUtils.getLoginName());
-        return toAjax(borrowService.updateBorrowInfo(borrow));
+        int i = borrowService.updateBorrowByOrderNum(borrow);
+        return toAjax(borrowService.updateBorrowByOrderNum(borrow));
     }
 
 
-    @RequiresPermissions("assets:borrow:remove")
     @Log(title = "用户管理", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
+        AssetsBorrow borrow = borrowService.getBorrowById(ids);
+        if (borrow == null) {
+            return error();
+        }
         try {
-            return toAjax(borrowService.deleteByBorrowId(ids));
+            return toAjax(assetsService.borrowDelete(borrow.getBorrowOrderNum()));
         } catch (Exception e) {
             return error(e.getMessage());
         }
+    }
+
+    @PostMapping("/childTableList")
+    @ResponseBody
+    public TableDataInfo childTableList(HttpServletRequest request) {
+        String orderNum = request.getParameter("orderNum");
+        if (StringUtils.isNotEmpty(orderNum)) {
+
+            List<AssetsBorrow> assetsBorrowBy = borrowService.getBorrowListByOrderNum(orderNum);
+            startPage();
+            return getDataTable(assetsBorrowBy);
+        }
+        return getDataTable(new ArrayList<>());
+    }
+
+    @GetMapping("/borrow/{assetsNumber}")
+    public String borrow(@PathVariable("assetsNumber") String assetsNumber, ModelMap mmap) {
+        mmap.put("assetsNumber", assetsNumber);
+        return prefix + "/borrowAssets2";
     }
 
     /**
@@ -235,10 +267,74 @@ public class AssetsBorrowController extends BaseController {
         }
         SysUser currentSysUser = ShiroUtils.getSysUser();
         if (currentSysUser != null) {
-            int allocateUserId = currentSysUser.getUserId().intValue();
+            int borrowUserId = currentSysUser.getUserId().intValue();
             String createBy = currentSysUser.getLoginName();
             try {
-                return toAjax(assetsService.borrowAssets(allocateUserId, createBy, borrowData));
+                return toAjax(assetsService.borrowAssets(borrowUserId, createBy, borrowData));
+            } catch (Exception e) {
+                e.printStackTrace();
+                return error();
+            }
+        }
+        return error();
+    }
+
+    @GetMapping("/myBorrow")
+    public String myAllocate() {
+        return prefix + "/myBorrow";
+    }
+
+    @PostMapping("/myBorrowList")
+    @ResponseBody
+    public TableDataInfo myAllocateTable() {
+        //获取当前系统用户id
+        SysUser currentUser = ShiroUtils.getSysUser();
+        if (currentUser == null) {
+            return getDataTable(new ArrayList<>());
+        }
+        startPage();
+        List<AssetsBorrow> myBorrowListByUserId = borrowService.getBorrowListByUserId(String.valueOf(currentUser.getUserId()));
+        return getDataTable(myBorrowListByUserId);
+    }
+
+    @GetMapping("/myExamine")
+    public String myExamine() {
+        return prefix + "/myExamine";
+    }
+
+    @PostMapping("/myExamineList")
+    @ResponseBody
+    public TableDataInfo myExamineList() {
+        startPage();
+        return getDataTable(borrowService.getMyExamineList());
+    }
+
+    @PostMapping("/examineOK/{orderNum}/{userId}")
+    @ResponseBody
+    public AjaxResult examineOK(@PathVariable("orderNum") String orderNum,
+                                @PathVariable("userId") int userId) {
+        SysUser currentSysUser = ShiroUtils.getSysUser();
+        if (currentSysUser != null) {
+            int auditorId = currentSysUser.getUserId().intValue();
+            try {
+                return toAjax(assetsService.borrowExamine(auditorId, orderNum, userId, AssetsExamineStatus.AGREE.getCode()));
+            } catch (Exception e) {
+                e.printStackTrace();
+                return error();
+            }
+        }
+        return error();
+    }
+
+    @PostMapping("/examineReject/{orderNum}/{userId}")
+    @ResponseBody
+    public AjaxResult examineReject(@PathVariable("orderNum") String orderNum,
+                                    @PathVariable("userId") int userId) {
+        SysUser currentSysUser = ShiroUtils.getSysUser();
+        if (currentSysUser != null) {
+            int auditorId = currentSysUser.getUserId().intValue();
+            try {
+                return toAjax(assetsService.borrowExamine(auditorId, orderNum, userId, AssetsExamineStatus.REJECT.getCode()));
             } catch (Exception e) {
                 e.printStackTrace();
                 return error();

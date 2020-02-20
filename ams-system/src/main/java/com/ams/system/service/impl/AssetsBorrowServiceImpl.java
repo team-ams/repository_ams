@@ -22,9 +22,24 @@ public class AssetsBorrowServiceImpl implements IAssetsBorrowService {
     }
 
     @Override
+    public List<AssetsBorrow> getNeedReturnByUserId(String userId) {
+        return borrowMapper.getNeedReturnByUserId(userId);
+    }
+
+    @Override
+    public List<AssetsBorrow> getBorrowListByOrderNum(String orderNum) {
+        return borrowMapper.getBorrowListByOrderNum(orderNum);
+    }
+
+    @Override
     public AssetsBorrow getBorrowById(String borrowId) {
         AssetsBorrow borrowByNumber = borrowMapper.getBorrowById(borrowId);
         return borrowByNumber;
+    }
+
+    @Override
+    public AssetsBorrow getBorrowByAssetsNumberAndIsNotReturn(String assetsNumber) {
+        return borrowMapper.getBorrowByAssetsNumberAndIsNotReturn(assetsNumber);
     }
 
     @Override
@@ -38,10 +53,6 @@ public class AssetsBorrowServiceImpl implements IAssetsBorrowService {
         return borrowMapper.insertBorrowList(borrowList);
     }
 
-    @Override
-    public int returnAssetsList(List<AssetsBorrow> returnList) {
-        return borrowMapper.returnAssetsList(returnList);
-    }
 
     @Override
     public int updateBorrowInfo(AssetsBorrow borrow) {
@@ -49,7 +60,22 @@ public class AssetsBorrowServiceImpl implements IAssetsBorrowService {
     }
 
     @Override
+    public int updateBorrowByOrderNum(AssetsBorrow borrow) {
+        return borrowMapper.updateBorrowByOrderNum(borrow);
+    }
+
+    @Override
     public int deleteByBorrowId(String borrowId) {
         return borrowMapper.deleteByBorrowId(borrowId);
+    }
+
+    @Override
+    public List<AssetsBorrow> getMyExamineList() {
+        return borrowMapper.getMyExamineList();
+    }
+
+    @Override
+    public int deleteBorrowByOrderNum(String orderNum) {
+        return borrowMapper.deleteBorrowByOrderNum(orderNum);
     }
 }

@@ -45,11 +45,10 @@ public interface AssetsAllocateMapper {
     /**
      * 根据用户和资产编号查询状态为审核中的资产领用
      *
-     * @param assetsNumber
-     * @param allocateUserId
+     * @param orderNum
      * @return
      */
-    AssetsAllocate getAssetsAllocateBy(@Param("assetsNumber") String assetsNumber, @Param("allocateUserId") int allocateUserId);
+    List<AssetsAllocate> getAssetsAllocateBy(@Param("orderNum") String orderNum);
 
     /**
      * 根据userId查找 “我的资产领用” 领用信息
@@ -60,10 +59,26 @@ public interface AssetsAllocateMapper {
     List<AssetsAllocate> getMyAllocateListByUserId(int userId);
 
     /**
+     * 根据领用Id获得领用信息
+     *
+     * @param allocateId
+     * @return
+     */
+    AssetsAllocate getAllocateByAllocateId(int allocateId);
+
+    /**
      * 更新资产领用信息
      *
      * @param assetsAllocate
      * @return
      */
     int updateAssetsAllocate(AssetsAllocate assetsAllocate);
+
+    /**
+     * 根据领用单号删除（可批量删除）
+     *
+     * @param orderNum
+     * @return
+     */
+    int deleteAllocateByOrderNum(String orderNum);
 }

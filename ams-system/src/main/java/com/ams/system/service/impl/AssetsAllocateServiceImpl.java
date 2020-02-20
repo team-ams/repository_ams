@@ -1,6 +1,6 @@
 package com.ams.system.service.impl;
 
-import com.ams.common.enums.AssetsAllocateStatus;
+import com.ams.common.enums.AssetsExamineStatus;
 import com.ams.common.enums.AssetsStatus;
 import com.ams.system.domain.AssetsAllocate;
 import com.ams.system.mapper.AssetsAllocateMapper;
@@ -38,7 +38,7 @@ public class AssetsAllocateServiceImpl implements IAssetsAllocateService {
             //映射 资产 使用状态
             allocate.getAssets().setUseStatus(AssetsStatus.getStatusByCode(allocate.getAssets().getUseStatus()).getInfo());
             //映射 资产领用 状态
-            allocate.setStatus(AssetsAllocateStatus.getStatusByCode(allocate.getStatus()).getInfo());
+            allocate.setStatus(AssetsExamineStatus.getStatusByCode(allocate.getStatus()).getInfo());
         }
         return allocateAdminList;
     }
@@ -63,18 +63,28 @@ public class AssetsAllocateServiceImpl implements IAssetsAllocateService {
             //映射 资产 使用状态
             allocate.getAssets().setUseStatus(AssetsStatus.getStatusByCode(allocate.getAssets().getUseStatus()).getInfo());
             //映射 资产领用 状态
-            allocate.setStatus(AssetsAllocateStatus.getStatusByCode(allocate.getStatus()).getInfo());
+            allocate.setStatus(AssetsExamineStatus.getStatusByCode(allocate.getStatus()).getInfo());
         }
         return myAllocateListByUserId;
     }
 
     @Override
-    public AssetsAllocate getAssetsAllocateBy(String assetsNumber, int allocateUserId) {
-        return allocateMapper.getAssetsAllocateBy(assetsNumber, allocateUserId);
+    public AssetsAllocate getAllocateByAllocateId(int allocateId) {
+        return allocateMapper.getAllocateByAllocateId(allocateId);
+    }
+
+    @Override
+    public List<AssetsAllocate> getAssetsAllocateBy(String orderNum) {
+        return allocateMapper.getAssetsAllocateBy(orderNum);
     }
 
     @Override
     public int updateAssetsAllocate(AssetsAllocate assetsAllocate) {
         return allocateMapper.updateAssetsAllocate(assetsAllocate);
+    }
+
+    @Override
+    public int deleteAllocateByOrderNum(String orderNum) {
+        return allocateMapper.deleteAllocateByOrderNum(orderNum);
     }
 }

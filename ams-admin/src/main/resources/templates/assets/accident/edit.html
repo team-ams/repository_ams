@@ -1,69 +1,33 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="include :: header('修改资产')" />
-    <th:block th:include="include :: select2-css" />
+    <th:block th:include="include :: header('修改资产')"/>
+    <th:block th:include="include :: select2-css"/>
 </head>
 <body>
 <div class="main-content">
     <form class="form-horizontal" id="form-assets-edit" th:object="${accident}">
-        <input name="accidentId"  type="hidden"  th:field="*{accidentId}" />
+        <input name="accidentId" type="hidden" th:field="*{accidentId}"/>
         <input name="reportUserId" type="hidden" th:field="*{reportUserId}"/>
         <h4 class="form-header h4">基本信息</h4>
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>资产编号：</label>
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>事故单号：</label>
                     <div class="col-sm-8">
                         <div class="input-group">
-                            <input class="form-control" type="text" readonly="true" th:field="*{assetsNumber}"/>
+                            <input name="accidentOrderNum" class="form-control" type="text" readonly="true"
+                                   th:field="*{accidentOrderNum}"/>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>资产名称：</label>
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>事故单位：</label>
                     <div class="col-sm-8">
-                        <input placeholder="请输入资产名称" class="form-control" type="text" readonly="true" maxlength="30" th:field="*{assets.assetsName}" required>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-6">
-                <div class="form-group">
-                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>事故上报人：</label>
-                    <div class="col-sm-8">
-                        <input id="reportUserId" placeholder="请输入事故上报人" class="form-control" type="text" readonly="true" maxlength="11" th:field="*{user.userName}" required>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="form-group">
-                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>事故发生时间：</label>
-                    <div class="col-sm-8">
-                        <input type="text" class="time-input" id="accidentTime" placeholder="请选择维修日期" name="accidentTime" th:field="*{accidentTime}" th:required/>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-6">
-                <div class="form-group">
-                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>事故级别：</label>
-                    <div class="col-sm-8">
-                        <select name="accidentGrade" class="form-control m-b" th:with="type=${@dict.getType('accident_grade')}">
-                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{accidentGrade}" th:required="true"></option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="form-group">
-                    <label class="col-sm-4 control-label"><span style="color: red;">*</span>防范终结：</label>
-                    <div class="col-sm-8">
-                        <input id="summary" name="summary" placeholder="请输入维修费用" class="form-control" type="text" maxlength="30" th:field="*{summary}" required>
+                        <input class="form-control" type="text" readonly="true" maxlength="30"
+                               th:field="*{user.dept.parentName}" required>
                     </div>
                 </div>
             </div>
@@ -73,7 +37,51 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>事故部门：</label>
                     <div class="col-sm-8">
-                        <input id="accidentDept" name="accidentDept" placeholder="请输入安装地点" class="form-control" type="text" maxlength="30" th:field="*{accidentDept}" required>
+                        <input class="form-control" type="text" readonly="true" maxlength="30"
+                               th:field="*{user.dept.deptName}" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>事故上报人：</label>
+                    <div class="col-sm-8">
+                        <input id="reportUserId" placeholder="请输入事故上报人" class="form-control" type="text" readonly="true"
+                               maxlength="11" th:field="*{user.userName}" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>事故发生时间：</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="time-input" id="accidentTime" placeholder="请选择事故发生日期"
+                               name="accidentTime" th:field="*{accidentTime}" th:required/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>事故级别：</label>
+                    <div class="col-sm-8">
+                        <select name="accidentGrade" class="form-control m-b"
+                                th:with="type=${@dict.getType('accident_grade')}">
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"
+                                    th:field="*{accidentGrade}" th:required="true"></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>事故地点：</label>
+                    <div class="col-sm-8">
+                        <input id="accidentDept" name="accidentDept" placeholder="请输入事故地点" class="form-control"
+                               type="text" maxlength="30" th:field="*{accidentDept}" required>
                     </div>
                 </div>
             </div>
@@ -81,7 +89,19 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>经济损失：</label>
                     <div class="col-sm-8">
-                        <input id="economicLosses" name="economicLosses" placeholder="请输入经济损失" class="form-control" type="text" maxlength="30" th:field="*{economicLosses}" required>
+                        <input id="economicLosses" name="economicLosses" placeholder="请输入经济损失" class="form-control"
+                               type="text" maxlength="30" th:field="*{economicLosses}" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red;">*</span>防范终结：</label>
+                    <div class="col-sm-8">
+                        <input id="summary" name="summary" placeholder="请输入维修费用" class="form-control" type="text"
+                               maxlength="30" th:field="*{summary}" required>
                     </div>
                 </div>
             </div>
@@ -101,12 +121,14 @@
 </div>
 <div class="row">
     <div class="col-sm-offset-5 col-sm-10">
-        <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler()"><i class="fa fa-check"></i>保 存</button>&nbsp;
-        <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭 </button>
+        <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler()"><i class="fa fa-check"></i>保 存
+        </button>&nbsp;
+        <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭
+        </button>
     </div>
 </div>
-<th:block th:include="include :: footer" />
-<th:block th:include="include :: select2-js" />
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: select2-js"/>
 <script type="text/javascript">
     var prefix = ctx + "assets/accident";
 
@@ -115,8 +137,8 @@
             var data = $("#form-assets-edit").serializeArray();
             var accidentId = $("#accidentId").val();
             var reportUserId = $("#reportUserId").val();
-            data.push({"name":"accidentId","value":accidentId});
-            data.push({"name":"reportUserId","value":reportUserId});
+            data.push({"name": "accidentId", "value": accidentId});
+            data.push({"name": "reportUserId", "value": reportUserId});
             $.operate.saveTab(prefix + "/edit", data);
         }
     }

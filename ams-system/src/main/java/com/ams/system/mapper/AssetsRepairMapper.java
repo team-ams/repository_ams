@@ -1,5 +1,6 @@
 package com.ams.system.mapper;
 
+import com.ams.system.domain.AssetsMaintain;
 import com.ams.system.domain.AssetsRepair;
 
 import java.util.List;
@@ -48,10 +49,40 @@ public interface AssetsRepairMapper {
     int updateRepairInfo(AssetsRepair repair);
 
     /**
+     * 更新资产维修信息（根据维修单号，可批量更新）
+     *
+     * @param repair
+     * @return
+     */
+    int updateRepairByOrderNum(AssetsRepair repair);
+
+    /**
      * 根据维修id删除借还信息
      *
      * @param repairId
      * @return
      */
     int deleteByRepairId(String repairId);
+
+    /**
+     * 根据单号查找
+     * @param orderNum
+     * @return
+     */
+    List<AssetsRepair> getRepairListByOrderNum(String orderNum);
+
+    /**
+     * 获得审批列表
+     *
+     * @return
+     */
+    List<AssetsRepair> getMyExamineList();
+
+    /**
+     * 根据维修单号删除（可批量删除）
+     *
+     * @param orderNum
+     * @return
+     */
+    int deleteRepairByOrderNum(String orderNum);
 }

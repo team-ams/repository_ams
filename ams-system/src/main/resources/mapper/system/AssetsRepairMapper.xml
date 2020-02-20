@@ -6,14 +6,16 @@
 
     <resultMap type="com.ams.system.domain.AssetsRepair" id="AssetsRepairResult">
         <id property="repairId" column="repair_id"/>
+        <result property="repairOrderNum" column="repair_orderNum"/>
         <result property="assetsNumber" column="repair_assets_number"/>
         <result property="repairUserId" column="repair_userId"/>
         <result property="repairGrade" column="repair_grade"/>
-        <result property="installationAddr" column="installation_addr"/>
         <result property="sentTime" column="sent_time"/>
         <result property="repairTime" column="repair_time"/>
         <result property="repairStatus" column="repair_status"/>
         <result property="repairFees" column="repair_fees"/>
+        <result property="status" column="examine_status"/>
+        <result property="auditorId" column="auditor_id"/>
         <result property="remark" column="remark"/>
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
@@ -56,7 +58,7 @@
 
     <resultMap type="com.ams.system.domain.SysUser" id="SysUserResult">
         <id property="userId" column="user_id"/>
-        <result property="deptId" column="dept_id"/>
+        <result property="deptId" column="user_dept_id"/>
         <result property="loginName" column="login_name"/>
         <result property="userName" column="user_name"/>
         <result property="email" column="email"/>
@@ -90,10 +92,12 @@
 
     <sql id="selectAssetsRepairVo">
         select a.repair_id,
+        a.repair_orderNum,
                a.assets_number as repair_assets_number,
                a.repair_userId,
+               a.status as examine_status,
+               a.auditor_id,
                a.remark,
-               a.installation_addr,
                a.repair_status,
                a.sent_time,
                a.repair_time,
@@ -131,7 +135,7 @@
                b.update_time as assets_update_time,
 
                u.user_id,
-               u.dept_id,
+               u.dept_id as user_dept_id,
                u.login_name,
                u.user_name,
                u.email,
@@ -178,10 +182,10 @@
     <insert id="insertRepairList" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="repair_id">
         <foreach collection="list" item="item" separator=";">
             insert into assets_repair(
+            <if test="item.repairOrderNum != null and item.repairOrderNum !=  ''">repair_orderNum,</if>
             <if test="item.assetsNumber != null and item.assetsNumber != ''">assets_number,</if>
             <if test="item.repairUserId != null">repair_userId,</if>
             <if test="item.repairGrade != null and item.repairGrade != ''">repair_grade,</if>
-            <if test="item.installationAddr != null and item.installationAddr != ''">installation_addr,</if>
             <if test="item.sentTime != null and item.sentTime != ''">sent_time,</if>
             <if test="item.repairTime != null">repair_time,</if>
             <if test="item.repairStatus != null">repair_status,</if>
@@ -189,10 +193,10 @@
             <if test="item.createBy != null and item.createBy != ''">create_by,</if>
             create_time
             )values(
+            <if test="item.repairOrderNum != null and item.repairOrderNum !=  ''">#{item.repairOrderNum},</if>
             <if test="item.assetsNumber != null and item.assetsNumber != ''">#{item.assetsNumber},</if>
             <if test="item.repairUserId != null">#{item.repairUserId},</if>
             <if test="item.repairGrade != null and item.repairGrade != ''">#{item.repairGrade},</if>
-            <if test="item.installationAddr != null and item.installationAddr!= ''">#{item.installationAddr},</if>
             <if test="item.sentTime != null and item.sentTime != ''">#{item.sentTime},</if>
             <if test="item.repairTime != null">#{item.repairTime},</if>
             <if test="item.repairStatus != null">#{item.repairStatus},</if>
@@ -209,7 +213,8 @@
             <if test="assetsNumber != null and assetsNumber != ''">assets_number=#{assetsNumber},</if>
             <if test="repairUserId != null">repair_userId=#{repairUserId},</if>
             <if test="repairGrade != null and repairGrade != ''">repair_grade=#{repairGrade},</if>
-            <if test="installationAddr != null and installationAddr != ''">installation_addr=#{installationAddr},</if>
+            <if test="status != null and status != ''">status=#{status},</if>
+            <if test="auditorId != null and auditorId != 0">auditor_id=#{auditorId},</if>
             <if test="remark != null and remark != ''">remark=#{remark},</if>
             <if test="sentTime != null and sentTime != ''">sent_time=#{sentTime},</if>
             <if test="repairTime != null and repairTime != ''">repair_time=#{repairTime},</if>
@@ -220,8 +225,37 @@
         where repair_id = #{repairId}
     </update>
 
+    <update id="updateRepairByOrderNum" parameterType="com.ams.system.domain.AssetsRepair">
+        update assets_repair
+        <set>
+            <if test="assetsNumber != null and assetsNumber != ''">assets_number=#{assetsNumber},</if>
+            <if test="repairUserId != null">repair_userId=#{repairUserId},</if>
+            <if test="repairGrade != null and repairGrade != ''">repair_grade=#{repairGrade},</if>
+            <if test="status != null and status != ''">status=#{status},</if>
+            <if test="auditorId != null and auditorId != 0">auditor_id=#{auditorId},</if>
+            <if test="remark != null and remark != ''">remark=#{remark},</if>
+            <if test="sentTime != null and sentTime != ''">sent_time=#{sentTime},</if>
+            <if test="repairTime != null and repairTime != ''">repair_time=#{repairTime},</if>
+            <if test="repairStatus != null">repair_status=#{repairStatus},</if>
+            <if test="updateBy != null and updateBy != ''">update_by=#{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where repair_orderNum = #{repairOrderNum}
+    </update>
+
     <delete id="deleteByRepairId" parameterType="String">
         delete from assets_repair where repair_id = #{repairId}
     </delete>
 
+    <select id="getRepairListByOrderNum" parameterType="String" resultMap="AssetsRepairResult">
+        <include refid="selectAssetsRepairVo"/>
+        where a.repair_orderNum = #{orderNum}
+    </select>
+    <select id="getMyExamineList" resultMap="AssetsRepairResult">
+        <include refid="selectAssetsRepairVo"/>
+        where a.auditor_id = 1 and a.status > 0
+    </select>
+    <delete id="deleteRepairByOrderNum" parameterType="String">
+        delete from assets_repair where repair_orderNum = #{orderNum}
+    </delete>
 </mapper> 

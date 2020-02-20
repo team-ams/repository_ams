@@ -1,8 +1,10 @@
 package com.ams.system.domain;
 
 import com.ams.common.core.domain.BaseEntity;
-import com.ams.common.enums.AssetsAllocateStatus;
+import com.ams.common.enums.AssetsExamineStatus;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * @author zengchao
@@ -14,6 +16,11 @@ public class AssetsAllocate extends BaseEntity {
      * 资产领用ID
      */
     private Integer allocateId;
+    /**
+     * 领用单号
+     */
+    private String allocateOrderNum;
+
     /**
      * 资产编号
      */
@@ -44,6 +51,6 @@ public class AssetsAllocate extends BaseEntity {
     private SysUser auditor;
 
     public static String getExamineStatusInfo(String examineStatusNumber) {
-        return AssetsAllocateStatus.AGREE.getCode().equals(examineStatusNumber) ? "已同意" : "已驳回";
+        return AssetsExamineStatus.AGREE.getCode().equals(examineStatusNumber) ? "已同意" : "已驳回";
     }
 }

@@ -5,10 +5,13 @@ import com.ams.common.constant.UserConstants;
 import com.ams.common.core.controller.BaseController;
 import com.ams.common.core.domain.AjaxResult;
 import com.ams.common.core.page.TableDataInfo;
+import com.ams.common.enums.AssetsExamineStatus;
 import com.ams.common.enums.BusinessType;
+import com.ams.common.utils.StringUtils;
 import com.ams.common.utils.poi.ExcelUtil;
 import com.ams.framework.util.ShiroUtils;
 import com.ams.system.domain.Assets;
+import com.ams.system.domain.AssetsBorrow;
 import com.ams.system.domain.AssetsMaintain;
 import com.ams.system.domain.SysUser;
 import com.ams.system.service.*;
@@ -53,20 +56,28 @@ public class AssetsMaintainController extends BaseController {
     @RequiresPermissions("assets:maintain:view")
     @GetMapping()
     public String assets() {
-        return prefix + "/maintain";
+        SysUser currentSysUser = ShiroUtils.getSysUser();
+        if (currentSysUser != null) {
+            //当前用户不是管理员，返回领用界面
+            if (!currentSysUser.isAdmin()) {
+                return prefix + "/maintain";
+            }
+        }
+        //管理员返回管理员页面
+        return prefix + "/maintainAdmin";
     }
 
     @RequiresPermissions("assets:maintain:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list() {
+    public TableDataInfo list(Assets assets) {
         SysUser currentSysUser = ShiroUtils.getSysUser();
         if (currentSysUser != null) {
             //当前系统用户不是管理员，个人保养信息
             if (!currentSysUser.isAdmin()) {
-                List<AssetsMaintain> maintainListByUserId = maintainService.getMaintainListByUserId(currentSysUser.getUserId().toString());
+                List<Assets> assetsList0 = accountingService.getAssetsList0(assets);
                 startPage();
-                return getDataTable(maintainListByUserId);
+                return getDataTable(assetsList0);
             }
             //当前系统用户是管理员，全部信息
             List<AssetsMaintain> maintainListAll = maintainService.getMaintainListAll();
@@ -119,26 +130,48 @@ public class AssetsMaintainController extends BaseController {
     /**
      * 修改保存资产
      */
-    @RequiresPermissions("assets:maintain:edit")
     @Log(title = "资产管理", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editSave(@Validated AssetsMaintain maintain) {
         maintain.setUpdateBy(ShiroUtils.getLoginName());
-        return toAjax(maintainService.updateMaintainInfo(maintain));
+        return toAjax(maintainService.updateMaintainByOrderNum(maintain));
     }
 
 
-    @RequiresPermissions("assets:maintain:remove")
     @Log(title = "用户管理", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
+        AssetsMaintain maintain = maintainService.getMaintainById(ids);
+        if (maintain == null) {
+            return error();
+        }
         try {
-            return toAjax(maintainService.deleteByMaintainId(ids));
+            //根据单号批量删除
+            return toAjax(maintainService.deleteMaintainByOrderNum(maintain.getMaintainOrderNum()));
         } catch (Exception e) {
             return error(e.getMessage());
         }
+    }
+
+    @PostMapping("/childTableList")
+    @ResponseBody
+    public TableDataInfo childTableList(HttpServletRequest request) {
+        String orderNum = request.getParameter("orderNum");
+        if (StringUtils.isNotEmpty(orderNum)) {
+
+            List<AssetsMaintain> assetsMaintainBy = maintainService.getMaintainListByOrderNum(orderNum);
+            startPage();
+            return getDataTable(assetsMaintainBy);
+        }
+        return getDataTable(new ArrayList<>());
+    }
+
+    @GetMapping("/maintain/{assetsNumber}")
+    public String borrow(@PathVariable("assetsNumber") String assetsNumber, ModelMap mmap) {
+        mmap.put("assetsNumber", assetsNumber);
+        return prefix + "/maintainAssets2";
     }
 
     /**
@@ -224,4 +257,67 @@ public class AssetsMaintainController extends BaseController {
         return error();
     }
 
+    @GetMapping("/myMaintain")
+    public String myAllocate() {
+        return prefix + "/myMaintain";
+    }
+
+    @PostMapping("/myMaintainList")
+    @ResponseBody
+    public TableDataInfo myAllocateTable() {
+        //获取当前系统用户id
+        SysUser currentUser = ShiroUtils.getSysUser();
+        if (currentUser == null) {
+            return getDataTable(new ArrayList<>());
+        }
+        startPage();
+        List<AssetsMaintain> myMaintainListByUserId = maintainService.getMaintainListByUserId(String.valueOf(currentUser.getUserId()));
+        return getDataTable(myMaintainListByUserId);
+    }
+
+    @GetMapping("/myExamine")
+    public String myExamine() {
+        return prefix + "/myExamine";
+    }
+
+    @PostMapping("/myExamineList")
+    @ResponseBody
+    public TableDataInfo myExamineList() {
+        startPage();
+        return getDataTable(maintainService.getMyExamineList());
+    }
+
+    @PostMapping("/examineOK/{orderNum}/{userId}")
+    @ResponseBody
+    public AjaxResult examineOK(@PathVariable("orderNum") String orderNum,
+                                @PathVariable("userId") int userId) {
+        SysUser currentSysUser = ShiroUtils.getSysUser();
+        if (currentSysUser != null) {
+            int auditorId = currentSysUser.getUserId().intValue();
+            try {
+                return toAjax(assetsService.maintainExamine(auditorId, orderNum, userId, AssetsExamineStatus.AGREE.getCode()));
+            } catch (Exception e) {
+                e.printStackTrace();
+                return error();
+            }
+        }
+        return error();
+    }
+
+    @PostMapping("/examineReject/{orderNum}/{userId}")
+    @ResponseBody
+    public AjaxResult examineReject(@PathVariable("orderNum") String orderNum,
+                                    @PathVariable("userId") int userId) {
+        SysUser currentSysUser = ShiroUtils.getSysUser();
+        if (currentSysUser != null) {
+            int auditorId = currentSysUser.getUserId().intValue();
+            try {
+                return toAjax(assetsService.maintainExamine(auditorId, orderNum, userId, AssetsExamineStatus.REJECT.getCode()));
+            } catch (Exception e) {
+                e.printStackTrace();
+                return error();
+            }
+        }
+        return error();
+    }
 }

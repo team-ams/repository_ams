@@ -1,13 +1,15 @@
 package com.ams.system.service;
 
-import com.ams.common.enums.AssetsAllocateStatus;
+import com.ams.common.enums.AssetsExamineStatus;
 import com.ams.common.enums.AssetsCheckStatus;
 import com.ams.common.enums.AssetsStatus;
+import com.ams.common.utils.StringUtils;
 import com.ams.system.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.constraints.Size;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,6 +20,8 @@ import java.util.stream.Collectors;
 @Transactional
 public class AssetsService {
 
+    @Autowired
+    private ISysUserService userService;
     @Autowired
     private IAssetsAccountingService accountingService;
     @Autowired
@@ -36,6 +40,8 @@ public class AssetsService {
     private IAssetsCheckTaskService checkTaskService;
     @Autowired
     private IAssetsCheckItemService checkItemService;
+    @Autowired
+    private IAssetsReturnService returnService;
 
     /**
      * 领用事务（Transactional注解在class类上）
@@ -46,6 +52,9 @@ public class AssetsService {
      * @throws Exception
      */
     public int allocateAssets(int allocateUserId, String[] assetsNumbers) throws Exception {
+        //生成领用单号LY****
+        String allocateOrderNumber = "LY" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        SysUser sysUser = userService.selectUserById(Integer.toUnsignedLong(allocateUserId));
         List<Assets> updateList = accountingService.getAssetsByNumbers(assetsNumbers);
         if (updateList == null) {
             return 0;
@@ -53,15 +62,17 @@ public class AssetsService {
         for (Assets update : updateList) {
 
             //更新 资产 状态为“审核中”
-            update.setUseStatus(AssetsStatus.ALLOCATE.getCode());
+            update.setUseStatus(AssetsStatus.RESERVE.getCode());
         }
 
         List<AssetsAllocate> insertLists = new ArrayList<>();
 
         for (String number : assetsNumbers) {
             AssetsAllocate insert = new AssetsAllocate();
+            insert.setAllocateOrderNum(allocateOrderNumber);
             insert.setAssetsNumber(number);
             insert.setUserId(allocateUserId);
+            insert.setCreateBy(sysUser.getLoginName());
             insertLists.add(insert);
         }
 
@@ -75,43 +86,66 @@ public class AssetsService {
     }
 
     /**
-     * 审批事务 （Transactional注解在class类上）
+     * 领用审批事务 （Transactional注解在class类上）
      *
      * @param auditorId
-     * @param assetsNumber
+     * @param orderNum
      * @param allocateUserId
      * @param allocateExamineResult
      * @return
      * @throws Exception
      */
-    public int allocateExamine(int auditorId, String assetsNumber, int allocateUserId, String allocateExamineResult) throws Exception {
-        if (AssetsAllocateStatus.isExamineResult(allocateExamineResult)) {
-            Assets assetsUpdate = accountingService.getAssetsByNumber(assetsNumber);
-            AssetsAllocate allocateUpdate = allocateService.getAssetsAllocateBy(assetsNumber, allocateUserId);
+    public int allocateExamine(int auditorId, String orderNum, int allocateUserId, String allocateExamineResult) throws Exception {
+        SysUser sysUser = userService.selectUserById(Integer.toUnsignedLong(allocateUserId));
+        if (sysUser == null) {
+            return 0;
+        }
+        String userName = sysUser.getUserName();
+        if (AssetsExamineStatus.isExamineResult(allocateExamineResult)) {
+            List<AssetsAllocate> allocateUpdateList = allocateService.getAssetsAllocateBy(orderNum);
 
-            //审核用过
-            if (AssetsAllocateStatus.AGREE.getCode().equals(allocateExamineResult)) {
-                //更新资产领用状态为“审核通过”
-                allocateUpdate.setStatus(AssetsAllocateStatus.AGREE.getCode());
-
-                //更新资产状态为“已领用”
-                assetsUpdate.setUseStatus(AssetsStatus.ALLOCATE.getCode());
-
-            }
-            if (AssetsAllocateStatus.REJECT.getCode().equals(allocateExamineResult)) {
-                //更新资产领用状态为“审核被驳回“
-                allocateUpdate.setStatus(AssetsAllocateStatus.REJECT.getCode());
-
-                //更新资产状态为“正常”
-                assetsUpdate.setUseStatus(AssetsStatus.NORMAL.getCode());
-            }
-            //增加处理人信息
-            allocateUpdate.setAuditorId(auditorId);
-            //更新资产领用表
-            int updateAssetsAllocateRows = allocateService.updateAssetsAllocate(allocateUpdate);
             //更新资产表
             List<Assets> updateList = new ArrayList<>();
-            updateList.add(assetsUpdate);
+            //资产领用表更新数
+            int updateAssetsAllocateRows = 0;
+
+            //审核用过
+            if (AssetsExamineStatus.AGREE.getCode().equals(allocateExamineResult)) {
+                for (AssetsAllocate update : allocateUpdateList) {
+                    //更新资产领用状态为“审核通过”
+                    update.setStatus(AssetsExamineStatus.AGREE.getCode());
+                    //根据资产编号查找到资产并更新状态
+                    String assetsNumber = update.getAssetsNumber();
+                    Assets assetsUpdate = accountingService.getAssetsByNumber(assetsNumber);
+                    //更新资产状态为“在用”
+                    assetsUpdate.setUseStatus(AssetsStatus.USING.getCode());
+                    //更新资产的使用人为领用人
+                    assetsUpdate.setUser(userName);
+                    //加入待更新列表
+                    updateList.add(assetsUpdate);
+                    //增加处理人信息
+                    update.setAuditorId(auditorId);
+                    //更新资产领用表
+                    updateAssetsAllocateRows = allocateService.updateAssetsAllocate(update);
+                }
+            }
+            if (AssetsExamineStatus.REJECT.getCode().equals(allocateExamineResult)) {
+                for (AssetsAllocate update : allocateUpdateList) {
+                    //更新资产领用状态为“审核被驳回“
+                    update.setStatus(AssetsExamineStatus.REJECT.getCode());
+                    //根据资产编号查找到资产并更新状态
+                    String assetsNumber = update.getAssetsNumber();
+                    Assets assetsUpdate = accountingService.getAssetsByNumber(assetsNumber);
+                    //更新资产状态为“闲置”
+                    assetsUpdate.setUseStatus(AssetsStatus.NORMAL.getCode());
+                    //加入待更新列表
+                    updateList.add(assetsUpdate);
+                    //增加处理人信息
+                    update.setAuditorId(auditorId);
+                    //更新资产领用表
+                    updateAssetsAllocateRows = allocateService.updateAssetsAllocate(update);
+                }
+            }
             int updateAssetsRows = accountingService.updateAssetsLists(updateList);
             //成功才返回大于0的数
             if (updateAssetsRows > 0 && updateAssetsAllocateRows > 0) {
@@ -131,6 +165,8 @@ public class AssetsService {
      * @throws Exception
      */
     public int borrowAssets(int borrowUserId, String createBy, AssetsBorrow borrowData) throws Exception {
+        //生成借用单号JY****
+        String borrowOrderNumber = "JY" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
         if (borrowData == null) {
             return 0;
         }
@@ -140,13 +176,13 @@ public class AssetsService {
             return 0;
         }
         for (Assets update : updateList) {
-            //更新 资产 状态为“已外借”
-            update.setUseStatus(AssetsStatus.BORROWED.getCode());
-
+            //更新 资产 状态为“审核中”
+            update.setUseStatus(AssetsStatus.RESERVE.getCode());
         }
         List<AssetsBorrow> insertLists = new ArrayList<>();
         //当有多个资产编号的时候，每次更新资产编号
         for (Assets assets : updateList) {
+            borrowData.setBorrowOrderNum(borrowOrderNumber);
             borrowData.setBorrowUserId(borrowUserId);
             borrowData.setCreateBy(createBy);
             borrowData.setAssetsNumber(assets.getAssetsNumber());
@@ -163,6 +199,245 @@ public class AssetsService {
     }
 
     /**
+     * 借用审批事务 （Transactional注解在class类上）
+     *
+     * @param auditorId
+     * @param orderNum
+     * @param userId
+     * @param examineResult
+     * @return
+     * @throws Exception
+     */
+    public int borrowExamine(int auditorId, String orderNum, int userId, String examineResult) throws Exception {
+        SysUser sysUser = userService.selectUserById(Integer.toUnsignedLong(userId));
+        if (sysUser == null) {
+            return 0;
+        }
+        String userName = sysUser.getUserName();
+        if (AssetsExamineStatus.isExamineResult(examineResult)) {
+            //根据订单号查找
+            List<AssetsBorrow> borrowUpdateList = borrowService.getBorrowListByOrderNum(orderNum);
+
+            //更新资产表
+            List<Assets> updateList = new ArrayList<>();
+            //资产领用表更新数
+            int updateAssetsBorrowRows = 0;
+
+            //审核用过
+            if (AssetsExamineStatus.AGREE.getCode().equals(examineResult)) {
+                for (AssetsBorrow update : borrowUpdateList) {
+                    //更新资产领用状态为“审核通过”
+                    update.setStatus(AssetsExamineStatus.AGREE.getCode());
+                    //根据资产编号查找到资产并更新状态
+                    String assetsNumber = update.getAssetsNumber();
+                    Assets assetsUpdate = accountingService.getAssetsByNumber(assetsNumber);
+                    //更新资产状态为“在用”
+                    assetsUpdate.setUseStatus(AssetsStatus.USING.getCode());
+                    //更新资产的使用人为领用人
+                    assetsUpdate.setUser(userName);
+                    //加入待更新列表
+                    updateList.add(assetsUpdate);
+                    //增加处理人信息
+                    update.setAuditorId(auditorId);
+                    //更新资产领用表
+                    updateAssetsBorrowRows = borrowService.updateBorrowInfo(update);
+                }
+            }
+            if (AssetsExamineStatus.REJECT.getCode().equals(examineResult)) {
+                for (AssetsBorrow update : borrowUpdateList) {
+                    //更新资产领用状态为“审核被驳回“
+                    update.setStatus(AssetsExamineStatus.REJECT.getCode());
+                    //根据资产编号查找到资产并更新状态
+                    String assetsNumber = update.getAssetsNumber();
+                    Assets assetsUpdate = accountingService.getAssetsByNumber(assetsNumber);
+                    //更新资产状态为“闲置”
+                    assetsUpdate.setUseStatus(AssetsStatus.NORMAL.getCode());
+                    //加入待更新列表
+                    updateList.add(assetsUpdate);
+                    //增加处理人信息
+                    update.setAuditorId(auditorId);
+                    //更新资产领用表
+                    updateAssetsBorrowRows = borrowService.updateBorrowInfo(update);
+                }
+            }
+            int updateAssetsRows = accountingService.updateAssetsLists(updateList);
+            //成功才返回大于0的数
+            if (updateAssetsRows > 0 && updateAssetsBorrowRows > 0) {
+                return updateAssetsRows + updateAssetsBorrowRows;
+            }
+            return 0;
+        }
+        throw new Exception("审批失败！");
+    }
+
+    /**
+     * 删除借用单事务（同时更新资产状态)
+     *
+     * @param orderNum
+     * @return
+     * @throws Exception
+     */
+    public int borrowDelete(String orderNum) throws Exception {
+
+        if (StringUtils.isEmpty(orderNum)) {
+            return 0;
+        }
+        List<AssetsBorrow> borrowListByOrderNum = borrowService.getBorrowListByOrderNum(orderNum);
+        if (borrowListByOrderNum.size() == 0) {
+            return 0;
+        }
+        List<Assets> updateList = new ArrayList<>();
+        for (AssetsBorrow borrow : borrowListByOrderNum) {
+            Assets assetsByNumber = accountingService.getAssetsByNumber(borrow.getAssetsNumber());
+            //将资产状态更新为“闲置”
+            assetsByNumber.setUseStatus(AssetsStatus.NORMAL.getCode());
+            updateList.add(assetsByNumber);
+        }
+        if (updateList.size() == 0) {
+            return 0;
+        }
+        //批量更新资产状态
+        int updateAssetsRows = accountingService.updateAssetsLists(updateList);
+        //删除对应借用单号下的借用信息（可批量）
+        int deleteBorrowRows = borrowService.deleteBorrowByOrderNum(orderNum);
+        //成功才返回大于0的数
+        if (updateAssetsRows > 0 && deleteBorrowRows > 0) {
+            return updateAssetsRows + deleteBorrowRows;
+        }
+        throw new Exception("删除失败！");
+    }
+
+    /**
+     * 归还事务（Transactional注解在class类上）
+     *
+     * @param returnUserId
+     * @param returnData
+     * @return
+     * @throws Exception
+     */
+    public int returnAssets(int returnUserId, String createBy, AssetsReturn returnData) throws Exception {
+        //生成借用单号JY****
+        String returnOrderNumber = "GH" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        if (returnData == null) {
+            return 0;
+        }
+        String[] assetsNumbers = returnData.getAssetsNumber().split(",");
+        List<Assets> updateList = accountingService.getAssetsByNumbers(assetsNumbers);
+        if (updateList == null || updateList.size() == 0) {
+            return 0;
+        }
+        for (Assets update : updateList) {
+            //更新 资产 状态为“审核中”
+            update.setUseStatus(AssetsStatus.RESERVE.getCode());
+        }
+        List<AssetsReturn> insertLists = new ArrayList<>();
+        int updateBorrowRows = 0;
+        //当有多个资产编号的时候，每次更新资产编号
+        for (Assets assets : updateList) {
+            AssetsBorrow borrowUpdate = borrowService.getBorrowByAssetsNumberAndIsNotReturn(assets.getAssetsNumber());
+            //更新借用表的归还信息---->1为归还审批中
+            borrowUpdate.setIsReturn("1");
+            //更新借用表的是否归还信息 ---->  归还审批中(目的是点击归还按钮后，该借用信息暂时不显示，归还审核驳回则变回未归还状态)
+            updateBorrowRows = borrowService.updateBorrowInfo(borrowUpdate);
+            returnData.setReturnOrderNum(returnOrderNumber);
+            returnData.setReturnUserId(returnUserId);
+            returnData.setCreateBy(createBy);
+            returnData.setAssetsNumber(assets.getAssetsNumber());
+            insertLists.add(returnData);
+        }
+
+        int updateRows = accountingService.updateAssetsLists(updateList);
+        int insertRows = returnService.insertReturnList(insertLists);
+        //成功才返回大于0的数
+        if (updateBorrowRows > 0 && updateRows > 0 && insertRows == updateList.size()) {
+            return updateBorrowRows + insertRows + updateRows;
+        }
+        throw new Exception("申请归还失败");
+    }
+
+    /**
+     * 归还审批事务 （Transactional注解在class类上）
+     *
+     * @param auditorId
+     * @param orderNum
+     * @param userId
+     * @param examineResult
+     * @return
+     * @throws Exception
+     */
+    public int returnExamine(int auditorId, String orderNum, int userId, String examineResult) throws Exception {
+        SysUser sysUser = userService.selectUserById(Integer.toUnsignedLong(userId));
+        if (sysUser == null) {
+            return 0;
+        }
+        String userName = sysUser.getUserName();
+        if (AssetsExamineStatus.isExamineResult(examineResult)) {
+            //根据订单号查找
+            List<AssetsReturn> returnUpdateList = returnService.getReturnListByOrderNum(orderNum);
+
+            //更新资产表
+            List<Assets> updateList = new ArrayList<>();
+            //资产领用表更新数
+            int updateAssetsReturnRows = 0;
+            int updateBorrowRows = 0;
+
+            //审核用过
+            if (AssetsExamineStatus.AGREE.getCode().equals(examineResult)) {
+                for (AssetsReturn update : returnUpdateList) {
+                    //更新资产领用状态为“审核通过”
+                    update.setStatus(AssetsExamineStatus.AGREE.getCode());
+                    //根据资产编号查找到资产并更新状态
+                    String assetsNumber = update.getAssetsNumber();
+                    Assets assetsUpdate = accountingService.getAssetsByNumber(assetsNumber);
+                    AssetsBorrow borrowUpdate = borrowService.getBorrowByAssetsNumberAndIsNotReturn(assetsNumber);
+                    //更新借用表的归还信息---->2为已归还
+                    borrowUpdate.setIsReturn("2");
+                    //更新资产状态为“闲置”
+                    assetsUpdate.setUseStatus(AssetsStatus.NORMAL.getCode());
+                    //更新资产的使用人为领用人
+                    assetsUpdate.setUser("");
+                    //加入待更新列表
+                    updateList.add(assetsUpdate);
+                    //增加处理人信息
+                    update.setAuditorId(String.valueOf(auditorId));
+                    //更新资产归还表
+                    updateAssetsReturnRows = returnService.updateReturnInfo(update);
+                    //更新借用表的是否归还信息 ---->  已归还
+                    updateBorrowRows = borrowService.updateBorrowInfo(borrowUpdate);
+                }
+                //归还审批通过同步资产信息
+                int updateAssetsRows = accountingService.updateAssetsLists(updateList);
+                //成功才返回大于0的数
+                if (updateAssetsRows > 0 && updateAssetsReturnRows > 0 && updateBorrowRows > 0) {
+                    return updateAssetsRows + updateAssetsReturnRows + updateBorrowRows;
+                }
+            }
+            if (AssetsExamineStatus.REJECT.getCode().equals(examineResult)) {
+                for (AssetsReturn update : returnUpdateList) {
+                    //更新资产领用状态为“审核被驳回“
+                    update.setStatus(AssetsExamineStatus.REJECT.getCode());
+                    //增加处理人信息
+                    update.setAuditorId(String.valueOf(auditorId));
+                    //更新资产归还表
+                    updateAssetsReturnRows = returnService.updateReturnInfo(update);
+                    AssetsBorrow borrowUpdate = borrowService.getBorrowByAssetsNumberAndIsNotReturn(update.getAssetsNumber());
+                    //更新借用表的归还信息---->0为未归还
+                    borrowUpdate.setIsReturn("0");
+                    //更新借用表的是否归还信息 ---->  未归还 驳回则是归还失败
+                    updateBorrowRows = borrowService.updateBorrowInfo(borrowUpdate);
+
+                }
+                //成功才返回大于0的数  归还审批驳回不更新资产信息
+                if (updateBorrowRows > 0 && updateAssetsReturnRows > 0) {
+                    return updateBorrowRows + updateAssetsReturnRows;
+                }
+            }
+            return 0;
+        }
+        throw new Exception("审批失败！");
+    }
+
+    /**
      * 保养事务（Transactional注解在class类上）
      *
      * @param maintainUserId
@@ -171,6 +446,9 @@ public class AssetsService {
      * @throws Exception
      */
     public int maintainAssets(int maintainUserId, String createBy, AssetsMaintain maintainData) throws Exception {
+        //生成保养单号BY****
+        String maintainOrderNumber = "BY" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+
         if (maintainData == null) {
             return 0;
         }
@@ -179,9 +457,14 @@ public class AssetsService {
         if (updateList == null || updateList.size() == 0) {
             return 0;
         }
+        for (Assets update : updateList) {
+            //更新 资产 状态为“审核中”
+            update.setUseStatus(AssetsStatus.RESERVE.getCode());
+        }
         List<AssetsMaintain> insertLists = new ArrayList<>();
         //当有多个资产编号的时候，每次更新资产编号
         for (Assets assets : updateList) {
+            maintainData.setMaintainOrderNum(maintainOrderNumber);
             maintainData.setMaintainUserId(maintainUserId);
             maintainData.setCreateBy(createBy);
             maintainData.setAssetsNumber(assets.getAssetsNumber());
@@ -198,6 +481,59 @@ public class AssetsService {
     }
 
     /**
+     * 保养审批事务 （Transactional注解在class类上）
+     *
+     * @param auditorId
+     * @param orderNum
+     * @param userId
+     * @param examineResult
+     * @return
+     * @throws Exception
+     */
+    public int maintainExamine(int auditorId, String orderNum, int userId, String examineResult) throws Exception {
+        SysUser sysUser = userService.selectUserById(Integer.toUnsignedLong(userId));
+        if (sysUser == null) {
+            return 0;
+        }
+        String userName = sysUser.getUserName();
+        if (AssetsExamineStatus.isExamineResult(examineResult)) {
+            //根据订单号查找
+            List<AssetsMaintain> maintainUpdateList = maintainService.getMaintainListByOrderNum(orderNum);
+
+            //资产领用表更新数
+            int updateAssetsMaintainRows = 0;
+
+            //审核用过
+            if (AssetsExamineStatus.AGREE.getCode().equals(examineResult)) {
+                for (AssetsMaintain update : maintainUpdateList) {
+                    //更新资产领用状态为“审核通过”
+                    update.setStatus(AssetsExamineStatus.AGREE.getCode());
+                    //增加处理人信息
+                    update.setAuditorId(String.valueOf(auditorId));
+                    //更新资产领用表
+                    updateAssetsMaintainRows = maintainService.updateMaintainInfo(update);
+                }
+            }
+            if (AssetsExamineStatus.REJECT.getCode().equals(examineResult)) {
+                for (AssetsMaintain update : maintainUpdateList) {
+                    //更新资产领用状态为“审核被驳回“
+                    update.setStatus(AssetsExamineStatus.REJECT.getCode());
+                    //增加处理人信息
+                    update.setAuditorId(String.valueOf(auditorId));
+                    //更新资产领用表
+                    updateAssetsMaintainRows = maintainService.updateMaintainInfo(update);
+                }
+            }
+            //成功才返回大于0的数
+            if (updateAssetsMaintainRows > 0) {
+                return updateAssetsMaintainRows;
+            }
+            return 0;
+        }
+        throw new Exception("审批失败！");
+    }
+
+    /**
      * 维修事务（Transactional注解在class类上）
      *
      * @param maintainUserId
@@ -206,6 +542,8 @@ public class AssetsService {
      * @throws Exception
      */
     public int repairAssets(int maintainUserId, String createBy, AssetsRepair repairData) throws Exception {
+        //生成事故单号WX****
+        String repairOrderNumber = "WX" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
         if (repairData == null) {
             return 0;
         }
@@ -214,21 +552,147 @@ public class AssetsService {
         if (updateList == null || updateList.size() == 0) {
             return 0;
         }
+        for (Assets update : updateList) {
+            //更新 资产 状态为“审核中”
+            update.setUseStatus(AssetsStatus.RESERVE.getCode());
+        }
         List<AssetsRepair> insertLists = new ArrayList<>();
         //当有多个资产编号的时候，每次更新资产编号
         for (Assets assets : updateList) {
+            repairData.setRepairOrderNum(repairOrderNumber);
             repairData.setRepairUserId(maintainUserId);
             repairData.setCreateBy(createBy);
             repairData.setAssetsNumber(assets.getAssetsNumber());
             insertLists.add(repairData);
-        }
 
+            //更新资产状态为"维修中"
+            assets.setUseStatus(AssetsStatus.MAINTENANCING.getCode());
+
+
+        }
+        int updateAssetsRows = accountingService.updateAssetsLists(updateList);
         int insertRows = repairService.insertRepairList(insertLists);
         //成功才返回大于0的数
-        if (insertRows == updateList.size()) {
-            return insertRows;
+        if (insertRows == updateList.size() && updateAssetsRows > 0) {
+            return insertRows + updateAssetsRows;
         }
         throw new Exception("维修登记失败");
+    }
+
+    /**
+     * 删除维修单事务（同时更新资产状态)
+     *
+     * @param orderNum
+     * @return
+     * @throws Exception
+     */
+    public int repairDelete(String orderNum) throws Exception {
+
+        if (StringUtils.isEmpty(orderNum)) {
+            return 0;
+        }
+        List<AssetsRepair> repairListByOrderNum = repairService.getRepairListByOrderNum(orderNum);
+        if (repairListByOrderNum.size() == 0) {
+            return 0;
+        }
+        List<Assets> updateList = new ArrayList<>();
+        for (AssetsRepair repair : repairListByOrderNum) {
+            Assets assetsByNumber = accountingService.getAssetsByNumber(repair.getAssetsNumber());
+            //将资产状态更新为“闲置”
+            assetsByNumber.setUseStatus(AssetsStatus.NORMAL.getCode());
+            updateList.add(assetsByNumber);
+        }
+        if (updateList.size() == 0) {
+            return 0;
+        }
+        //批量更新资产状态
+        int updateAssetsRows = accountingService.updateAssetsLists(updateList);
+        //删除对应借用单号下的借用信息（可批量）
+        int deleteRepairRows = repairService.deleteRepairByOrderNum(orderNum);
+        //成功才返回大于0的数
+        if (updateAssetsRows > 0 && deleteRepairRows > 0) {
+            return updateAssetsRows + deleteRepairRows;
+        }
+        throw new Exception("删除失败！");
+    }
+
+    /**
+     * 维修审批事务 （Transactional注解在class类上）
+     *
+     * @param auditorId
+     * @param orderNum
+     * @param userId
+     * @param examineResult
+     * @return
+     * @throws Exception
+     */
+    public int repairExamine(int auditorId, String orderNum, int userId, String examineResult) throws Exception {
+        SysUser sysUser = userService.selectUserById(Integer.toUnsignedLong(userId));
+        if (sysUser == null) {
+            return 0;
+        }
+        String userName = sysUser.getUserName();
+        if (AssetsExamineStatus.isExamineResult(examineResult)) {
+            //根据订单号查找
+            List<AssetsRepair> repairUpdateList = repairService.getRepairListByOrderNum(orderNum);
+
+            //更新资产表
+            List<Assets> updateList = new ArrayList<>();
+            //资产领用表更新数
+            int updateAssetsRepairRows = 0;
+
+            //审核通过
+            if (AssetsExamineStatus.AGREE.getCode().equals(examineResult)) {
+                for (AssetsRepair update : repairUpdateList) {
+                    //更新资产维修状态为“审核通过”
+                    update.setStatus(AssetsExamineStatus.AGREE.getCode());
+                    //根据资产编号查找到资产并更新状态
+                    String assetsNumber = update.getAssetsNumber();
+                    Assets assetsUpdate = accountingService.getAssetsByNumber(assetsNumber);
+                    //根据修复状态更改资产状态（1：正常 2：待报废 3：故障）
+                    if (update.getRepairStatus().equals("3")) {
+                        //故障
+                        assetsUpdate.setUseStatus(AssetsStatus.DISABLE.getCode());
+                    } else if (update.getRepairStatus().equals("2")) {
+                        //待报废
+                        assetsUpdate.setUseStatus(AssetsStatus.TOSCRAPPED.getCode());
+                    } else if (update.getRepairStatus().equals("1")) {
+                        //正常---闲置
+                        assetsUpdate.setUseStatus(AssetsStatus.NORMAL.getCode());
+                    }
+
+                    //加入待更新列表
+                    updateList.add(assetsUpdate);
+                    //增加处理人信息
+                    update.setAuditorId(String.valueOf(auditorId));
+                    //更新资产维修表
+                    updateAssetsRepairRows = repairService.updateRepairInfo(update);
+                }
+            }
+            if (AssetsExamineStatus.REJECT.getCode().equals(examineResult)) {
+                for (AssetsRepair update : repairUpdateList) {
+                    //更新资产维修状态为“审核被驳回“
+                    update.setStatus(AssetsExamineStatus.REJECT.getCode());
+                    //增加处理人信息
+                    update.setAuditorId(String.valueOf(auditorId));
+                    //更新资产维修表
+                    updateAssetsRepairRows = repairService.updateRepairInfo(update);
+                    //根据资产编号查找到资产并更新状态
+                    String assetsNumber = update.getAssetsNumber();
+                    Assets assetsUpdate = accountingService.getAssetsByNumber(assetsNumber);
+                    assetsUpdate.setUseStatus(AssetsStatus.NORMAL.getCode());
+                    //加入待更新列表
+                    updateList.add(assetsUpdate);
+                }
+            }
+            int updateAssetsRows = accountingService.updateAssetsLists(updateList);
+            //成功才返回大于0的数
+            if (updateAssetsRows > 0 && updateAssetsRepairRows > 0) {
+                return updateAssetsRows + updateAssetsRepairRows;
+            }
+            return 0;
+        }
+        throw new Exception("审批失败！");
     }
 
     /**
@@ -240,6 +704,8 @@ public class AssetsService {
      * @throws Exception
      */
     public int accidentAssets(int reportUserId, String createBy, AssetsAccident accidentData) throws Exception {
+        //生成事故单号SG****
+        String accidentOrderNumber = "SG" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
         if (accidentData == null) {
             return 0;
         }
@@ -248,20 +714,101 @@ public class AssetsService {
         if (updateList == null || updateList.size() == 0) {
             return 0;
         }
+        for (Assets update : updateList) {
+            //更新 资产 状态为“审核中”
+            update.setUseStatus(AssetsStatus.RESERVE.getCode());
+        }
         List<AssetsAccident> insertLists = new ArrayList<>();
         //当有多个资产编号的时候，每次更新资产编号
         for (Assets assets : updateList) {
+            //事故单号
+            accidentData.setAccidentOrderNum(accidentOrderNumber);
             accidentData.setReportUserId(reportUserId);
             accidentData.setCreateBy(createBy);
             accidentData.setAssetsNumber(assets.getAssetsNumber());
             insertLists.add(accidentData);
         }
+        int updateAssetsRows = accountingService.updateAssetsLists(updateList);
         int insertRows = accidentService.insertAccidentList(insertLists);
         //成功才返回大于0的数
-        if (insertRows == updateList.size()) {
-            return insertRows;
+        if (updateAssetsRows > 0 && insertRows == updateList.size()) {
+            return insertRows + updateAssetsRows;
         }
         throw new Exception("事故登记失败");
+    }
+
+
+    /**
+     * 事故审批事务 （Transactional注解在class类上）
+     *
+     * @param auditorId
+     * @param orderNum
+     * @param userId
+     * @param examineResult
+     * @return
+     * @throws Exception
+     */
+    public int accidentExamine(int auditorId, String orderNum, int userId, String examineResult) throws Exception {
+        SysUser sysUser = userService.selectUserById(Integer.toUnsignedLong(auditorId));
+        if (sysUser == null) {
+            return 0;
+        }
+        String userName = sysUser.getUserName();
+        if (AssetsExamineStatus.isExamineResult(examineResult)) {
+            //根据订单号查找
+            List<AssetsAccident> accidentUpdateList = accidentService.getAccidentListByOrderNum(orderNum);
+
+            //更新资产表
+            List<Assets> updateList = new ArrayList<>();
+            //资产领用表更新数
+            int updateAssetsAccidentRows = 0;
+
+            //审核用过
+            if (AssetsExamineStatus.AGREE.getCode().equals(examineResult)) {
+                for (AssetsAccident update : accidentUpdateList) {
+                    //更新资产领用状态为“审核通过”
+                    update.setStatus(AssetsExamineStatus.AGREE.getCode());
+                    //根据资产编号查找到资产并更新状态
+                    String assetsNumber = update.getAssetsNumber();
+                    Assets assetsUpdate = accountingService.getAssetsByNumber(assetsNumber);
+                    //更新资产状态为“停用”
+                    assetsUpdate.setUseStatus(AssetsStatus.DISABLE.getCode());
+                    //清空资产的使用人
+                    assetsUpdate.setUser("");
+                    assetsUpdate.setUpdateBy(userName);
+                    //加入待更新列表
+                    updateList.add(assetsUpdate);
+                    //增加处理人信息
+                    update.setAuditorId(String.valueOf(auditorId));
+                    //更新资产领用表
+                    updateAssetsAccidentRows = accidentService.updateAccidentInfo(update);
+                }
+            }
+            if (AssetsExamineStatus.REJECT.getCode().equals(examineResult)) {
+                for (AssetsAccident update : accidentUpdateList) {
+                    //更新资产领用状态为“审核被驳回“
+                    update.setStatus(AssetsExamineStatus.REJECT.getCode());
+                    //增加处理人信息
+                    update.setAuditorId(String.valueOf(auditorId));
+                    //更新资产领用表
+                    updateAssetsAccidentRows = accidentService.updateAccidentInfo(update);
+                    //根据资产编号查找到资产并更新状态
+                    String assetsNumber = update.getAssetsNumber();
+                    Assets assetsUpdate = accountingService.getAssetsByNumber(assetsNumber);
+                    //闲置状态
+                    assetsUpdate.setUseStatus(AssetsStatus.NORMAL.getCode());
+                    //加入待更新列表
+                    updateList.add(assetsUpdate);
+                }
+            }
+            int updateAssetsRows = accountingService.updateAssetsLists(updateList);
+            //成功才返回大于0的数
+            if (updateAssetsRows > 0 && updateAssetsAccidentRows > 0) {
+                return updateAssetsRows + updateAssetsAccidentRows;
+            }
+            return 0;
+        }
+        throw new Exception("审批失败！");
     }
 
     /**
@@ -273,6 +820,9 @@ public class AssetsService {
      * @throws Exception
      */
     public int transferAssets(int transferUserId, String createBy, AssetsTransfer transferData) throws Exception {
+        //生成转移单号ZY****
+        String transferOrderNumber = "ZY" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+
         if (transferData == null) {
             return 0;
         }
@@ -281,27 +831,109 @@ public class AssetsService {
         if (updateList == null || updateList.size() == 0) {
             return 0;
         }
-
         for (Assets update : updateList) {
-            //更新 资产 存放地点
-            update.setStorageAddr(transferData.getPresentAddr());
+            //更新 资产 状态为“审核中”
+            update.setUseStatus(AssetsStatus.RESERVE.getCode());
         }
+
         List<AssetsTransfer> insertLists = new ArrayList<>();
         //当有多个资产编号的时候，每次更新资产编号
         for (Assets assets : updateList) {
+            transferData.setTransferOrderNum(transferOrderNumber);
             transferData.setTransferUserId(transferUserId);
             transferData.setCreateBy(createBy);
             transferData.setAssetsNumber(assets.getAssetsNumber());
             insertLists.add(transferData);
         }
 
-        int updateRows = accountingService.updateAssetsLists(updateList);
+        int updateAssetsRows = accountingService.updateAssetsLists(updateList);
         int insertRows = transferService.insertTransferList(insertLists);
         //成功才返回大于0的数
-        if (updateRows == updateList.size() && insertRows == updateList.size()) {
-            return updateRows + insertRows;
+        if (updateAssetsRows > 0 && insertRows == updateList.size()) {
+            return insertRows + updateAssetsRows;
         }
         throw new Exception("转移失败");
+    }
+
+    /**
+     * 转移审批事务 （Transactional注解在class类上）
+     *
+     * @param auditorId
+     * @param orderNum
+     * @param userId
+     * @param examineResult
+     * @return
+     * @throws Exception
+     */
+    public int transferExamine(int auditorId, String orderNum, int userId, String examineResult) throws Exception {
+        SysUser sysUser = userService.selectUserById(Integer.toUnsignedLong(userId));
+        if (sysUser == null) {
+            return 0;
+        }
+        String userName = sysUser.getUserName();
+        if (AssetsExamineStatus.isExamineResult(examineResult)) {
+            //根据订单号查找
+            List<AssetsTransfer> transferUpdateList = transferService.getTransferListByOrderNum(orderNum);
+
+            //更新资产表
+            List<Assets> updateList = new ArrayList<>();
+            //资产领用表更新数
+            int updateAssetsTransferRows = 0;
+
+            //审核用过
+            if (AssetsExamineStatus.AGREE.getCode().equals(examineResult)) {
+                for (AssetsTransfer update : transferUpdateList) {
+                    //更新资产领用状态为“审核通过”
+                    update.setStatus(AssetsExamineStatus.AGREE.getCode());
+
+                    //根据资产编号查找到资产并更新存放地址
+                    String assetsNumber = update.getAssetsNumber();
+                    Assets assetsUpdate = accountingService.getAssetsByNumber(assetsNumber);
+                    //更新转移后的地址为存放地址
+                    String presentAddr = update.getPresentAddr();
+                    assetsUpdate.setStorageAddr(presentAddr);
+                    //更新状态为“闲置”
+                    assetsUpdate.setUseStatus(AssetsStatus.NORMAL.getCode());
+                    //加入待更新列表
+                    updateList.add(assetsUpdate);
+                    //增加处理人信息
+                    update.setAuditorId(String.valueOf(auditorId));
+                    //更新资产转移表
+                    updateAssetsTransferRows = transferService.updateTransferInfo(update);
+                }
+                //转移审批通过，同步更新资产信息
+                int updateAssetsRows = accountingService.updateAssetsLists(updateList);
+                //成功才返回大于0的数
+                if (updateAssetsRows > 0 && updateAssetsTransferRows > 0) {
+                    return updateAssetsRows + updateAssetsTransferRows;
+                }
+            }
+            if (AssetsExamineStatus.REJECT.getCode().equals(examineResult)) {
+                for (AssetsTransfer update : transferUpdateList) {
+                    //更新资产领用状态为“审核被驳回“
+                    update.setStatus(AssetsExamineStatus.REJECT.getCode());
+                    //增加处理人信息
+                    update.setAuditorId(String.valueOf(auditorId));
+                    //更新资产转移表
+                    updateAssetsTransferRows = transferService.updateTransferInfo(update);
+                    //根据资产编号查找到资产并更新状态
+                    String assetsNumber = update.getAssetsNumber();
+                    Assets assetsUpdate = accountingService.getAssetsByNumber(assetsNumber);
+                    //闲置状态
+                    assetsUpdate.setUseStatus(AssetsStatus.NORMAL.getCode());
+                    //加入待更新列表
+                    updateList.add(assetsUpdate);
+                }
+                int updateAssetsRows = accountingService.updateAssetsLists(updateList);
+                //成功才返回大于0的数  转移审批驳回
+                if (updateAssetsRows > 0 && updateAssetsTransferRows > 0) {
+                    return updateAssetsRows + updateAssetsTransferRows;
+                }
+            }
+
+            return 0;
+        }
+        throw new Exception("审批失败！");
     }
 
     /**

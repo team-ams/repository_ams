@@ -11,6 +11,10 @@ public class AssetsTransfer extends BaseEntity {
      */
     private Integer transferId;
     /**
+     * 转移单号
+     */
+    private String transferOrderNum;
+    /**
      * '资产编号'
      */
     private String assetsNumber;
@@ -30,6 +34,14 @@ public class AssetsTransfer extends BaseEntity {
      * '转移日期'
      */
     private String transferTime;
+    /**
+     * 状态
+     */
+    private String status;
+    /**
+     * 审核者
+     */
+    private String auditorId;
 
     /**
      * 资产详情

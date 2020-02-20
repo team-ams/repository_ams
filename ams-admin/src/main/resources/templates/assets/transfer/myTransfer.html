@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('资产列表')"/>
+    <th:block th:include="include :: layout-latest-css"/>
+</head>
+<body class="gray-bg">
+
+<div class="ui-layout-center">
+    <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="user-form">
+                    <input type="hidden" id="deptId" name="deptId">
+                    <input type="hidden" id="parentId" name="parentId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                资产编号：<input type="text" name="assetsNumber"/>
+                            </li>
+                            <li>
+                                存放地点：<input type="text" name="storageAddr"/>
+                            </li>
+                            <li class="select-time">
+                                <label>创建时间： </label>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                                       name="params[beginTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                       name="params[endTime]"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                        class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                        class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-sm btn-danger" onclick="closeItem()">
+                    <i class="fa fa-reply-all"></i> 关闭
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: layout-latest-js"/>
+<script th:inline="javascript">
+    var prefix = ctx + "assets/transfer";
+    var examineStatus = [[${@dict.getType('examine_status')}]];
+
+    $(function () {
+        var panehHidden = false;
+        if ($(this).width() < 769) {
+            panehHidden = true;
+        }
+        $('body').layout({initClosed: panehHidden, west__size: 185});
+        queryUserList();
+    });
+
+    function queryUserList() {
+        var options = {
+            url: prefix + "/myTransferList",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            detailView: true,
+            onExpandRow: function (index, row, $detail) {
+                initChildTable(index, row, $detail);
+            },
+            sortName: "createTime",
+            sortOrder: "desc",
+            modalName: "资产转移",
+            columns: [{
+                field: 'transferOrderNum',
+                title: '转移单号',
+                sortable: true,
+                align: 'center'
+            },
+                {
+                    field: 'user.userName',
+                    title: '负责人姓名',
+                    align: 'center'
+                },
+                {
+                    field: 'user.cardNumber',
+                    title: '负责人卡号',
+                    align: 'center'
+                },
+                {
+                    field: 'user.dept.parentName',
+                    title: '所在学院',
+                    align: 'center'
+                },
+                {
+                    field: 'user.dept.deptName',
+                    title: '所属专业',
+                    align: 'center'
+                },
+                {
+                    field: 'originalAddr',
+                    title: '转移前地点',
+                    align: 'center'
+                },
+                {
+                    field: 'presentAddr',
+                    title: '转移后地点',
+                    align: 'center'
+                },
+                {
+                    field: 'transferTime',
+                    title: '转移时间',
+                    align: 'center'
+                },
+                {
+                    field: 'transferId',
+                    title: '转移Id',
+                    visible: false
+                },
+                {
+                    field: 'status',
+                    title: '审批结果',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(examineStatus, value);
+                    }
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        <!-- 0：审核中 1：审核通过 2：驳回-->
+                        var editFlag = row.status === "0" ? '' : 'hidden';
+                        var removeFlag = row.status === "0" ? '' : 'hidden';
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.editTab(\'' + row.transferId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.transferId + '\')"><i class="fa fa-remove"></i>删除</a> ');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    }
+
+    initChildTable = function (index, row, $detail) {
+        var cur_table = $detail.html('<table style="table-layout:fixed"></table>').find('table');
+        $(cur_table).bootstrapTable({
+            url: prefix + "/childTableList",
+            method: 'post',
+            sidePagination: "server",
+            contentType: "application/x-www-form-urlencoded",   // 编码类型
+            queryParams: {
+                orderNum: row.transferOrderNum
+            },
+            columns: [{
+                field: 'assets.assetsNumber',
+                title: '资产编号',
+                align: 'center',
+            },
+                {
+                    field: 'assets.assetsName',
+                    title: '资产名称',
+                    align: 'center',
+                },
+                {
+                    field: 'assets.assetsModel',
+                    title: '资产规格',
+                    align: 'center',
+                },
+                {
+                    field: 'assets.assetsBrand',
+                    title: '品牌',
+                    align: 'center',
+                },
+                {
+                    field: 'assets.purchaseDate',
+                    title: '购入日期',
+                    align: 'center',
+                },
+                {
+                    field: 'assets.custodian',
+                    title: '保管人',
+                    align: 'center',
+                },
+                {
+                    field: 'assets.assetsPrice',
+                    title: '资产价值',
+                    align: 'center',
+                },
+                {
+                    field: 'assets.storageAddr',
+                    title: '存放地点',
+                    align: 'center',
+                },
+                {
+                    field: 'assets.assetsSource',
+                    title: '资产来源',
+                    align: 'center',
+                },
+                {
+                    field: 'assets.assetsType',
+                    title: '资产类别',
+                    align: 'center',
+                },
+                {
+                    field: 'assets.assetsNature',
+                    title: '资产性质',
+                    align: 'center',
+                }]
+        });
+    };
+
+</script>
+</body>
+</html>

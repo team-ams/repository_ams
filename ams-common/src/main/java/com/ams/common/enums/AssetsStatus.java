@@ -4,31 +4,37 @@ public enum AssetsStatus {
     /**
      * 正常状态
      */
-    NORMAL("0", "正常"),
+    NORMAL("0", "闲置"),
+
     /**
-     * 待审核状态
+     * 审核中状态
      */
-    TOAPPROVAL("1", "审核中"),
+    RESERVE("1", "审核中"),
+
     /**
-     * 已领用状态
+     * 在用状态
      */
-    ALLOCATE("2", "已领用"),
-    /**
-     * 已外借状态
-     */
-    BORROWED("3", "已外借"),
+    USING("2", "在用"),
+
     /**
      * 维修中状态
      */
-    MAINTENANCING("4", "维修中"),
+    MAINTENANCING("3", "维修中"),
+
+    /**
+     * 待报废状态
+     */
+    TOSCRAPPED("4", "待报废"),
+
     /**
      * 停用状态
      */
     DISABLE("5", "停用"),
+
     /**
      * 未知状态
      */
-    UNKNOW("-1","未知");
+    UNKNOW("-1", "未知");
 
     private final String code;
     private final String info;
@@ -43,13 +49,13 @@ public enum AssetsStatus {
             case "0":
                 return NORMAL;
             case "1":
-                return TOAPPROVAL;
+                return RESERVE;
             case "2":
-                return ALLOCATE;
+                return USING;
             case "3":
-                return BORROWED;
-            case "4":
                 return MAINTENANCING;
+            case "4":
+                return TOSCRAPPED;
             case "5":
                 return DISABLE;
             default:

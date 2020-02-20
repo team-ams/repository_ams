@@ -1,11 +1,12 @@
 package com.ams.web.controller.assets;
 
-import com.ams.common.core.websocket.*;
+import com.ams.common.annotation.Log;
 import com.ams.common.core.controller.BaseController;
 import com.ams.common.core.domain.AjaxResult;
-import com.ams.common.core.domain.RestResult;
 import com.ams.common.core.page.TableDataInfo;
-import com.ams.common.enums.AssetsAllocateStatus;
+import com.ams.common.enums.AssetsExamineStatus;
+import com.ams.common.enums.BusinessType;
+import com.ams.common.utils.StringUtils;
 import com.ams.framework.util.ShiroUtils;
 import com.ams.system.domain.Assets;
 import com.ams.system.domain.AssetsAllocate;
@@ -17,12 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.*;
 
 /**
@@ -34,6 +32,8 @@ public class AssetsAllocateController extends BaseController {
 
     private static List<String> assetsNumbers = new ArrayList<>();
     private static LinkedHashSet<Assets> assetsLinkedHashSet = new LinkedHashSet<>();
+    private static final String FID = "0";
+    private static final String MSG = "I'm from Server---allocate";
 
     private String prefix = "/assets/allocate";
 
@@ -74,6 +74,22 @@ public class AssetsAllocateController extends BaseController {
             return getDataTable(allocateAdminList);
         }
         return getDataTable(new ArrayList<>());
+    }
+
+    @Log(title = "领用管理", businessType = BusinessType.DELETE)
+    @PostMapping("/remove")
+    @ResponseBody
+    public AjaxResult remove(String ids) {
+        AssetsAllocate allocate = allocateService.getAllocateByAllocateId(Integer.parseInt(ids));
+        if (allocate == null) {
+            return error();
+        }
+        try {
+            //根据单号批量删除
+            return toAjax(allocateService.deleteAllocateByOrderNum(allocate.getAllocateOrderNum()));
+        } catch (Exception e) {
+            return error(e.getMessage());
+        }
     }
 
     @PostMapping("/allocate/{assetsNumber}")
@@ -125,15 +141,15 @@ public class AssetsAllocateController extends BaseController {
         return getDataTable(allocateService.getMyAllocateExamineList());
     }
 
-    @PostMapping("/allocateExamineOK/{assetsNumber}/{allocateUserId}")
+    @PostMapping("/allocateExamineOK/{orderNum}/{userId}")
     @ResponseBody
-    public AjaxResult allocateExamineOK(@PathVariable("assetsNumber") String assetsNumber,
-                                        @PathVariable("allocateUserId") int allocateUserId) {
+    public AjaxResult allocateExamineOK(@PathVariable("orderNum") String orderNum,
+                                        @PathVariable("userId") int userId) {
         SysUser currentSysUser = ShiroUtils.getSysUser();
         if (currentSysUser != null) {
             int auditorId = currentSysUser.getUserId().intValue();
             try {
-                return toAjax(assetsService.allocateExamine(auditorId, assetsNumber, allocateUserId, AssetsAllocateStatus.AGREE.getCode()));
+                return toAjax(assetsService.allocateExamine(auditorId, orderNum, userId, AssetsExamineStatus.AGREE.getCode()));
             } catch (Exception e) {
                 e.printStackTrace();
                 return error();
@@ -142,15 +158,15 @@ public class AssetsAllocateController extends BaseController {
         return error();
     }
 
-    @PostMapping("/allocateExamineReject/{assetsNumber}/{allocateUserId}")
+    @PostMapping("/allocateExamineReject/{orderNum}/{userId}")
     @ResponseBody
-    public AjaxResult allocateExamineReject(@PathVariable("assetsNumber") String assetsNumber,
-                                            @PathVariable("allocateUserId") int allocateUserId) {
+    public AjaxResult allocateExamineReject(@PathVariable("orderNum") String orderNum,
+                                            @PathVariable("userId") int userId) {
         SysUser currentSysUser = ShiroUtils.getSysUser();
         if (currentSysUser != null) {
             int auditorId = currentSysUser.getUserId().intValue();
             try {
-                return toAjax(assetsService.allocateExamine(auditorId, assetsNumber, allocateUserId, AssetsAllocateStatus.REJECT.getCode()));
+                return toAjax(assetsService.allocateExamine(auditorId, orderNum, userId, AssetsExamineStatus.REJECT.getCode()));
             } catch (Exception e) {
                 e.printStackTrace();
                 return error();
@@ -165,7 +181,7 @@ public class AssetsAllocateController extends BaseController {
      * @return
      */
     @GetMapping("/allocateParent/{cid}")
-    public String allocateParent(@PathVariable("cid") String cid,HttpServletRequest request,ModelMap mmap) {
+    public String allocateParent(@PathVariable("cid") String cid, HttpServletRequest request, ModelMap mmap) {
         mmap.put("basePath", request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/");
         mmap.put("cid", cid);
         //todo 要求MFRC522发送卡号
@@ -175,18 +191,18 @@ public class AssetsAllocateController extends BaseController {
     /**
      * MFRC522通过ESP8266将ID卡号发送过来，提供给esp8266调用的接口
      *
-     * @param request
+     * @param mmap
      */
     @RequestMapping("/getMsg")
     @ResponseBody
-    public String getMsg(HttpServletRequest request, ModelMap mmap) {
+    public String getMsg(ModelMap mmap) {
         Map<String, String> parameterMap = getParameterMap();
         String assetsNumber = parameterMap.get("assetsNumber");
         assetsNumbers.add(assetsNumber);
         System.out.println(parameterMap);
 
         //通知前端页面有新数据
-        pushToWeb("22","I'm from Server");
+        pushToWeb(FID, MSG);
         mmap.put("content", "传过来的：" + assetsNumber);
         return prefix + "/allocate";
     }
@@ -209,16 +225,28 @@ public class AssetsAllocateController extends BaseController {
 
     }
 
+    @PostMapping("/childTableList")
+    @ResponseBody
+    public TableDataInfo childTableList(HttpServletRequest request) {
+        String orderNum = request.getParameter("orderNum");
+        if (StringUtils.isNotEmpty(orderNum)) {
+
+            List<AssetsAllocate> assetsAllocateBy = allocateService.getAssetsAllocateBy(orderNum);
+            startPage();
+            return getDataTable(assetsAllocateBy);
+        }
+        return getDataTable(new ArrayList<>());
+    }
+
     @PostMapping("/allocateConfirm")
     @ResponseBody
-    public AjaxResult allocateConfirm(String numbers){
-        System.out.println("############"+numbers);
+    public AjaxResult allocateConfirm(String numbers) {
         //清除卡号，复位
         assetsNumbers.clear();
         //清空表格信息，复位，避免下次把之前的数据重新显示出来
         assetsLinkedHashSet.clear();
         //点击“确认”后 通知前端页面刷新表格
-        pushToWeb("22","I'm from Server Please refresh table");
+        pushToWeb(FID, MSG);
         return allocate(numbers);
 
     }

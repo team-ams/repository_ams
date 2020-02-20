@@ -4,7 +4,9 @@ import com.ams.common.annotation.Log;
 import com.ams.common.core.controller.BaseController;
 import com.ams.common.core.domain.AjaxResult;
 import com.ams.common.core.page.TableDataInfo;
+import com.ams.common.enums.AssetsExamineStatus;
 import com.ams.common.enums.BusinessType;
+import com.ams.common.utils.StringUtils;
 import com.ams.common.utils.poi.ExcelUtil;
 import com.ams.framework.util.ShiroUtils;
 import com.ams.system.domain.Assets;
@@ -20,6 +22,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -53,20 +56,28 @@ public class AssetsAccidentController extends BaseController {
     @RequiresPermissions("assets:accident:view")
     @GetMapping()
     public String assets() {
-        return prefix + "/accident";
+        SysUser currentSysUser = ShiroUtils.getSysUser();
+        if (currentSysUser != null) {
+            //当前用户不是管理员，返回领用界面
+            if (!currentSysUser.isAdmin()) {
+                return prefix + "/accident";
+            }
+        }
+        //管理员返回管理员页面
+        return prefix + "/accidentAdmin";
     }
 
     @RequiresPermissions("assets:accident:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list() {
+    public TableDataInfo list(Assets assets) {
         SysUser currentSysUser = ShiroUtils.getSysUser();
         if (currentSysUser != null) {
             //当前系统用户不是管理员，个人保养信息
             if (!currentSysUser.isAdmin()) {
-                List<AssetsAccident> accidentListByUserId = accidentService.getAccidentListByUserId(currentSysUser.getUserId().toString());
+                List<Assets> assetsList0 = accountingService.getAssetsList0(assets);
                 startPage();
-                return getDataTable(accidentListByUserId);
+                return getDataTable(assetsList0);
             }
             //当前系统用户是管理员，全部信息
             List<AssetsAccident> accidentListAll = accidentService.getAccidentListAll();
@@ -118,26 +129,48 @@ public class AssetsAccidentController extends BaseController {
     /**
      * 修改保存资产
      */
-    @RequiresPermissions("assets:accident:edit")
     @Log(title = "资产管理", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editSave(@Validated AssetsAccident accident) {
         accident.setUpdateBy(ShiroUtils.getLoginName());
-        return toAjax(accidentService.updateAccidentInfo(accident));
+        return toAjax(accidentService.updateAccidentByOrderNum(accident));
     }
 
 
-    @RequiresPermissions("assets:accident:remove")
     @Log(title = "用户管理", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
+        AssetsAccident accident = accidentService.getAccidentById(ids);
+        if (accident == null) {
+            return error();
+        }
         try {
-            return toAjax(accidentService.deleteByAccidentId(ids));
+            //根据单号删除
+            return toAjax(accidentService.deleteAccidentByOrderNum(accident.getAccidentOrderNum()));
         } catch (Exception e) {
             return error(e.getMessage());
         }
+    }
+
+    @PostMapping("/childTableList")
+    @ResponseBody
+    public TableDataInfo childTableList(HttpServletRequest request) {
+        String orderNum = request.getParameter("orderNum");
+        if (StringUtils.isNotEmpty(orderNum)) {
+
+            List<AssetsAccident> assetsAccidentBy = accidentService.getAccidentListByOrderNum(orderNum);
+            startPage();
+            return getDataTable(assetsAccidentBy);
+        }
+        return getDataTable(new ArrayList<>());
+    }
+
+    @GetMapping("/accident/{assetsNumber}")
+    public String borrow(@PathVariable("assetsNumber") String assetsNumber, ModelMap mmap) {
+        mmap.put("assetsNumber", assetsNumber);
+        return prefix + "/accidentAssets2";
     }
 
     /**
@@ -215,6 +248,70 @@ public class AssetsAccidentController extends BaseController {
             String createBy = currentSysUser.getLoginName();
             try {
                 return toAjax(assetsService.accidentAssets(allocateUserId, createBy, accidentData));
+            } catch (Exception e) {
+                e.printStackTrace();
+                return error();
+            }
+        }
+        return error();
+    }
+
+    @GetMapping("/myAccident")
+    public String myAllocate() {
+        return prefix + "/myAccident";
+    }
+
+    @PostMapping("/myAccidentList")
+    @ResponseBody
+    public TableDataInfo myAllocateTable() {
+        //获取当前系统用户id
+        SysUser currentUser = ShiroUtils.getSysUser();
+        if (currentUser == null) {
+            return getDataTable(new ArrayList<>());
+        }
+        startPage();
+        List<AssetsAccident> myAccidentListByUserId = accidentService.getAccidentListByUserId(String.valueOf(currentUser.getUserId()));
+        return getDataTable(myAccidentListByUserId);
+    }
+
+    @GetMapping("/myExamine")
+    public String myExamine() {
+        return prefix + "/myExamine";
+    }
+
+    @PostMapping("/myExamineList")
+    @ResponseBody
+    public TableDataInfo myExamineList() {
+        startPage();
+        return getDataTable(accidentService.getMyExamineList());
+    }
+
+    @PostMapping("/examineOK/{orderNum}/{userId}")
+    @ResponseBody
+    public AjaxResult examineOK(@PathVariable("orderNum") String orderNum,
+                                @PathVariable("userId") int userId) {
+        SysUser currentSysUser = ShiroUtils.getSysUser();
+        if (currentSysUser != null) {
+            int auditorId = currentSysUser.getUserId().intValue();
+            try {
+                return toAjax(assetsService.accidentExamine(auditorId, orderNum, userId, AssetsExamineStatus.AGREE.getCode()));
+            } catch (Exception e) {
+                e.printStackTrace();
+                return error();
+            }
+        }
+        return error();
+    }
+
+    @PostMapping("/examineReject/{orderNum}/{userId}")
+    @ResponseBody
+    public AjaxResult examineReject(@PathVariable("orderNum") String orderNum,
+                                    @PathVariable("userId") int userId) {
+        SysUser currentSysUser = ShiroUtils.getSysUser();
+        if (currentSysUser != null) {
+            int auditorId = currentSysUser.getUserId().intValue();
+            try {
+                return toAjax(assetsService.accidentExamine(auditorId, orderNum, userId, AssetsExamineStatus.REJECT.getCode()));
             } catch (Exception e) {
                 e.printStackTrace();
                 return error();

@@ -951,22 +951,22 @@ var table = {
                     }
                 });
             },
-            //审批资产领用信息 同意（管理员）
-            allocateExamineOK: function (assetsNumber, userId) {
+            //审批信息 同意（管理员）
+            examineOK: function (orderNum,userId) {
                 table.set();
                 $.modal.confirm("同意该项" + table.options.modalName + "？", function () {
-                    var url = $.common.isEmpty(assetsNumber) ? table.options.approveUrl : table.options.approveUrl.replace("{assetsNumber}", assetsNumber).replace("{userId}", userId);
-                    var data = {"assetsNumber": assetsNumber, "userId": userId};
+                    var url = $.common.isEmpty(orderNum) ? table.options.approveUrl : table.options.approveUrl.replace("{orderNum}", orderNum).replace("{userId}",userId);
+                    var data = {"orderNum": orderNum,"userId":userId};
                     $.operate.submit(url, "post", "json", data)
                 });
 
             },
-            //审批资产领用信息 驳回（管理员）
-            allocateExamineReject: function (assetsNumber, userId) {
+            //审批信息 驳回（管理员）
+            examineReject: function (orderNum,userId) {
                 table.set();
                 $.modal.confirm("驳回该项" + table.options.modalName + "？", function () {
-                    var url = $.common.isEmpty(assetsNumber) ? table.options.rejectUrl : table.options.rejectUrl.replace("{assetsNumber}", assetsNumber).replace("{userId}", userId);
-                    var data = {"assetsNumber": assetsNumber, "userId": userId};
+                    var url = $.common.isEmpty(orderNum) ? table.options.rejectUrl : table.options.rejectUrl.replace("{orderNum}", orderNum).replace("{userId}",userId);
+                    var data = {"orderNum": orderNum,"userId":userId};
                     $.operate.submit(url, "post", "json", data)
                 });
 
@@ -1021,10 +1021,22 @@ var table = {
                 var url = $.common.isEmpty(id) ? table.options.myAllocateUrl : table.options.myAllocateUrl.replace("{id}", id);
                 $.modal.openTab("我的" + table.options.modalName, url)
             },
+            //我的##，以tab页展示
+            myTab: function (id) {
+                table.set();
+                var url = $.common.isEmpty(id) ? table.options.myUrl : table.options.myUrl.replace("{id}", id);
+                $.modal.openTab("我的" + table.options.modalName, url)
+            },
             //我的审批， 以tab页展示
             myAllocateExamineTab: function (id) {
                 table.set();
                 var url = $.common.isEmpty(id) ? table.options.myAllocateExamineUrl : table.options.myAllocateExamineUrl.replace("{id}", id);
+                $.modal.openTab("我的" + table.options.modalName, url)
+            },
+            //我的审批， 以tab页展示
+            myExamineTab: function (id) {
+                table.set();
+                var url = $.common.isEmpty(id) ? table.options.myExamineUrl : table.options.myExamineUrl.replace("{id}", id);
                 $.modal.openTab("我的" + table.options.modalName, url)
             },
             // 修改信息

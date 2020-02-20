@@ -15,12 +15,36 @@ public interface IAssetsBorrowService {
     List<AssetsBorrow> getBorrowListByUserId(String userId);
 
     /**
+     * 查找出需要归还的借用信息，用于归还列表的展示（借用审核通过的，且没有归还状态的）
+     *
+     * @param userId
+     * @return
+     */
+    List<AssetsBorrow> getNeedReturnByUserId(String userId);
+
+    /**
+     * 根据单号查找
+     *
+     * @param orderNum
+     * @return
+     */
+    List<AssetsBorrow> getBorrowListByOrderNum(String orderNum);
+
+    /**
      * 根据id查找资产借用信息（管理员级别）
      *
      * @param borrowId
      * @return
      */
     AssetsBorrow getBorrowById(String borrowId);
+
+    /**
+     * 根据资产编号和 未归还 状态确定借用信息
+     *
+     * @param assetsNumber
+     * @return
+     */
+    AssetsBorrow getBorrowByAssetsNumberAndIsNotReturn(String assetsNumber);
 
     /**
      * 查找所有资产借用信息
@@ -37,13 +61,6 @@ public interface IAssetsBorrowService {
      */
     int insertBorrowList(List<AssetsBorrow> borrowList);
 
-    /**
-     * 批量归还资产
-     *
-     * @param returnList
-     * @return
-     */
-    int returnAssetsList(List<AssetsBorrow> returnList);
 
     /**
      * 更新资产借用信息
@@ -54,10 +71,33 @@ public interface IAssetsBorrowService {
     int updateBorrowInfo(AssetsBorrow borrow);
 
     /**
+     * 更新资产借用信息（根据借用单号，可批量更新）
+     *
+     * @param borrow
+     * @return
+     */
+    int updateBorrowByOrderNum(AssetsBorrow borrow);
+
+    /**
      * 根据借用id删除借还信息
      *
      * @param borrowId
      * @return
      */
     int deleteByBorrowId(String borrowId);
+
+    /**
+     * 获得审批列表
+     *
+     * @return
+     */
+    List<AssetsBorrow> getMyExamineList();
+
+    /**
+     * 根据借用单号删除（可批量删除）
+     *
+     * @param orderNum
+     * @return
+     */
+    int deleteBorrowByOrderNum(String orderNum);
 }

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('表格传值给父页面')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <form id="form-assets-add" class="form-horizontal">
+        <h4 class="form-header h4">基本信息</h4>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>事故级别：</label>
+                    <div class="col-sm-8">
+                        <select name="accidentGrade" class="form-control m-b"
+                                th:with="type=${@dict.getType('accident_grade')}">
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"
+                                    th:required="true"></option>
+                        </select>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>事故发生部门：</label>
+                    <div class="col-sm-8">
+                        <input id="accidentDept" name="accidentDept" placeholder="请输入事故发生部门" class="form-control"
+                               type="text" maxlength="11" required/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>经济损失：</label>
+                    <div class="col-sm-8">
+                        <input id="economicLosses" name="economicLosses" placeholder="请输入经济损失" class="form-control"
+                               type="text" maxlength="11" required/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>事故发生时间：</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="time-input" id="accidentTime" placeholder="请选择日期" name="accidentTime"
+                               required/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>防范终结：</label>
+                    <div class="col-sm-8">
+                        <input id="summary" name="summary" placeholder="请输入防范终结" class="form-control"
+                               type="text" maxlength="11" required/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <h4 class="form-header h4">其他信息</h4>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="col-xs-2 control-label">故障描述：</label>
+                    <div class="col-xs-10">
+                        <textarea name="remark" maxlength="500" class="form-control" rows="3"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+    var prefix = ctx + "assets/accident";
+    var assetsNumber = [[${assetsNumber}]];
+
+
+    /* 添加用户-选择用户-提交 */
+    function submitHandler(index, layero) {
+        var data = {};
+        if ($.validate.form()) {
+            data = $("#form-assets-add").serializeArray();
+        }
+        var url = prefix + "/accidentConfirm";
+        //卡号拼接起来
+        data.push({"name": "assetsNumber", "value": assetsNumber});
+        //ajax异步调用后台接口，完成新增资产领用
+        $.operate.submit(url, "post", "json", data);
+        //延时2秒关闭，等待submit的ajax异步方法回调后执行关闭模态框
+        setTimeout(function () {
+            $.modal.close();
+        }, 2000);
+        $.modal.msgReload("操作成功,正在刷新数据请稍后……", modal_status.SUCCESS);
+
+    }
+
+</script>
+</body>
+</html>

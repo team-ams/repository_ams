@@ -6,6 +6,7 @@
 
     <resultMap type="com.ams.system.domain.AssetsAccident" id="AssetsAccidentResult">
         <id property="accidentId" column="accident_id"/>
+        <result property="accidentOrderNum" column="accident_orderNum"/>
         <result property="assetsNumber" column="accident_assets_number"/>
         <result property="reportUserId" column="report_userId"/>
         <result property="accidentGrade" column="accident_grade"/>
@@ -14,6 +15,8 @@
         <result property="accidentTime" column="accident_time"/>
         <result property="summary" column="summary"/>
         <result property="remark" column="remark"/>
+        <result property="status" column="examine_status"/>
+        <result property="auditorId" column="auditorId"/>
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
         <association property="assets" column="accident_assets_number" javaType="com.ams.system.domain.Assets"
@@ -55,7 +58,7 @@
 
     <resultMap type="com.ams.system.domain.SysUser" id="SysUserResult">
         <id property="userId" column="user_id"/>
-        <result property="deptId" column="dept_id"/>
+        <result property="deptId" column="user_dept_id"/>
         <result property="loginName" column="login_name"/>
         <result property="userName" column="user_name"/>
         <result property="email" column="email"/>
@@ -91,8 +94,11 @@
         select a.accident_id,
                a.assets_number as accident_assets_number,
                a.report_userId,
+               a.accident_orderNum,
                a.summary,
                a.remark,
+               a.auditor_id,
+               a.status as examine_status,
                a.accident_dept,
                a.accident_time,
                a.accident_grade,
@@ -129,7 +135,7 @@
                b.update_time as assets_update_time,
 
                u.user_id,
-               u.dept_id,
+               u.dept_id as user_dept_id,
                u.login_name,
                u.user_name,
                u.email,
@@ -177,6 +183,7 @@
         <foreach collection="list" item="item" separator=";">
             insert into assets_accident(
             <if test="item.assetsNumber != null and item.assetsNumber != ''">assets_number,</if>
+            <if test="item.accidentOrderNum != null and item.accidentOrderNum != ''">accident_orderNum,</if>
             <if test="item.reportUserId != null">report_userId,</if>
             <if test="item.accidentGrade != null and item.accidentGrade != ''">accident_grade,</if>
             <if test="item.accidentDept != null and item.accidentDept != ''">accident_dept,</if>
@@ -188,6 +195,7 @@
             create_time
             )values(
             <if test="item.assetsNumber != null and item.assetsNumber != ''">#{item.assetsNumber},</if>
+            <if test="item.accidentOrderNum != null and item.accidentOrderNum != ''">#{item.accidentOrderNum},</if>
             <if test="item.reportUserId != null">#{item.reportUserId},</if>
             <if test="item.accidentGrade != null and item.accidentGrade != ''">#{item.accidentGrade},</if>
             <if test="item.accidentDept != null and item.accidentDept != ''">#{item.accidentDept},</if>
@@ -211,6 +219,8 @@
             <if test="economicLosses != null and economicLosses != ''">economic_losses=#{economicLosses},</if>
             <if test="summary != null and summary != ''">summary=#{summary},</if>
             <if test="remark != null and remark != ''">remark=#{remark},</if>
+            <if test="auditorId != null and auditorId != 0">auditor_id=#{auditorId},</if>
+            <if test="remark != null and remark != ''">remark=#{remark},</if>
             <if test="accidentTime != null and accidentTime != ''">accident_time=#{accidentTime},</if>
             <if test="updateBy != null and updateBy != ''">update_by=#{updateBy},</if>
             update_time = sysdate()
@@ -218,8 +228,41 @@
         where accident_id = #{accidentId}
     </update>
 
+    <update id="updateAccidentByOrderNum" parameterType="com.ams.system.domain.AssetsAccident">
+        update assets_accident
+        <set>
+            <if test="assetsNumber != null and assetsNumber != ''">assets_number=#{assetsNumber},</if>
+            <if test="reportUserId != null">report_userId=#{reportUserId},</if>
+            <if test="accidentGrade != null and accidentGrade != ''">accident_grade=#{accidentGrade},</if>
+            <if test="accidentDept != null and accidentDept != ''">accident_dept=#{accidentDept},</if>
+            <if test="economicLosses != null and economicLosses != ''">economic_losses=#{economicLosses},</if>
+            <if test="summary != null and summary != ''">summary=#{summary},</if>
+            <if test="remark != null and remark != ''">remark=#{remark},</if>
+            <if test="auditorId != null and auditorId != 0">auditor_id=#{auditorId},</if>
+            <if test="remark != null and remark != ''">remark=#{remark},</if>
+            <if test="accidentTime != null and accidentTime != ''">accident_time=#{accidentTime},</if>
+            <if test="updateBy != null and updateBy != ''">update_by=#{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where accident_orderNum = #{accidentOrderNum}
+    </update>
+
     <delete id="deleteByAccidentId" parameterType="String">
         delete from assets_accident where accident_id = #{accidentId}
+    </delete>
+
+
+    <select id="getAccidentListByOrderNum" parameterType="String" resultMap="AssetsAccidentResult">
+        <include refid="selectAssetsAccidentVo"/>
+        where a.accident_orderNum = #{orderNum}
+    </select>
+    <select id="getMyExamineList" resultMap="AssetsAccidentResult">
+        <include refid="selectAssetsAccidentVo"/>
+        where a.auditor_id = 1 and a.status > 0
+    </select>
+
+    <delete id="deleteAccidentByOrderNum" parameterType="String">
+        delete from assets_accident where accident_orderNum = #{orderNum}
     </delete>
 
 </mapper> 

@@ -1,31 +1,33 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="include :: header('修改资产')" />
-    <th:block th:include="include :: select2-css" />
+    <th:block th:include="include :: header('修改资产')"/>
+    <th:block th:include="include :: select2-css"/>
 </head>
 <body>
 <div class="main-content">
     <form class="form-horizontal" id="form-assets-edit" th:object="${repair}">
-        <input name="repairId"  type="hidden"  th:field="*{repairId}" />
+        <input name="repairId" type="hidden" th:field="*{repairId}"/>
         <input name="repairUserId" type="hidden" th:field="*{repairUserId}"/>
         <h4 class="form-header h4">基本信息</h4>
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>资产编号：</label>
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>维修单号：</label>
                     <div class="col-sm-8">
                         <div class="input-group">
-                            <input class="form-control" type="text" readonly="true" th:field="*{assetsNumber}"/>
+                            <input name="repairOrderNum" class="form-control" type="text" readonly="true"
+                                   th:field="*{repairOrderNum}"/>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>资产名称：</label>
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>维修单位：</label>
                     <div class="col-sm-8">
-                        <input placeholder="请输入资产名称" class="form-control" type="text" readonly="true" maxlength="30" th:field="*{assets.assetsName}" required>
+                        <input class="form-control" type="text" readonly="true" maxlength="30"
+                               th:field="*{user.dept.parentName}" required>
                     </div>
                 </div>
             </div>
@@ -33,9 +35,19 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
+                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>维修部门：</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" type="text" readonly="true" maxlength="30"
+                               th:field="*{user.dept.deptName}" required>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>维修申请人：</label>
                     <div class="col-sm-8">
-                        <input id="repairUserId" placeholder="请输入维修申请人" class="form-control" type="text" readonly="true" maxlength="11" th:field="*{user.userName}" required>
+                        <input id="repairUserId" placeholder="请输入维修申请人" class="form-control" type="text" readonly="true"
+                               maxlength="11" th:field="*{user.userName}" required>
                     </div>
                 </div>
             </div>
@@ -45,7 +57,8 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>送修时间：</label>
                     <div class="col-sm-8">
-                        <input type="text" class="time-input" id="sentTime" placeholder="请选择送修日期" name="sentTime" th:field="*{sentTime}" th:required/>
+                        <input type="text" class="time-input" id="sentTime" placeholder="请选择送修日期" name="sentTime"
+                               th:field="*{sentTime}" th:required/>
                     </div>
                 </div>
             </div>
@@ -53,7 +66,8 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>维修时间：</label>
                     <div class="col-sm-8">
-                        <input type="text" class="time-input" id="repairTime" placeholder="请选择维修日期" name="repairTime" th:field="*{repairTime}" th:required/>
+                        <input type="text" class="time-input" id="repairTime" placeholder="请选择维修日期" name="repairTime"
+                               th:field="*{repairTime}" th:required/>
                     </div>
                 </div>
             </div>
@@ -63,8 +77,10 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>维修等级：</label>
                     <div class="col-sm-8">
-                        <select name="repairGrade" class="form-control m-b" th:with="type=${@dict.getType('repair_grade')}">
-                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{repairGrade}" th:required="true"></option>
+                        <select name="repairGrade" class="form-control m-b"
+                                th:with="type=${@dict.getType('repair_grade')}">
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"
+                                    th:field="*{repairGrade}" th:required="true"></option>
                         </select>
                     </div>
                 </div>
@@ -73,8 +89,10 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red;">*</span>修复状态：</label>
                     <div class="col-sm-8">
-                        <select name="repairStatus" class="form-control m-b" th:with="type=${@dict.getType('repair_status')}">
-                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{repairStatus}" th:required="true"></option>
+                        <select name="repairStatus" class="form-control m-b"
+                                th:with="type=${@dict.getType('repair_status')}">
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"
+                                    th:field="*{repairStatus}" th:required="true"></option>
                         </select>
                     </div>
                 </div>
@@ -83,17 +101,10 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>安装地点：</label>
-                    <div class="col-sm-8">
-                        <input id="installationAddr" name="installationAddr" placeholder="请输入安装地点" class="form-control" type="text" maxlength="30" th:field="*{installationAddr}" required>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="form-group">
                     <label class="col-sm-4 control-label"><span style="color: red; ">*</span>维修费用：</label>
                     <div class="col-sm-8">
-                        <input id="repairFees" name="repairFees" placeholder="请输入维修费用" class="form-control" type="text" maxlength="30" th:field="*{repairFees}" required>
+                        <input id="repairFees" name="repairFees" placeholder="请输入维修费用" class="form-control" type="text"
+                               maxlength="30" th:field="*{repairFees}" required>
                     </div>
                 </div>
             </div>
@@ -113,12 +124,14 @@
 </div>
 <div class="row">
     <div class="col-sm-offset-5 col-sm-10">
-        <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler()"><i class="fa fa-check"></i>保 存</button>&nbsp;
-        <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭 </button>
+        <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler()"><i class="fa fa-check"></i>保 存
+        </button>&nbsp;
+        <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭
+        </button>
     </div>
 </div>
-<th:block th:include="include :: footer" />
-<th:block th:include="include :: select2-js" />
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: select2-js"/>
 <script type="text/javascript">
     var prefix = ctx + "assets/repair";
 
@@ -127,8 +140,8 @@
             var data = $("#form-assets-edit").serializeArray();
             var repairId = $("#repairId").val();
             var repairUserId = $("#repairUserId").val();
-            data.push({"name":"repairId","value":repairId});
-            data.push({"name":"repairUserId","value":repairUserId});
+            data.push({"name": "repairId", "value": repairId});
+            data.push({"name": "repairUserId", "value": repairUserId});
             $.operate.saveTab(prefix + "/edit", data);
         }
     }

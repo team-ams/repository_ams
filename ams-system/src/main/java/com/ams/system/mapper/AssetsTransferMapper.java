@@ -48,10 +48,39 @@ public interface AssetsTransferMapper {
     int updateTransferInfo(AssetsTransfer transfer);
 
     /**
+     * 更新资产转移信息（根据事故单号，可批量更新）
+     *
+     * @param transfer
+     * @return
+     */
+    int updateTransferByOrderNum(AssetsTransfer transfer);
+
+    /**
      * 根据维修id删除借还信息
      *
      * @param transferId
      * @return
      */
     int deleteByTransferId(String transferId);
+    /**
+     * 根据单号查找
+     * @param orderNum
+     * @return
+     */
+    List<AssetsTransfer> getTransferListByOrderNum(String orderNum);
+
+    /**
+     * 获得审批列表
+     *
+     * @return
+     */
+    List<AssetsTransfer> getMyExamineList();
+
+    /**
+     * 根据转移单号删除（可批量删除）
+     *
+     * @param orderNum
+     * @return
+     */
+    int deleteTransferByOrderNum(String orderNum);
 }

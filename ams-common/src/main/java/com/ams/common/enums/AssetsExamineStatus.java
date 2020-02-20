@@ -1,6 +1,6 @@
 package com.ams.common.enums;
 
-public enum AssetsAllocateStatus {
+public enum AssetsExamineStatus {
     /**
      * 审核中
      */
@@ -21,7 +21,7 @@ public enum AssetsAllocateStatus {
     private String code;
     private String info;
 
-    AssetsAllocateStatus(String code, String info) {
+    AssetsExamineStatus(String code, String info) {
         this.code = code;
         this.info = info;
     }
@@ -37,7 +37,7 @@ public enum AssetsAllocateStatus {
         }
     }
 
-    public static AssetsAllocateStatus getStatusByCode(String code) {
+    public static AssetsExamineStatus getStatusByCode(String code) {
         switch (code) {
             case "0":
                 return APPROVALING;

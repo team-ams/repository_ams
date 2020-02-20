@@ -54,7 +54,6 @@
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: layout-latest-js"/>
 <script th:inline="javascript">
-    var allocateFlag = [[${@permission.hasPermi('assets:accounting:allocate')}]];
     var prefix = ctx + "assets/allocate";
 
     $(function () {
@@ -64,88 +63,143 @@
         }
         $('body').layout({initClosed: panehHidden, west__size: 185});
         queryUserList();
-     });
+    });
 
     function queryUserList() {
         var options = {
             url: prefix + "/myAllocateList",
             sortName: "createTime",
+            removeUrl: prefix + "/remove",
+            detailView: true,
+            onExpandRow: function (index, row, $detail) {
+                initChildTable(index, row, $detail);
+            },
             sortOrder: "desc",
-            modalName: "我的资产领用",
+            modalName: "资产领用",
             columns: [{
-                checkbox: true
+                field: 'allocateOrderNum',
+                title: '领用单号',
+                sortable: true,
+                align: 'center'
             },
                 {
-                    field: 'assetsNumber',
-                    title: '资产编号',
-                    sortable: true
+                    field: 'user.userName',
+                    title: '申请人',
+                    align: 'center'
                 },
                 {
-                    field: 'assets.assetsName',
-                    title: '资产名称',
-
+                    field: 'user.dept.parentName',
+                    title: '所在学院',
+                    align: 'center'
                 },
                 {
-                    field: 'assets.assetsType',
-                    title: '资产类别'
+                    field: 'user.dept.deptName',
+                    title: '所属专业',
+                    align: 'center'
                 },
                 {
-                    field: 'assets.assetsAmount',
-                    title: '数量'
-                },
-                {
-                    field: 'assets.measuringUnit',
-                    title: '计量单位'
-                },
-				{
-					field: 'assets.assetsPrice',
-					title: '单价'
-				},
-				{
-					field: 'assets.storageDepartment',
-					title: '保管部门'
-				},
-				{
-					field: 'assets.storageAddr',
-					title: '存放地点'
-				},
-				{
-					field: 'assets.assetsSource',
-					title: '资产来源'
-				},
-				{
-					field: 'assets.usefulLife',
-					title: '使用年限'
-				},
-				{
-					field: 'assets.assetsModel',
-					title: '型号'
-				},
-				{
-					field: 'assets.assetsBrand',
-					title: '品牌'
-				},
-                {
-                    field: 'assets.purchaseDate',
-                    title: '购入日期',
-                },
-                {
-                    field: 'auditor.loginName',
-                    title: '处理人',
-                },
-                {
-                    field: 'status',
-                    title: '申请进度'
+                    field: 'user.userId',
+                    title: '申请人Id',
+                    visible: false
                 },
                 {
                     field: 'createTime',
-                    title: '申请时间',
-                    sortable: true
+                    title: '申请领用时间',
+                    align: 'center'
+                },
+                {
+                    field: 'allocateId',
+                    title: '领用ID',
+                    visible: false
+                },
+                {
+                    field: 'status',
+                    title: '审批结果'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+
+                        <!-- 0：审核中 1：审核通过 2：驳回   领用已在impl层映射了审批结果-->
+                        <!-- var removeFlag = row.status === "0" ? '' : 'hidden'; -->
+                        var removeFlag = row.status === "审核中" ? '' : 'hidden';
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.allocateId + '\')"><i class="fa fa-remove"></i>删除</a> ');
+                        return actions.join('');
+                    }
                 }]
         };
         $.table.init(options);
     }
 
+    initChildTable = function (index, row, $detail) {
+        var cur_table = $detail.html('<table style="table-layout:fixed"></table>').find('table');
+        $(cur_table).bootstrapTable({
+            url: prefix + "/childTableList",
+            method: 'post',
+            sidePagination: "server",
+            contentType: "application/x-www-form-urlencoded",   // 编码类型
+            queryParams: {
+                orderNum: row.allocateOrderNum
+            },
+            columns: [{
+                field: 'assets.assetsNumber',
+                title: '资产编号',
+                align: 'center',
+            },
+                {
+                    field: 'assets.assetsName',
+                    title: '资产名称',
+                    align: 'center',
+                },
+                {
+                    field: 'assets.assetsModel',
+                    title: '资产规格',
+                    align: 'center',
+                },
+                {
+                    field: 'assets.assetsBrand',
+                    title: '品牌',
+                    align: 'center',
+                },
+                {
+                    field: 'assets.purchaseDate',
+                    title: '购入日期',
+                    align: 'center',
+                },
+                {
+                    field: 'assets.custodian',
+                    title: '保管人',
+                    align: 'center',
+                },
+                {
+                    field: 'assets.assetsPrice',
+                    title: '资产价值',
+                    align: 'center',
+                },
+                {
+                    field: 'assets.storageAddr',
+                    title: '存放地点',
+                    align: 'center',
+                },
+                {
+                    field: 'assets.assetsSource',
+                    title: '资产来源',
+                    align: 'center',
+                },
+                {
+                    field: 'assets.assetsType',
+                    title: '资产类别',
+                    align: 'center',
+                },
+                {
+                    field: 'assets.assetsNature',
+                    title: '资产性质',
+                    align: 'center',
+                }]
+        });
+    };
 
 </script>
 </body>

@@ -44,7 +44,27 @@ public class AssetsRepairServiceImpl implements IAssetsRepairService {
     }
 
     @Override
+    public int updateRepairByOrderNum(AssetsRepair repair) {
+        return repairMapper.updateRepairByOrderNum(repair);
+    }
+
+    @Override
     public int deleteByRepairId(String repairId) {
         return repairMapper.deleteByRepairId(repairId);
+    }
+
+    @Override
+    public List<AssetsRepair> getRepairListByOrderNum(String orderNum) {
+        return repairMapper.getRepairListByOrderNum(orderNum);
+    }
+
+    @Override
+    public List<AssetsRepair> getMyExamineList() {
+        return repairMapper.getMyExamineList();
+    }
+
+    @Override
+    public int deleteRepairByOrderNum(String orderNum) {
+        return repairMapper.deleteRepairByOrderNum(orderNum);
     }
 }

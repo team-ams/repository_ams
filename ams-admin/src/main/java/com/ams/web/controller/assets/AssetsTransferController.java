@@ -4,12 +4,13 @@ import com.ams.common.annotation.Log;
 import com.ams.common.core.controller.BaseController;
 import com.ams.common.core.domain.AjaxResult;
 import com.ams.common.core.page.TableDataInfo;
+import com.ams.common.enums.AssetsExamineStatus;
 import com.ams.common.enums.BusinessType;
+import com.ams.common.utils.StringUtils;
 import com.ams.common.utils.poi.ExcelUtil;
 import com.ams.framework.util.ShiroUtils;
-import com.ams.system.domain.Assets;
+import com.ams.system.domain.*;
 import com.ams.system.domain.AssetsTransfer;
-import com.ams.system.domain.SysUser;
 import com.ams.system.service.AssetsService;
 import com.ams.system.service.IAssetsAccountingService;
 import com.ams.system.service.IAssetsTransferService;
@@ -51,23 +52,29 @@ public class AssetsTransferController extends BaseController {
     @Autowired
     private AssetsService assetsService;
 
-    @RequiresPermissions("assets:transfer:view")
     @GetMapping()
     public String assets() {
-        return prefix + "/transfer";
+        SysUser currentSysUser = ShiroUtils.getSysUser();
+        if (currentSysUser != null) {
+            //当前用户不是管理员，返回领用界面
+            if (!currentSysUser.isAdmin()) {
+                return prefix + "/transfer";
+            }
+        }
+        //管理员返回管理员页面
+        return prefix + "/transferAdmin";
     }
 
-    @RequiresPermissions("assets:transfer:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list() {
+    public TableDataInfo list(Assets assets) {
         SysUser currentSysUser = ShiroUtils.getSysUser();
         if (currentSysUser != null) {
             //当前系统用户不是管理员，个人保养信息
             if (!currentSysUser.isAdmin()) {
-                List<AssetsTransfer> transferListByUserId = transferService.getTransferListByUserId(currentSysUser.getUserId().toString());
+                List<Assets> assetsList0 = accountingService.getAssetsList0(assets);
                 startPage();
-                return getDataTable(transferListByUserId);
+                return getDataTable(assetsList0);
             }
             //当前系统用户是管理员，全部信息
             List<AssetsTransfer> transferListAll = transferService.getTransferListAll();
@@ -88,7 +95,6 @@ public class AssetsTransferController extends BaseController {
     }
 
     @Log(title = "资产管理", businessType = BusinessType.IMPORT)
-    @RequiresPermissions("assets:transfer:import")
     @PostMapping("/importData")
     @ResponseBody
     public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception {
@@ -99,7 +105,6 @@ public class AssetsTransferController extends BaseController {
         return AjaxResult.success(message);
     }
 
-    @RequiresPermissions("assets:transfer:view")
     @GetMapping("/importTemplate")
     @ResponseBody
     public AjaxResult importTemplate() {
@@ -119,26 +124,48 @@ public class AssetsTransferController extends BaseController {
     /**
      * 修改保存资产
      */
-    @RequiresPermissions("assets:transfer:edit")
     @Log(title = "资产管理", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editSave(@Validated AssetsTransfer transfer) {
         transfer.setUpdateBy(ShiroUtils.getLoginName());
-        return toAjax(transferService.updateTransferInfo(transfer));
+        return toAjax(transferService.updateTransferByOrderNum(transfer));
     }
 
 
-    @RequiresPermissions("assets:transfer:remove")
     @Log(title = "用户管理", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
+        AssetsTransfer transfer = transferService.getTransferById(ids);
+        if (transfer == null) {
+            return error();
+        }
         try {
-            return toAjax(transferService.deleteByTransferId(ids));
+            //根据单号批量删除
+            return toAjax(transferService.deleteTransferByOrderNum(transfer.getTransferOrderNum()));
         } catch (Exception e) {
             return error(e.getMessage());
         }
+    }
+
+    @PostMapping("/childTableList")
+    @ResponseBody
+    public TableDataInfo childTableList(HttpServletRequest request) {
+        String orderNum = request.getParameter("orderNum");
+        if (StringUtils.isNotEmpty(orderNum)) {
+
+            List<AssetsTransfer> assetsTransferBy = transferService.getTransferListByOrderNum(orderNum);
+            startPage();
+            return getDataTable(assetsTransferBy);
+        }
+        return getDataTable(new ArrayList<>());
+    }
+
+    @GetMapping("/transfer/{assetsNumber}")
+    public String borrow(@PathVariable("assetsNumber") String assetsNumber, ModelMap mmap) {
+        mmap.put("assetsNumber", assetsNumber);
+        return prefix + "/transferAssets2";
     }
 
     /**
@@ -224,4 +251,67 @@ public class AssetsTransferController extends BaseController {
         return error();
     }
 
+    @GetMapping("/myTransfer")
+    public String myAllocate() {
+        return prefix + "/myTransfer";
+    }
+
+    @PostMapping("/myTransferList")
+    @ResponseBody
+    public TableDataInfo myAllocateTable() {
+        //获取当前系统用户id
+        SysUser currentUser = ShiroUtils.getSysUser();
+        if (currentUser == null) {
+            return getDataTable(new ArrayList<>());
+        }
+        startPage();
+        List<AssetsTransfer> myTransferListByUserId = transferService.getTransferListByUserId(String.valueOf(currentUser.getUserId()));
+        return getDataTable(myTransferListByUserId);
+    }
+
+    @GetMapping("/myExamine")
+    public String myExamine() {
+        return prefix + "/myExamine";
+    }
+
+    @PostMapping("/myExamineList")
+    @ResponseBody
+    public TableDataInfo myExamineList() {
+        startPage();
+        return getDataTable(transferService.getMyExamineList());
+    }
+
+    @PostMapping("/examineOK/{orderNum}/{userId}")
+    @ResponseBody
+    public AjaxResult examineOK(@PathVariable("orderNum") String orderNum,
+                                @PathVariable("userId") int userId) {
+        SysUser currentSysUser = ShiroUtils.getSysUser();
+        if (currentSysUser != null) {
+            int auditorId = currentSysUser.getUserId().intValue();
+            try {
+                return toAjax(assetsService.transferExamine(auditorId, orderNum, userId, AssetsExamineStatus.AGREE.getCode()));
+            } catch (Exception e) {
+                e.printStackTrace();
+                return error();
+            }
+        }
+        return error();
+    }
+
+    @PostMapping("/examineReject/{orderNum}/{userId}")
+    @ResponseBody
+    public AjaxResult examineReject(@PathVariable("orderNum") String orderNum,
+                                    @PathVariable("userId") int userId) {
+        SysUser currentSysUser = ShiroUtils.getSysUser();
+        if (currentSysUser != null) {
+            int auditorId = currentSysUser.getUserId().intValue();
+            try {
+                return toAjax(assetsService.transferExamine(auditorId, orderNum, userId, AssetsExamineStatus.REJECT.getCode()));
+            } catch (Exception e) {
+                e.printStackTrace();
+                return error();
+            }
+        }
+        return error();
+    }
 }

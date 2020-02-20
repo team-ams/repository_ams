@@ -44,7 +44,27 @@ public class AssetsAccidentServiceImpl implements IAssetsAccidentService {
     }
 
     @Override
+    public int updateAccidentByOrderNum(AssetsAccident accident) {
+        return accidentMapper.updateAccidentByOrderNum(accident);
+    }
+
+    @Override
     public int deleteByAccidentId(String accidentId) {
         return accidentMapper.deleteByAccidentId(accidentId);
+    }
+
+    @Override
+    public List<AssetsAccident> getAccidentListByOrderNum(String orderNum) {
+        return accidentMapper.getAccidentListByOrderNum(orderNum);
+    }
+
+    @Override
+    public List<AssetsAccident> getMyExamineList() {
+        return accidentMapper.getMyExamineList();
+    }
+
+    @Override
+    public int deleteAccidentByOrderNum(String orderNum) {
+        return accidentMapper.deleteAccidentByOrderNum(orderNum);
     }
 }

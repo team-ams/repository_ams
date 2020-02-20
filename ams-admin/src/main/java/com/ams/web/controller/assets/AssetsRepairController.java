@@ -4,10 +4,13 @@ import com.ams.common.annotation.Log;
 import com.ams.common.core.controller.BaseController;
 import com.ams.common.core.domain.AjaxResult;
 import com.ams.common.core.page.TableDataInfo;
+import com.ams.common.enums.AssetsExamineStatus;
 import com.ams.common.enums.BusinessType;
+import com.ams.common.utils.StringUtils;
 import com.ams.common.utils.poi.ExcelUtil;
 import com.ams.framework.util.ShiroUtils;
 import com.ams.system.domain.Assets;
+import com.ams.system.domain.AssetsMaintain;
 import com.ams.system.domain.AssetsRepair;
 import com.ams.system.domain.SysUser;
 import com.ams.system.service.AssetsService;
@@ -54,20 +57,28 @@ public class AssetsRepairController extends BaseController {
     @RequiresPermissions("assets:repair:view")
     @GetMapping()
     public String assets() {
-        return prefix + "/repair";
+        SysUser currentSysUser = ShiroUtils.getSysUser();
+        if (currentSysUser != null) {
+            //当前用户不是管理员，返回领用界面
+            if (!currentSysUser.isAdmin()) {
+                return prefix + "/repair";
+            }
+        }
+        //管理员返回管理员页面
+        return prefix + "/repairAdmin";
     }
 
     @RequiresPermissions("assets:repair:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list() {
+    public TableDataInfo list(Assets assets) {
         SysUser currentSysUser = ShiroUtils.getSysUser();
         if (currentSysUser != null) {
             //当前系统用户不是管理员，个人保养信息
             if (!currentSysUser.isAdmin()) {
-                List<AssetsRepair> repairListByUserId = repairService.getRepairListByUserId(currentSysUser.getUserId().toString());
+                List<Assets> assetsList0 = accountingService.getAssetsList0(assets);
                 startPage();
-                return getDataTable(repairListByUserId);
+                return getDataTable(assetsList0);
             }
             //当前系统用户是管理员，全部信息
             List<AssetsRepair> repairListAll = repairService.getRepairListAll();
@@ -119,26 +130,47 @@ public class AssetsRepairController extends BaseController {
     /**
      * 修改保存资产
      */
-    @RequiresPermissions("assets:repair:edit")
     @Log(title = "资产管理", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editSave(@Validated AssetsRepair repair) {
         repair.setUpdateBy(ShiroUtils.getLoginName());
-        return toAjax(repairService.updateRepairInfo(repair));
+        return toAjax(repairService.updateRepairByOrderNum(repair));
     }
 
 
-    @RequiresPermissions("assets:repair:remove")
     @Log(title = "用户管理", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
+        AssetsRepair repair = repairService.getRepairById(ids);
+        if (repair == null) {
+            return error();
+        }
         try {
-            return toAjax(repairService.deleteByRepairId(ids));
+            //根据单号批量删除
+            return toAjax(assetsService.repairDelete(repair.getRepairOrderNum()));
         } catch (Exception e) {
             return error(e.getMessage());
         }
+    }
+
+    @PostMapping("/childTableList")
+    @ResponseBody
+    public TableDataInfo childTableList(HttpServletRequest request) {
+        String orderNum = request.getParameter("orderNum");
+        if (StringUtils.isNotEmpty(orderNum)) {
+            List<AssetsRepair> assetsRepairBy = repairService.getRepairListByOrderNum(orderNum);
+            startPage();
+            return getDataTable(assetsRepairBy);
+        }
+        return getDataTable(new ArrayList<>());
+    }
+
+    @GetMapping("/repair/{assetsNumber}")
+    public String borrow(@PathVariable("assetsNumber") String assetsNumber, ModelMap mmap) {
+        mmap.put("assetsNumber", assetsNumber);
+        return prefix + "/repairAssets2";
     }
 
     /**
@@ -224,4 +256,68 @@ public class AssetsRepairController extends BaseController {
         return error();
     }
 
+
+    @GetMapping("/myRepair")
+    public String myAllocate() {
+        return prefix + "/myRepair";
+    }
+
+    @PostMapping("/myRepairList")
+    @ResponseBody
+    public TableDataInfo myAllocateTable() {
+        //获取当前系统用户id
+        SysUser currentUser = ShiroUtils.getSysUser();
+        if (currentUser == null) {
+            return getDataTable(new ArrayList<>());
+        }
+        startPage();
+        List<AssetsRepair> myRepairListByUserId = repairService.getRepairListByUserId(String.valueOf(currentUser.getUserId()));
+        return getDataTable(myRepairListByUserId);
+    }
+
+    @GetMapping("/myExamine")
+    public String myExamine() {
+        return prefix + "/myExamine";
+    }
+
+    @PostMapping("/myExamineList")
+    @ResponseBody
+    public TableDataInfo myExamineList() {
+        startPage();
+        return getDataTable(repairService.getMyExamineList());
+    }
+
+    @PostMapping("/examineOK/{orderNum}/{userId}")
+    @ResponseBody
+    public AjaxResult examineOK(@PathVariable("orderNum") String orderNum,
+                                @PathVariable("userId") int userId) {
+        SysUser currentSysUser = ShiroUtils.getSysUser();
+        if (currentSysUser != null) {
+            int auditorId = currentSysUser.getUserId().intValue();
+            try {
+                return toAjax(assetsService.repairExamine(auditorId, orderNum, userId, AssetsExamineStatus.AGREE.getCode()));
+            } catch (Exception e) {
+                e.printStackTrace();
+                return error();
+            }
+        }
+        return error();
+    }
+
+    @PostMapping("/examineReject/{orderNum}/{userId}")
+    @ResponseBody
+    public AjaxResult examineReject(@PathVariable("orderNum") String orderNum,
+                                    @PathVariable("userId") int userId) {
+        SysUser currentSysUser = ShiroUtils.getSysUser();
+        if (currentSysUser != null) {
+            int auditorId = currentSysUser.getUserId().intValue();
+            try {
+                return toAjax(assetsService.repairExamine(auditorId, orderNum, userId, AssetsExamineStatus.REJECT.getCode()));
+            } catch (Exception e) {
+                e.printStackTrace();
+                return error();
+            }
+        }
+        return error();
+    }
 }

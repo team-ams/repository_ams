@@ -14,6 +14,10 @@ public class AssetsAccident extends BaseEntity {
      */
     private Integer accidentId;
     /**
+     * 事故单号
+     */
+    private String accidentOrderNum;
+    /**
      * '资产编号'
      */
     private String assetsNumber;
@@ -49,6 +53,14 @@ public class AssetsAccident extends BaseEntity {
      * '事故发生日期'
      */
     private String accidentTime;
+    /**
+     * 状态
+     */
+    private String status;
+    /**
+     * 审核者
+     */
+    private String auditorId;
 
     /**
      * 资产详情

@@ -14,6 +14,10 @@ public class AssetsBorrow extends BaseEntity {
      */
     private Integer borrowId;
     /**
+     * 借用单号
+     */
+    private String borrowOrderNum;
+    /**
      * '资产编号'
      */
     private String assetsNumber;
@@ -22,21 +26,30 @@ public class AssetsBorrow extends BaseEntity {
      */
     private int borrowUserId;
     /**
-     * '是否归还（0：未归还，1：已归还）'
-     */
-    private String isReturn;
-    /**
-     * '安装地点'
-     */
-    private String installationAddr;
-    /**
      * 借用时间
      */
     private String borrowTime;
     /**
-     * 归还时间
+     * 预计归还时间
      */
     private String returnTime;
+    /**
+     * '录入人'
+     */
+    private String enterPerson;
+    /**
+     * '是否归还（0：未归还 1：归还审核中 2：已归还）'
+     */
+    private String isReturn;
+
+    /**
+     * 状态
+     */
+    private String status;
+    /**
+     * 审核者
+     */
+    private int auditorId;
     /**
      * 资产详情
      */

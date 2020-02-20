@@ -11,6 +11,10 @@ public class AssetsMaintain extends BaseEntity {
      */
     private Integer maintainId;
     /**
+     * 保养单号
+     */
+    private String maintainOrderNum;
+    /**
      * '资产编号'
      */
     private String assetsNumber;
@@ -31,9 +35,13 @@ public class AssetsMaintain extends BaseEntity {
      */
     private String maintainTime;
     /**
-     * '安装地点'
+     * 状态
      */
-    private String installationAddr;
+    private String status;
+    /**
+     * 审核者
+     */
+    private String auditorId;
     /**
      * 资产详情
      */

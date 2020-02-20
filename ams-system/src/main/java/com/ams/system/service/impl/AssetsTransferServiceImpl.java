@@ -44,7 +44,27 @@ public class AssetsTransferServiceImpl implements IAssetsTransferService {
     }
 
     @Override
+    public int updateTransferByOrderNum(AssetsTransfer transfer) {
+        return transferMapper.updateTransferByOrderNum(transfer);
+    }
+
+    @Override
     public int deleteByTransferId(String transferId) {
         return transferMapper.deleteByTransferId(transferId);
+    }
+
+    @Override
+    public List<AssetsTransfer> getTransferListByOrderNum(String orderNum) {
+        return transferMapper.getTransferListByOrderNum(orderNum);
+    }
+
+    @Override
+    public List<AssetsTransfer> getMyExamineList() {
+        return transferMapper.getMyExamineList();
+    }
+
+    @Override
+    public int deleteTransferByOrderNum(String orderNum) {
+        return transferMapper.deleteTransferByOrderNum(orderNum);
     }
 }

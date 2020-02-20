@@ -49,13 +49,20 @@ public interface IAssetsAllocateService {
     List<AssetsAllocate> getMyAllocateListByUserId(int userId);
 
     /**
-     * 根据用户和资产编号查询状态为审核中的资产领用
+     * 根据领用Id获得领用信息
      *
-     * @param assetsNumber
-     * @param allocateUserId
+     * @param allocateId
      * @return
      */
-    AssetsAllocate getAssetsAllocateBy(String assetsNumber, int allocateUserId);
+    AssetsAllocate getAllocateByAllocateId(int allocateId);
+
+    /**
+     * 根据领用单号查找资产领用
+     *
+     * @param orderNum
+     * @return
+     */
+    List<AssetsAllocate> getAssetsAllocateBy(String orderNum);
 
 
     /**
@@ -65,5 +72,13 @@ public interface IAssetsAllocateService {
      * @return
      */
     int updateAssetsAllocate(AssetsAllocate assetsAllocate);
+
+    /**
+     * 根据领用单号删除（可批量删除）
+     *
+     * @param orderNum
+     * @return
+     */
+    int deleteAllocateByOrderNum(String orderNum);
 
 }

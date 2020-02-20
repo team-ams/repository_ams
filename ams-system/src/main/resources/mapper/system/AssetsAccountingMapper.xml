@@ -159,7 +159,7 @@
                 <if test="item.storageDepartment != null and item.storageDepartment != ''">storage_department=#{item.storageDepartment},
                 </if>
                 <if test="item.custodian != null and item.custodian != ''">custodian=#{item.custodian},</if>
-                <if test="item.user != null and item.user != ''">user=#{item.user},</if>
+                <if test="item.user != null">user=#{item.user},</if>
                 <if test="item.storageAddr != null and item.storageAddr != ''">storage_addr=#{item.storageAddr},</if>
                 <if test="item.useStatus != null and item.useStatus != ''">use_status=#{item.useStatus},</if>
                 <if test="item.assetsSource != null and item.assetsSource != ''">assets_source=#{item.assetsSource},</if>

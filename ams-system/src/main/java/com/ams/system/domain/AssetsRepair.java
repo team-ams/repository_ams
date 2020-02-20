@@ -13,6 +13,10 @@ public class AssetsRepair extends BaseEntity {
      */
     private Integer repairId;
     /**
+     * 维修单号
+     */
+    private String repairOrderNum;
+    /**
      * '资产编号'
      */
     private String assetsNumber;
@@ -25,9 +29,13 @@ public class AssetsRepair extends BaseEntity {
      */
     private String repairStatus;
     /**
-     * '安装地点'
+     * 状态
      */
-    private String installationAddr;
+    private String status;
+    /**
+     * 审核者
+     */
+    private String auditorId;
     /**
      * '修复级别（1：部件维修，2：中修，3：大修）'
      */

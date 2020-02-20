@@ -6,12 +6,14 @@
 
     <resultMap type="com.ams.system.domain.AssetsMaintain" id="AssetsMaintainResult">
         <id property="maintainId" column="maintain_id"/>
+        <result property="maintainOrderNum" column="maintain_orderNum"/>
         <result property="assetsNumber" column="maintain_assets_number"/>
         <result property="maintainUserId" column="maintain_userId"/>
         <result property="maintainName" column="maintain_name"/>
-        <result property="installationAddr" column="installation_addr"/>
         <result property="maintainTime" column="maintain_time"/>
         <result property="maintainStatus" column="maintain_status"/>
+        <result property="status" column="examine_status"/>
+        <result property="auditorId" column="auditor_id"/>
         <result property="remark" column="remark"/>
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
@@ -54,7 +56,7 @@
 
     <resultMap type="com.ams.system.domain.SysUser" id="SysUserResult">
         <id property="userId" column="user_id"/>
-        <result property="deptId" column="dept_id"/>
+        <result property="deptId" column="user_dept_id"/>
         <result property="loginName" column="login_name"/>
         <result property="userName" column="user_name"/>
         <result property="email" column="email"/>
@@ -88,10 +90,12 @@
 
     <sql id="selectAssetsMaintainVo">
         select a.maintain_id,
+               a.maintain_orderNum,
                a.assets_number as maintain_assets_number,
                a.maintain_userId,
+               a.status as examine_status,
+               a.auditor_id,
                a.remark,
-               a.installation_addr,
                a.maintain_name,
                a.maintain_status,
                a.maintain_time,
@@ -127,7 +131,7 @@
                b.update_time as assets_update_time,
 
                u.user_id,
-               u.dept_id,
+               u.dept_id as user_dept_id,
                u.login_name,
                u.user_name,
                u.email,
@@ -174,20 +178,20 @@
     <insert id="insertMaintainList" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="maintain_id">
         <foreach collection="list" item="item" separator=";">
             insert into assets_maintain(
+            <if test="item.maintainOrderNum != null and item.maintainOrderNum != ''">maintain_orderNum,</if>
             <if test="item.assetsNumber != null and item.assetsNumber != ''">assets_number,</if>
             <if test="item.maintainUserId != null">maintain_userId,</if>
             <if test="item.maintainName != null and item.maintainName != ''">maintain_name,</if>
-            <if test="item.installationAddr != null and item.installationAddr != ''">installation_addr,</if>
             <if test="item.maintainTime != null">maintain_time,</if>
             <if test="item.maintainStatus != null">maintain_status,</if>
             <if test="item.remark != null and item.remark!= ''">remark,</if>
             <if test="item.createBy != null and item.createBy != ''">create_by,</if>
             create_time
             )values(
+            <if test="item.maintainOrderNum != null and item.maintainOrderNum != ''">#{item.maintainOrderNum},</if>
             <if test="item.assetsNumber != null and item.assetsNumber != ''">#{item.assetsNumber},</if>
             <if test="item.maintainUserId != null">#{item.maintainUserId},</if>
             <if test="item.maintainName != null and item.maintainName != ''">#{item.maintainName},</if>
-            <if test="item.installationAddr != null and item.installationAddr!= ''">#{item.installationAddr},</if>
             <if test="item.maintainTime != null">#{item.maintainTime},</if>
             <if test="item.maintainStatus != null">#{item.maintainStatus},</if>
             <if test="item.remark != null and item.remark!= ''">#{item.remark},</if>
@@ -198,23 +202,55 @@
     </insert>
 
     <update id="updateMaintainInfo" parameterType="com.ams.system.domain.AssetsMaintain">
-            update assets_maintain
-            <set>
-                <if test="assetsNumber != null and assetsNumber != ''">assets_number=#{assetsNumber},</if>
-                <if test="maintainUserId != null">maintain_userId=#{maintainUserId},</if>
-                <if test="maintainName != null and maintainName != ''">maintain_name=#{maintainName},</if>
-                <if test="installationAddr != null and installationAddr != ''">installation_addr=#{installationAddr},</if>
-                <if test="remark != null and remark != ''">remark=#{remark},</if>
-                <if test="maintainTime != null and maintainTime != ''">maintain_time=#{maintainTime},</if>
-                <if test="maintainStatus != null">maintain_status=#{maintainStatus},</if>
-                <if test="updateBy != null and updateBy != ''">update_by=#{updateBy},</if>
-                update_time = sysdate()
-            </set>
-            where maintain_id = #{maintainId}
+        update assets_maintain
+        <set>
+            <if test="assetsNumber != null and assetsNumber != ''">assets_number=#{assetsNumber},</if>
+            <if test="maintainUserId != null">maintain_userId=#{maintainUserId},</if>
+            <if test="maintainName != null and maintainName != ''">maintain_name=#{maintainName},</if>
+            <if test="status != null and status != ''">status=#{status},</if>
+            <if test="auditorId != null and auditorId != 0">auditor_id=#{auditorId},</if>
+            <if test="remark != null and remark != ''">remark=#{remark},</if>
+            <if test="maintainTime != null and maintainTime != ''">maintain_time=#{maintainTime},</if>
+            <if test="maintainStatus != null">maintain_status=#{maintainStatus},</if>
+            <if test="updateBy != null and updateBy != ''">update_by=#{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where maintain_id = #{maintainId}
+    </update>
+
+    <update id="updateMaintainByOrderNum" parameterType="com.ams.system.domain.AssetsMaintain">
+        update assets_maintain
+        <set>
+            <if test="assetsNumber != null and assetsNumber != ''">assets_number=#{assetsNumber},</if>
+            <if test="maintainUserId != null">maintain_userId=#{maintainUserId},</if>
+            <if test="maintainName != null and maintainName != ''">maintain_name=#{maintainName},</if>
+            <if test="status != null and status != ''">status=#{status},</if>
+            <if test="auditorId != null and auditorId != 0">auditor_id=#{auditorId},</if>
+            <if test="remark != null and remark != ''">remark=#{remark},</if>
+            <if test="maintainTime != null and maintainTime != ''">maintain_time=#{maintainTime},</if>
+            <if test="maintainStatus != null">maintain_status=#{maintainStatus},</if>
+            <if test="updateBy != null and updateBy != ''">update_by=#{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where maintain_orderNum = #{maintainOrderNum}
     </update>
 
     <delete id="deleteByMaintainId" parameterType="String">
         delete from assets_maintain where maintain_id = #{maintainId}
+    </delete>
+
+    <select id="getMaintainListByOrderNum" parameterType="String" resultMap="AssetsMaintainResult">
+        <include refid="selectAssetsMaintainVo"/>
+        where a.maintain_orderNum = #{orderNum}
+    </select>
+
+    <select id="getMyExamineList" resultMap="AssetsMaintainResult">
+        <include refid="selectAssetsMaintainVo"/>
+        where a.auditor_id = 1 and a.status > 0
+    </select>
+
+    <delete id="deleteMaintainByOrderNum" parameterType="String">
+        delete from assets_maintain where maintain_orderNum = #{orderNum}
     </delete>
 
 </mapper> 

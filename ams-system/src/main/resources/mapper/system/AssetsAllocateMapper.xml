@@ -6,6 +6,7 @@
 
     <resultMap type="com.ams.system.domain.AssetsAllocate" id="AssetsAllocateResult">
         <id property="allocateId" column="allocate_id"/>
+        <result property="allocateOrderNum" column="allocate_orderNum"/>
         <result property="assetsNumber" column="allocate_assets_number"/>
         <result property="userId" column="allocate_user_id"/>
         <result property="auditorId" column="auditor_id"/>
@@ -72,6 +73,7 @@
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
         <result property="remark" column="user_remark"/>
+        <association property="dept" column="dept_id" javaType="com.ams.system.domain.SysDept" resultMap="deptResult"/>
     </resultMap>
 
     <resultMap type="com.ams.system.domain.SysUser" id="AuditorResult">
@@ -81,9 +83,20 @@
         <result property="remark" column="u2_remark"/>
     </resultMap>
 
+    <resultMap id="deptResult" type="com.ams.system.domain.SysDept">
+        <id property="deptId" column="dept_id"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="deptName" column="dept_name"/>
+        <result property="orderNum" column="order_num"/>
+        <result property="leader" column="leader"/>
+        <result property="status" column="dept_status"/>
+        <result property="parentName" column="parent_name"/>
+    </resultMap>
+
 
     <sql id="selectAssetsAllocateVo">
         select a.allocate_id,
+               a.allocate_orderNum,
                a.assets_number as allocate_assets_number,
                a.user_id as allocate_user_id,
                a.auditor_id,
@@ -140,16 +153,26 @@
                u2.user_id as u2_user_id,
                u2.login_name as u2_login_name,
                u2.user_name as u2_user_name,
-               u2.remark as u2_remark
+               u2.remark as u2_remark,
+
+               d.dept_id,
+               d.parent_id,
+               d.dept_name,
+               d.order_num,
+               d.leader,
+               d.status as dept_status,
+               (select dept_name from sys_dept where dept_id = d.parent_id) parent_name
         from assets_allocate a
             left join assets_accounting b on a.assets_number = b.assets_number
             left join sys_user u on a.user_id =  u.user_id
             left join sys_user u2 on a.auditor_id = u2.user_id and u2.del_flag = 0
+            left join sys_dept d on d.dept_id = u.dept_id
     </sql>
 
     <insert id="insert" parameterType="com.ams.system.domain.AssetsAllocate" useGeneratedKeys="true"
             keyProperty="allocate_id">
         insert into assets_allocate(
+        <if test="allocateOrderNum != null and allocateOrderNum != ''">allocate_orderNum,</if>
         <if test="assetsNumber != null and assetsNumber != ''">assets_number,</if>
         <if test="userId != null">user_id,</if>
         <if test="auditorId != null">auditor_id,</if>
@@ -157,6 +180,7 @@
         <if test="remark != null and remark!= ''">remark,</if>
         create_time
         )values(
+        <if test="allocateOrderNum != null and allocateOrderNum != ''">#{allocateOrderNum},</if>
         <if test="assetsNumber != null and assetsNumber != ''">#{assetsNumber},</if>
         <if test="userId != null">#{userId},</if>
         <if test="auditorId != null">auditor_id,</if>
@@ -170,6 +194,7 @@
             keyProperty="allocate_id">
         <foreach collection="list" item="item" separator=";">
             insert into assets_allocate(
+            <if test="item.allocateOrderNum != null and item.allocateOrderNum != ''">allocate_orderNum,</if>
             <if test="item.assetsNumber != null and item.assetsNumber != ''">assets_number,</if>
             <if test="item.userId != null">user_id,</if>
             <if test="item.auditorId != null">auditor_id,</if>
@@ -177,6 +202,7 @@
             <if test="item.remark != null and item.remark!= ''">remark,</if>
             create_time
             )values(
+            <if test="item.allocateOrderNum != null and item.allocateOrderNum != ''">#{item.allocateOrderNum},</if>
             <if test="item.assetsNumber != null and item.assetsNumber != ''">#{item.assetsNumber},</if>
             <if test="item.userId != null">#{item.userId},</if>
             <if test="item.auditorId != null">#{item.auditorId},</if>
@@ -199,7 +225,7 @@
 
     <select id="getAssetsAllocateBy" resultMap="AssetsAllocateResult">
         <include refid="selectAssetsAllocateVo"/>
-        where a.assets_number = #{assetsNumber} and a.user_id = #{allocateUserId} and a.status = 0
+        where a.allocate_orderNum = #{orderNum}
     </select>
 
     <update id="updateAssetsAllocate" parameterType="com.ams.system.domain.AssetsAllocate">
@@ -219,4 +245,13 @@
         <include refid="selectAssetsAllocateVo"/>
         where a.user_id = #{userId}
     </select>
+
+    <select id="getAllocateByAllocateId" parameterType="java.lang.Integer" resultMap="AssetsAllocateResult">
+        <include refid="selectAssetsAllocateVo"/>
+        where a.allocate_id = #{allocateId}
+    </select>
+
+    <delete id="deleteAllocateByOrderNum" parameterType="String">
+        delete from assets_allocate where allocate_orderNum = #{orderNum}
+    </delete>
 </mapper> 

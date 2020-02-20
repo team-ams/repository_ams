@@ -6,13 +6,16 @@
 
     <resultMap type="com.ams.system.domain.AssetsBorrow" id="AssetsBorrowResult">
         <id property="borrowId" column="borrow_id"/>
+        <result property="borrowOrderNum" column="borrow_orderNum"/>
         <result property="assetsNumber" column="borrow_assets_number"/>
         <result property="borrowUserId" column="borrow_userid"/>
-        <result property="isReturn" column="is_return"/>
-        <result property="installationAddr" column="installation_addr"/>
         <result property="borrowTime" column="borrow_time"/>
         <result property="returnTime" column="return_time"/>
+        <result property="enterPerson" column="enter_person"/>
         <result property="remark" column="remark"/>
+        <result property="isReturn" column="is_return"/>
+        <result property="status" column="examine_status"/>
+        <result property="auditorId" column="auditor_id"/>
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
         <association property="assets" column="borrow_assets_number" javaType="com.ams.system.domain.Assets"
@@ -54,7 +57,7 @@
 
     <resultMap type="com.ams.system.domain.SysUser" id="SysUserResult">
         <id property="userId" column="user_id"/>
-        <result property="deptId" column="dept_id"/>
+        <result property="deptId" column="user_dept_id"/>
         <result property="loginName" column="login_name"/>
         <result property="userName" column="user_name"/>
         <result property="email" column="email"/>
@@ -88,13 +91,16 @@
 
     <sql id="selectAssetsBorrowVo">
         select a.borrow_id,
+               a.borrow_orderNum,
                a.assets_number as borrow_assets_number,
                a.borrow_userid,
-               a.is_return,
+               a.status as examine_status,
+               a.auditor_id,
                a.remark,
-               a.installation_addr,
+               a.is_return,
                a.borrow_time,
                a.return_time,
+               a.enter_person,
                a.create_time,
                a.update_time,
 
@@ -127,7 +133,7 @@
                b.update_time as assets_update_time,
 
                u.user_id,
-               u.dept_id,
+               u.dept_id as user_dept_id,
                u.login_name,
                u.user_name,
                u.email,
@@ -159,7 +165,17 @@
 
     <select id="getBorrowListByUserId" parameterType="String" resultMap="AssetsBorrowResult">
         <include refid="selectAssetsBorrowVo"/>
-        where a.borrow_userId = #{userId}
+        where a.borrow_userId = #{userId} group by a.borrow_orderNum
+    </select>
+
+    <select id="getNeedReturnByUserId" parameterType="String" resultMap="AssetsBorrowResult">
+        <include refid="selectAssetsBorrowVo"/>
+        where a.borrow_userId = #{userId} and a.status = 1 and a.is_return = 0 group by a.borrow_orderNum
+    </select>
+
+    <select id="getBorrowListByOrderNum" parameterType="String" resultMap="AssetsBorrowResult">
+        <include refid="selectAssetsBorrowVo"/>
+        where a.borrow_orderNum = #{orderNum}
     </select>
 
     <select id="getBorrowById" parameterType="String" resultMap="AssetsBorrowResult">
@@ -167,70 +183,87 @@
         where a.borrow_id = #{borrowId}
     </select>
 
+    <select id="getBorrowByAssetsNumberAndIsNotReturn" parameterType="String" resultMap="AssetsBorrowResult">
+        <include refid="selectAssetsBorrowVo"/>
+        where a.assets_number = #{assetsNumber} and a.is_return != 2;
+    </select>
+
     <select id="getBorrowListAll" resultMap="AssetsBorrowResult">
         <include refid="selectAssetsBorrowVo"/>
+        where a.status = 0
     </select>
 
     <insert id="insertBorrowList" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="borrow_id">
         <foreach collection="list" item="item" separator=";">
             insert into assets_borrow(
+            <if test="item.borrowOrderNum != null and item.borrowOrderNum != ''">borrow_orderNum,</if>
             <if test="item.assetsNumber != null and item.assetsNumber != ''">assets_number,</if>
             <if test="item.borrowUserId != null">borrow_userid,</if>
-            <if test="item.isReturn != null and item.isReturn != ''">is_return,</if>
-            <if test="item.installationAddr != null and item.installationAddr != ''">installation_addr,</if>
             <if test="item.borrowTime != null">borrow_time,</if>
             <if test="item.returnTime != null">return_time,</if>
+            <if test="item.enterPerson != null and item.enterPerson != ''">enter_person,</if>
             <if test="item.remark != null and item.remark!= ''">remark,</if>
             create_time
             )values(
+            <if test="item.borrowOrderNum != null and item.borrowOrderNum != ''">#{item.borrowOrderNum},</if>
             <if test="item.assetsNumber != null and item.assetsNumber != ''">#{item.assetsNumber},</if>
             <if test="item.borrowUserId != null">#{item.borrowUserId},</if>
-            <if test="item.isReturn != null and item.isReturn != ''">#{item.isReturn},</if>
-            <if test="item.installationAddr != null and item.installationAddr!= ''">#{item.installationAddr},</if>
             <if test="item.borrowTime != null">#{item.borrowTime},</if>
             <if test="item.returnTime != null">#{item.returnTime},</if>
+            <if test="item.enterPerson != null and item.enterPerson != ''">#{item.enterPerson},</if>
             <if test="item.remark != null and item.remark!= ''">#{item.remark},</if>
             sysdate()
             )
         </foreach>
     </insert>
 
-    <update id="returnAssetsList" parameterType="java.util.List">
-        <foreach collection="list" separator=";" open="(" close=")">
-            update assets_borrow
-            <set>
-                <if test="assetsNumber != null and assetsNumber != ''">assets_number=#{assetsNumber},</if>
-                <if test="borrowUserId != null">borrow_userid=#{borrowUserId},</if>
-                <if test="isReturn != null and isReturn != ''">is_return=#{isReturn},</if>
-                <if test="installationAddr != null and installationAddr != ''">installation_addr=#{installationAddr}
-                </if>
-                <if test="item.borrowTime != null and borrowTime != ''">borrow_time=#{item.borrowTime},</if>
-                <if test="item.returnTime != null and returnTime != ''">return_time=#{item.returnTime},</if>
-                <if test="remark != null and remark != ''">remark=#{remark},</if>
-                update_time = sysdate()
-            </set>
-            where borrow_id = #{borrowId}
-        </foreach>
-    </update>
 
     <update id="updateBorrowInfo" parameterType="com.ams.system.domain.AssetsBorrow">
-            update assets_borrow
-            <set>
-                <if test="assetsNumber != null and assetsNumber != ''">assets_number=#{assetsNumber},</if>
-                <if test="borrowUserId != null">borrow_userid=#{borrowUserId},</if>
-                <if test="isReturn != null and isReturn != ''">is_return=#{isReturn},</if>
-                <if test="installationAddr != null and installationAddr != ''">installation_addr=#{installationAddr},</if>
-                <if test="remark != null and remark != ''">remark=#{remark},</if>
-                <if test="borrowTime != null and borrowTime != ''">borrow_time=#{borrowTime},</if>
-                <if test="returnTime != null and returnTime != ''">return_time=#{returnTime},</if>
-                <if test="updateBy != null and updateBy != ''">update_by=#{updateBy},</if>
-                update_time = sysdate()
-            </set>
-            where borrow_id = #{borrowId}
+        update assets_borrow
+        <set>
+            <if test="assetsNumber != null and assetsNumber != ''">assets_number=#{assetsNumber},</if>
+            <if test="borrowUserId != null">borrow_userid=#{borrowUserId},</if>
+            <if test="remark != null and remark != ''">remark=#{remark},</if>
+            <if test="isReturn != null and isReturn != ''">is_return=#{isReturn},</if>
+            <if test="status != null and status != ''">status=#{status},</if>
+            <if test="auditorId != null and auditorId != 0">auditor_id=#{auditorId},</if>
+            <if test="borrowTime != null and borrowTime != ''">borrow_time=#{borrowTime},</if>
+            <if test="returnTime != null and returnTime != ''">return_time=#{returnTime},</if>
+            <if test="enterPerson != null and enterPerson != ''">enter_person=#{enterPerson},</if>
+            <if test="updateBy != null and updateBy != ''">update_by=#{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where borrow_id = #{borrowId}
+    </update>
+
+    <update id="updateBorrowByOrderNum" parameterType="com.ams.system.domain.AssetsBorrow">
+        update assets_borrow
+        <set>
+            <if test="assetsNumber != null and assetsNumber != ''">assets_number=#{assetsNumber},</if>
+            <if test="borrowUserId != null">borrow_userid=#{borrowUserId},</if>
+            <if test="remark != null and remark != ''">remark=#{remark},</if>
+            <if test="isReturn != null and isReturn != ''">is_return=#{isReturn},</if>
+            <if test="status != null and status != ''">status=#{status},</if>
+            <if test="auditorId != null and auditorId != 0">auditor_id=#{auditorId},</if>
+            <if test="borrowTime != null and borrowTime != ''">borrow_time=#{borrowTime},</if>
+            <if test="returnTime != null and returnTime != ''">return_time=#{returnTime},</if>
+            <if test="enterPerson != null and enterPerson != ''">enter_person=#{enterPerson},</if>
+            <if test="updateBy != null and updateBy != ''">update_by=#{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where borrow_orderNum = #{borrowOrderNum}
     </update>
 
     <delete id="deleteByBorrowId" parameterType="String">
         delete from assets_borrow where borrow_id = #{borrowId}
     </delete>
 
+    <select id="getMyExamineList" resultMap="AssetsBorrowResult">
+        <include refid="selectAssetsBorrowVo"/>
+        where a.auditor_id = 1 and a.status > 0
+    </select>
+
+    <delete id="deleteBorrowByOrderNum" parameterType="String">
+        delete from assets_borrow where borrow_orderNum = #{orderNum}
+    </delete>
 </mapper> 

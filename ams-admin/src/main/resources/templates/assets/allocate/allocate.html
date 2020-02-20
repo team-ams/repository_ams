@@ -43,11 +43,8 @@
                 <a class="btn btn-success" onclick="$.operate.myAllocateTab()">
                     <i class="fa fa-user-md"></i> 我的领用
                 </a>
-                <a class="btn btn-success" onclick="selectUsersToParent()">
-                    <i class="fa fa-user-md"></i> 资产领用
-                </a>
-                <a class="btn btn-success">
-                    <i class="fa fa-user-md"></i> <p id="allocateNumber" th:utext="${content}"> </p>
+                <a class="btn btn-success" onclick="allocateAssets()">
+                    <i class="fa fa-user-md"></i> 资产识别领用
                 </a>
             </div>
             <div class="col-sm-12 select-table table-striped">
@@ -60,7 +57,6 @@
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: layout-latest-js"/>
 <script th:inline="javascript">
-    var allocateFlag = [[${@permission.hasPermi('assets:accounting:allocate')}]];
     var prefix = ctx + "assets/allocate";
 
     $(function () {
@@ -70,13 +66,13 @@
         }
         $('body').layout({initClosed: panehHidden, west__size: 185});
         queryUserList();
-     });
+    });
 
     function queryUserList() {
         var options = {
             url: prefix + "/list",
-            allocateUrl:prefix+"/allocate/{id}",
-            myAllocateUrl:prefix+"/myAllocate",
+            allocateUrl: prefix + "/allocate/{id}",
+            myAllocateUrl: prefix + "/myAllocate",
             sortName: "createTime",
             sortOrder: "desc",
             modalName: "资产领用",
@@ -109,46 +105,46 @@
                     title: '计量单位',
                     align: 'center'
                 },
-				{
-					field: 'assetsPrice',
-					title: '单价',
+                {
+                    field: 'assetsPrice',
+                    title: '单价',
                     align: 'center'
-				},
-				{
-					field: 'storageDepartment',
-					title: '保管部门',
+                },
+                {
+                    field: 'storageDepartment',
+                    title: '保管部门',
                     align: 'center'
-				},
-				{
-					field: 'storageAddr',
-					title: '存放地点',
+                },
+                {
+                    field: 'storageAddr',
+                    title: '存放地点',
                     align: 'center'
-				},
-				{
-					field: 'useStatus',
-					title: '使用情况',
+                },
+                {
+                    field: 'useStatus',
+                    title: '资产状态',
                     align: 'center'
-				},
-				{
-					field: 'assetsSource',
-					title: '资产来源',
+                },
+                {
+                    field: 'assetsSource',
+                    title: '资产来源',
                     align: 'center'
-				},
-				{
-					field: 'usefulLife',
-					title: '使用年限',
+                },
+                {
+                    field: 'usefulLife',
+                    title: '使用年限',
                     align: 'center'
-				},
-				{
-					field: 'assetsModel',
-					title: '型号',
+                },
+                {
+                    field: 'assetsModel',
+                    title: '型号',
                     align: 'center'
-				},
-				{
-					field: 'assetsBrand',
-					title: '品牌',
+                },
+                {
+                    field: 'assetsBrand',
+                    title: '品牌',
                     align: 'center'
-				},
+                },
                 {
                     field: 'purchaseDate',
                     title: '购入日期',
@@ -166,7 +162,7 @@
                     align: 'center',
                     formatter: function (value, row, index) {
                         var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs ' + allocateFlag + '" href="javascript:void(0)" onclick="$.operate.allocate(\'' + row.assetsNumber + '\')"><i class="fa fa-edit"></i>领用</a> ');
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.allocate(\'' + row.assetsNumber + '\')"><i class="fa fa-edit"></i>领用</a> ');
                         return actions.join('');
                     }
                 }]
@@ -175,8 +171,8 @@
     }
 
 
-    function selectUsersToParent(){
-        $.modal.open("选择资产", prefix + "/allocateParent/22");
+    function allocateAssets() {
+        $.modal.open("选择资产", prefix + "/allocateParent/0");
     }
 
 </script>

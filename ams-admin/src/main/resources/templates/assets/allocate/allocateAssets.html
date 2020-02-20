@@ -94,7 +94,7 @@
         $.table.init(options);
     });
 
-    /* 添加用户-选择用户-提交 */
+    /* 领用资产-选择资产-提交 */
     function submitHandler(index, layero) {
         var rows = $.table.selectFirstColumns();
         var url = prefix + "/allocateConfirm";
@@ -103,8 +103,6 @@
             $.modal.alertWarning("请至少选择一条记录");
             return;
         }
-        // 父页面的变量
-        parent.$('#allocateNumber').html(rows.join());
         //ajax异步调用后台接口，完成新增资产领用
         $.operate.submit(url, "post", "json", data);
         //延时2秒关闭，等待submit的ajax异步方法回调后执行关闭模态框
