@@ -3,6 +3,7 @@ package com.ams.system.service.impl;
 import com.ams.common.enums.AssetsExamineStatus;
 import com.ams.common.enums.AssetsStatus;
 import com.ams.system.domain.AssetsAllocate;
+import com.ams.system.domain.LingYong;
 import com.ams.system.mapper.AssetsAllocateMapper;
 import com.ams.system.service.IAssetsAllocateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,5 +87,20 @@ public class AssetsAllocateServiceImpl implements IAssetsAllocateService {
     @Override
     public int deleteAllocateByOrderNum(String orderNum) {
         return allocateMapper.deleteAllocateByOrderNum(orderNum);
+    }
+
+    @Override
+    public List<LingYong> getDataGroupByDay() {
+        return allocateMapper.getDataGroupByDay();
+    }
+
+    @Override
+    public List<LingYong> getDataGroupByYear() {
+        return allocateMapper.getDataGroupByYear();
+    }
+
+    @Override
+    public List<LingYong> getDataGroupByMonth() {
+        return allocateMapper.getDataGroupByMonth();
     }
 }

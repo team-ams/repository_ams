@@ -1,6 +1,7 @@
 package com.ams.system.service;
 
 import com.ams.system.domain.AssetsAllocate;
+import com.ams.system.domain.LingYong;
 
 import java.util.List;
 
@@ -80,5 +81,26 @@ public interface IAssetsAllocateService {
      * @return
      */
     int deleteAllocateByOrderNum(String orderNum);
+
+    /**
+     * 根据天统计
+     *
+     * @return
+     */
+    List<LingYong> getDataGroupByDay();
+
+    /**
+     * 根据周统计
+     *
+     * @return
+     */
+    List<LingYong> getDataGroupByYear();
+
+    /**
+     * 根据月统计
+     *
+     * @return
+     */
+    List<LingYong> getDataGroupByMonth();
 
 }

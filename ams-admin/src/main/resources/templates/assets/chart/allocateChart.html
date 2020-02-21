@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('资产Charts')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+
+        <div class="col-sm-12 select-table table-striped">
+            <div class="ibox-content">
+                <div class="echarts" style="height: 450px" id="echarts-bar-chart"></div>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: echarts-js"/>
+<script type="text/javascript">
+    var prefix = ctx + "assets/chart";
+    var barChart = echarts.init(document.getElementById("echarts-bar-chart"));
+    var query_params = {};
+    var groupByDay = [];
+    var groupByYear = [];
+    var groupByMonth = [];
+
+    getData(query_params);
+
+    function getData(params) {
+        $.ajax({
+            url: prefix + "/lingYong",
+            type: 'post',
+            data: params,
+            dataType: "JSON",
+            success: function (data) {
+                var listMap = data;
+
+                var dayList = listMap["dataGroupByDay"];
+                var yearList = listMap["dataGroupByYear"];
+                var monthList = listMap["dataGroupByMonth"];
+
+
+                var dayTotal = [];
+                var yearTotal = [];
+                var monthTotal = [];
+
+
+                for (var i = 0; i < dayList.length; i++) {
+                    groupByDay.push(dayList[i].groupByDay);
+                    dayTotal.push(dayList[i].dayTotal);
+                }
+                for (var i = 0; i < yearList.length; i++) {
+                    groupByYear.push(yearList[i].groupByYear);
+                    yearTotal.push(yearList[i].yearTotal);
+                }
+                for (var i = 0; i < monthList.length; i++) {
+                    groupByMonth.push(monthList[i].groupByMonth);
+                    monthTotal.push(monthList[i].monthTotal);
+                }
+
+                var option = drawBar(groupByDay, dayTotal, yearTotal, monthTotal);
+                if (option && typeof option === "object") {
+                    barChart.setOption(option);
+                    window.onresize = barChart.resize;
+
+                }
+            }
+        })
+
+    }
+
+    function drawBar(groupByDay, dayTotal, yearTotal, monthTotal) {
+
+        var baroption = {
+            title: {
+                text: '领用报表'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            //显示工具栏
+            toolbox: {
+                show: true,
+                showTitle: true,
+                top: 'auto',
+                feature: {
+                    dataView: {//数据视图
+                        show: true
+                    },
+                    dataZoom: {
+                        show: true
+                    },
+                    restore: {
+                        show: true
+                    },
+                    magicType: {
+                        type: ['line', 'bar']
+                    },
+                    saveAsImage: {
+                        show: true
+                    }
+
+                }
+            },
+            legend: {
+                data: ['日领用量', '月领用量', '年领用量'],
+                selectedMode: 'single'
+            },
+            grid: {
+                x: 48,
+                x2: 48
+            },
+            calculable: true,
+            xAxis: [
+
+                {
+                    name: '日领用量',
+                    type: 'category',
+                    data: groupByDay,
+                    axisLabel: {
+                        interval: 0,
+                        rotate: 20
+                    },
+                }
+
+            ],
+
+            yAxis: [
+                {
+                    type: 'value',
+                    axisLabel: {
+                        show: true,
+                        interval: 0
+                    },
+                }
+            ],
+            series: [
+                {
+                    name: '日领用量',
+                    type: 'bar',
+                    data: dayTotal,
+                    markPoint: {
+                        data: [
+                            {type: 'max', name: '最大值'},
+                            {type: 'min', name: '最小值'}
+                        ]
+                    },
+                    markLine: {
+                        data: [
+                            {type: 'average', name: '平均值'}
+                        ]
+                    }
+                },
+                {
+                    name: '月领用量',
+                    type: 'bar',
+                    data: monthTotal,
+                    markPoint: {
+                        data: [
+                            {type: 'max', name: '最大值'},
+                            {type: 'min', name: '最小值'}
+                        ]
+                    },
+                    markLine: {
+                        data: [
+                            {type: 'average', name: '平均值'}
+                        ]
+                    }
+                },
+                {
+                    name: '年领用量',
+                    type: 'bar',
+                    data: yearTotal,
+                    markPoint: {
+                        data: [
+                            {type: 'max', name: '最大值'},
+                            {type: 'min', name: '最小值'}
+                        ]
+                    },
+                    markLine: {
+                        data: [
+                            {type: 'average', name: '平均值'}
+                        ]
+                    }
+                }
+            ]
+        };
+        return baroption;
+
+    }
+
+    barChart.on('legendselectchanged', function (obj) {
+        var name = obj.name;
+        var option = barChart.getOption();
+        if (name == '日领用量') {
+            option.xAxis[0].data = groupByDay;
+            option.xAxis[0].name = "日领用量";
+        }
+        if (name == '年领用量') {
+            option.xAxis[0].data = groupByYear;
+            option.xAxis[0].name = "年领用量";
+
+        }
+        if (name == '月领用量') {
+            option.xAxis[0].data = groupByMonth;
+            option.xAxis[0].name = "月领用量";
+
+        }
+
+        barChart.setOption(option, true);
+    })
+</script>
+</body>

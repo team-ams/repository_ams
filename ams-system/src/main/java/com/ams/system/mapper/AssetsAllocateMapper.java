@@ -2,6 +2,7 @@ package com.ams.system.mapper;
 
 import com.ams.system.domain.Assets;
 import com.ams.system.domain.AssetsAllocate;
+import com.ams.system.domain.LingYong;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -81,4 +82,25 @@ public interface AssetsAllocateMapper {
      * @return
      */
     int deleteAllocateByOrderNum(String orderNum);
+
+    /**
+     * 根据天统计
+     *
+     * @return
+     */
+    List<LingYong> getDataGroupByDay();
+
+    /**
+     * 根据周统计
+     *
+     * @return
+     */
+    List<LingYong> getDataGroupByYear();
+
+    /**
+     * 根据月统计
+     *
+     * @return
+     */
+    List<LingYong> getDataGroupByMonth();
 }

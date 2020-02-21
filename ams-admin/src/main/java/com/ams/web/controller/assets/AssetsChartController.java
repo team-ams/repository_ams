@@ -11,8 +11,10 @@ import com.ams.common.json.JSONObject;
 import com.ams.common.utils.poi.ExcelUtil;
 import com.ams.framework.util.ShiroUtils;
 import com.ams.system.domain.Assets;
+import com.ams.system.domain.LingYong;
 import com.ams.system.domain.RuKu;
 import com.ams.system.service.IAssetsAccountingService;
+import com.ams.system.service.IAssetsAllocateService;
 import com.ams.system.service.IAssetsSourceService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,13 +42,12 @@ public class AssetsChartController extends BaseController {
 
     @Autowired
     private IAssetsAccountingService accountingService;
-
     @Autowired
-    private IAssetsSourceService sourceService;
+    private IAssetsAllocateService allocateService;
 
 
     @GetMapping("/ruKu")
-    public String index() {
+    public String ruKuIndex() {
         return prefix + "/accountingChart";
     }
 
@@ -61,6 +63,27 @@ public class AssetsChartController extends BaseController {
         List<RuKu> countGroupByName = accountingService.getCountGroupByName(startTime, endTime);
 
         return countGroupByName;
+    }
+
+    @GetMapping("/lingYong")
+    public String lingYongIndex() {
+        return prefix + "/allocateChart";
+    }
+
+    @PostMapping("/lingYong")
+    @ResponseBody
+    public Map<String, List<LingYong>> lingYong() {
+
+        Map<String, List<LingYong>> listMap = new HashMap<>();
+
+        List<LingYong> dataGroupByDay = allocateService.getDataGroupByDay();
+        List<LingYong> dataGroupByYear = allocateService.getDataGroupByYear();
+        List<LingYong> dataGroupByMonth = allocateService.getDataGroupByMonth();
+        listMap.put("dataGroupByDay", dataGroupByDay);
+        listMap.put("dataGroupByYear", dataGroupByYear);
+        listMap.put("dataGroupByMonth", dataGroupByMonth);
+
+        return listMap;
     }
 
 }

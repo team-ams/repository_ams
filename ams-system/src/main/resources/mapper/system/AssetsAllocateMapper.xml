@@ -93,6 +93,16 @@
         <result property="parentName" column="parent_name"/>
     </resultMap>
 
+    <resultMap id="LingYongMap" type="com.ams.system.domain.LingYong">
+        <id property="allocateId" column="allocate_id"/>
+        <result property="dayTotal" column="dayCount"/>
+        <result property="yearTotal" column="yearCount"/>
+        <result property="monthTotal" column="monthCount"/>
+        <result property="groupByDay" column="days"/>
+        <result property="groupByYear" column="years"/>
+        <result property="groupByMonth" column="months"/>
+    </resultMap>
+
 
     <sql id="selectAssetsAllocateVo">
         select a.allocate_id,
@@ -254,4 +264,14 @@
     <delete id="deleteAllocateByOrderNum" parameterType="String">
         delete from assets_allocate where allocate_orderNum = #{orderNum}
     </delete>
+
+    <select id="getDataGroupByDay" resultMap="LingYongMap">
+        select allocate_id, DATE_FORMAT(create_time,'%Y%m%d')days,count(allocate_id)dayCount from assets_allocate group by days;
+    </select>
+    <select id="getDataGroupByYear" resultMap="LingYongMap">
+        select allocate_id, DATE_FORMAT(create_time,'%Y')years,count(allocate_id)yearCount from assets_allocate group by years;
+    </select>
+    <select id="getDataGroupByMonth" resultMap="LingYongMap">
+        select allocate_id, DATE_FORMAT(create_time,'%Y%m')months,count(allocate_id)monthCount from assets_allocate group by months;
+    </select>
 </mapper> 
