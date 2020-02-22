@@ -1,6 +1,7 @@
 package com.ams.system.service.impl;
 
 import com.ams.system.domain.AssetsBorrow;
+import com.ams.system.domain.JieYong;
 import com.ams.system.mapper.AssetsBorrowMapper;
 import com.ams.system.service.IAssetsBorrowService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,5 +78,20 @@ public class AssetsBorrowServiceImpl implements IAssetsBorrowService {
     @Override
     public int deleteBorrowByOrderNum(String orderNum) {
         return borrowMapper.deleteBorrowByOrderNum(orderNum);
+    }
+
+    @Override
+    public List<JieYong> getDataGroupByDay() {
+        return borrowMapper.getDataGroupByDay();
+    }
+
+    @Override
+    public List<JieYong> getDataGroupByYear() {
+        return borrowMapper.getDataGroupByYear();
+    }
+
+    @Override
+    public List<JieYong> getDataGroupByMonth() {
+        return borrowMapper.getDataGroupByMonth();
     }
 }

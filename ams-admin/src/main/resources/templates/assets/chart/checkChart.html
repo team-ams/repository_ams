@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('资产Charts')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="user-form">
+                <div class="select-list">
+                    <ul>
+                        <li class="select-time">
+                            <label>盘点时间： </label>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                                   name="params[beginTime]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                   name="params[endTime]"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="chartSearch()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-sm-12 select-table table-striped">
+            <div class="ibox-content">
+                <div class="echarts" style="height: 450px" id="echarts-bar-chart"></div>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: echarts-js"/>
+<script type="text/javascript">
+    var prefix = ctx + "assets/chart";
+    var barChart = echarts.init(document.getElementById("echarts-bar-chart"));
+    var query_params = {};
+
+    getData(query_params);
+
+
+    function chartSearch() {
+        query_params = $.common.formToJSON("user-form");
+        getData(query_params);
+    }
+
+    function getData(params) {
+        $.ajax({
+            url: prefix + "/panDian",
+            type: 'post',
+            data: params,
+            dataType: "JSON",
+            success: function (data) {
+                var list = data;
+                //订单号
+                var checkNumber = [];
+                //应盘数量
+                var targetNum = [];
+                //盘盈
+                var checkProfit = [];
+                //盘亏
+                var checkLoss = [];
+
+                for (var i = 0; i < list.length; i++) {
+                    checkNumber.push(list[i].checkNumber);
+                    targetNum.push(list[i].targetNum);
+                    checkProfit.push(list[i].checkProfit);
+                    checkLoss.push(list[i].checkLoss);
+
+                }
+
+                var option = drawBar(checkNumber, targetNum, checkProfit, checkLoss);
+                if (option && typeof option === "object") {
+                    barChart.setOption(option);
+                    window.onresize = barChart.resize;
+
+                }
+            }
+        })
+
+    }
+
+    function drawBar(checkNumber, targetNum, checkProfit, checkLoss) {
+
+        var baroption = {
+            title: {
+                text: '盘点报表'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            //显示工具栏
+            toolbox: {
+                show: true,
+                showTitle: true,
+                top: 'auto',
+                feature: {
+                    dataView: {//数据视图
+                        show: true
+                    },
+                    dataZoom: {
+                        show: true
+                    },
+                    restore: {
+                        show: true
+                    },
+                    magicType: {
+                        type: ['line', 'bar']
+                    },
+                    saveAsImage: {
+                        show: true
+                    }
+
+                }
+            },
+            legend: {
+                data: ['应盘','盘盈','盘亏']
+            },
+            grid: {
+                x: 48,
+                x2: 48
+            },
+            calculable: true,
+            xAxis: [
+                {
+                    type: 'category',
+                    data: checkNumber,
+                    axisLabel: {
+                        interval: 0,
+                        rotate: 20
+                    },
+                }
+
+            ],
+
+            yAxis: [
+                {
+                    type: 'value',
+                    axisLabel: {
+                        show: true,
+                        interval: 0
+                    },
+                }
+            ],
+            series: [
+                {
+                    name: '应盘数量',
+                    type: 'bar',
+                    data: targetNum
+                },
+                {
+                    name: '盘盈',
+                    type: 'bar',
+                    data: checkProfit
+                }
+                ,
+                {
+                    name: '盘亏',
+                    type: 'bar',
+                    data: checkLoss
+                }
+            ]
+        };
+        return baroption;
+
+    }
+
+</script>
+</body>

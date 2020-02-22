@@ -90,6 +90,12 @@
         <result property="parentName" column="parent_name"/>
     </resultMap>
 
+    <resultMap id="weiXiuMap" type="com.ams.system.domain.WeiXiu">
+        <id property="repairDate" column="repair_date"/>
+        <result property="totalMoney" column="total"/>
+        <result property="repairCount" column="repair_count"/>
+    </resultMap>
+
     <sql id="selectAssetsRepairVo">
         select a.repair_id,
         a.repair_orderNum,
@@ -258,4 +264,9 @@
     <delete id="deleteRepairByOrderNum" parameterType="String">
         delete from assets_repair where repair_orderNum = #{orderNum}
     </delete>
+
+    <select id="getCountAndFeesGroupByDate" resultMap="weiXiuMap">
+        SELECT DATE_FORMAT(repair_time,'%Y-%m-%d') as repair_date, sum(repair_fees) as total, count(repair_id) AS repair_count FROM assets_repair
+        GROUP BY repair_date
+    </select>
 </mapper> 

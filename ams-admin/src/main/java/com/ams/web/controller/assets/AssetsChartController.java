@@ -10,12 +10,8 @@ import com.ams.common.enums.BusinessType;
 import com.ams.common.json.JSONObject;
 import com.ams.common.utils.poi.ExcelUtil;
 import com.ams.framework.util.ShiroUtils;
-import com.ams.system.domain.Assets;
-import com.ams.system.domain.LingYong;
-import com.ams.system.domain.RuKu;
-import com.ams.system.service.IAssetsAccountingService;
-import com.ams.system.service.IAssetsAllocateService;
-import com.ams.system.service.IAssetsSourceService;
+import com.ams.system.domain.*;
+import com.ams.system.service.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -44,6 +40,14 @@ public class AssetsChartController extends BaseController {
     private IAssetsAccountingService accountingService;
     @Autowired
     private IAssetsAllocateService allocateService;
+    @Autowired
+    private IAssetsBorrowService borrowService;
+    @Autowired
+    private IAssetsReturnService returnService;
+    @Autowired
+    private IAssetsRepairService repairService;
+    @Autowired
+    private IAssetsCheckTaskService checkTaskService;
 
 
     @GetMapping("/ruKu")
@@ -54,7 +58,6 @@ public class AssetsChartController extends BaseController {
     @PostMapping("/ruKu")
     @ResponseBody
     public List<RuKu> ruKu(HttpServletRequest request) {
-        String params = request.getParameter("params");
         String startTime = request.getParameter("params[beginTime]");
         String endTime = request.getParameter("params[endTime]");
 
@@ -84,6 +87,85 @@ public class AssetsChartController extends BaseController {
         listMap.put("dataGroupByMonth", dataGroupByMonth);
 
         return listMap;
+    }
+
+    @GetMapping("/jieHuan")
+    public String jieHuanIndex() {
+        return prefix + "/borrowReturnChart";
+    }
+
+    @PostMapping("/jieYong")
+    @ResponseBody
+    public Map<String, List<JieYong>> jieYong() {
+
+        Map<String, List<JieYong>> listMap = new HashMap<>();
+
+        List<JieYong> dataGroupByDay = borrowService.getDataGroupByDay();
+        List<JieYong> dataGroupByYear = borrowService.getDataGroupByYear();
+        List<JieYong> dataGroupByMonth = borrowService.getDataGroupByMonth();
+        listMap.put("dataGroupByDay", dataGroupByDay);
+        listMap.put("dataGroupByYear", dataGroupByYear);
+        listMap.put("dataGroupByMonth", dataGroupByMonth);
+
+        return listMap;
+    }
+    @PostMapping("/guiHuan")
+    @ResponseBody
+    public Map<String, List<GuiHuan>> guiHuan() {
+
+        Map<String, List<GuiHuan>> listMap = new HashMap<>();
+
+        List<GuiHuan> dataGroupByDay = returnService.getDataGroupByDay();
+        List<GuiHuan> dataGroupByYear = returnService.getDataGroupByYear();
+        List<GuiHuan> dataGroupByMonth = returnService.getDataGroupByMonth();
+        listMap.put("dataGroupByDay", dataGroupByDay);
+        listMap.put("dataGroupByYear", dataGroupByYear);
+        listMap.put("dataGroupByMonth", dataGroupByMonth);
+
+        return listMap;
+    }
+
+    @GetMapping("/weiXiu")
+    public String weiXiuIndex() {
+        return prefix + "/repairChart";
+    }
+
+    @PostMapping("/weiXiu")
+    @ResponseBody
+    public List<WeiXiu> weiXiu() {
+
+        List<WeiXiu> weiXiuList = repairService.getCountAndFeesGroupByDate();
+
+
+        return weiXiuList;
+    }
+
+    @GetMapping("/panDian")
+    public String panDianIndex() {
+        return prefix + "/checkChart";
+    }
+
+    @PostMapping("/panDian")
+    @ResponseBody
+    public List<AssetsCheckTask> panDian(HttpServletRequest request) {
+        String startTime = request.getParameter("params[beginTime]");
+        String endTime = request.getParameter("params[endTime]");
+        List<AssetsCheckTask> assetsCheckTasks = checkTaskService.staticCheckTaskByDate(startTime, endTime);
+        return assetsCheckTasks;
+    }
+
+    @GetMapping("/ziChan")
+    public String ziChanIndex() {
+        return prefix + "/assetsChart";
+    }
+
+    @PostMapping("/ziChan")
+    @ResponseBody
+    public List<ZiChan> ziChan() {
+
+        List<ZiChan> useStatusList = accountingService.getCountByUseStatus();
+
+        return useStatusList;
     }
 
 }

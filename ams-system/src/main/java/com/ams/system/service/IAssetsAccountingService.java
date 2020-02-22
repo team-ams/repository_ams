@@ -3,6 +3,7 @@ package com.ams.system.service;
 import com.ams.system.domain.Assets;
 import com.ams.system.domain.AssetsAllocate;
 import com.ams.system.domain.RuKu;
+import com.ams.system.domain.ZiChan;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -125,4 +126,11 @@ public interface IAssetsAccountingService {
      * @return
      */
     List<RuKu> getCountGroupByName(String startTime,String endTime);
+
+    /**
+     * 统计库存资产的使用状态
+     *
+     * @return
+     */
+    List<ZiChan> getCountByUseStatus();
 }

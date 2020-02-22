@@ -1,6 +1,7 @@
 package com.ams.system.service;
 
 import com.ams.system.domain.AssetsBorrow;
+import com.ams.system.domain.JieYong;
 
 import java.util.List;
 
@@ -100,4 +101,25 @@ public interface IAssetsBorrowService {
      * @return
      */
     int deleteBorrowByOrderNum(String orderNum);
+
+    /**
+     * 根据天统计
+     *
+     * @return
+     */
+    List<JieYong> getDataGroupByDay();
+
+    /**
+     * 根据周统计
+     *
+     * @return
+     */
+    List<JieYong> getDataGroupByYear();
+
+    /**
+     * 根据月统计
+     *
+     * @return
+     */
+    List<JieYong> getDataGroupByMonth();
 }

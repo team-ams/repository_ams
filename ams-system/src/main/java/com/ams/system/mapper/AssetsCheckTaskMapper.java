@@ -1,6 +1,7 @@
 package com.ams.system.mapper;
 
 import com.ams.system.domain.AssetsCheckTask;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -12,6 +13,15 @@ public interface AssetsCheckTaskMapper {
      * @return
      */
     List<AssetsCheckTask> getCheckTaskAll();
+
+    /**
+     * 统计盘点详情
+     *
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    List<AssetsCheckTask> staticCheckTaskByDate(@Param("startTime") String startTime, @Param("endTime") String endTime);
 
     /**
      * 获取已盘点的待审核列表

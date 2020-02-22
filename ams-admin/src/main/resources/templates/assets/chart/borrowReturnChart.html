@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('资产Charts')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+
+        <div class="tabs-container">
+            <ul class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true"> 借用统计图表</a>
+                </li>
+                <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false">归还统计图表</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div id="tab-1" class="tab-pane active">
+                    <div class="panel-body">
+                        <div class="ibox-content">
+                            <div class="echarts" style="height: 450px" id="borrow-bar-chart"></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="tab-2" class="tab-pane">
+                    <div class="panel-body">
+                        <div class="ibox-content">
+                            <div class="echarts" style="height: 450px; width: 1204px;" id="return-bar-chart"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: echarts-js"/>
+<script type="text/javascript">
+    var prefix = ctx + "assets/chart";
+    var borrowChart = echarts.init(document.getElementById("borrow-bar-chart"));
+    var returnChart = echarts.init(document.getElementById("return-bar-chart"));
+    var query_params = {};
+    var groupByDay = [];
+    var groupByYear = [];
+    var groupByMonth = [];
+    var groupByDay2 = [];
+    var groupByYear2 = [];
+    var groupByMonth2 = [];
+
+    getBorrowData(query_params);
+
+
+    function getBorrowData(params) {
+        $.ajax({
+            url: prefix + "/jieYong",
+            type: 'post',
+            data: params,
+            dataType: "JSON",
+            success: function (data) {
+                var listMap = data;
+
+                var dayList = listMap["dataGroupByDay"];
+                var yearList = listMap["dataGroupByYear"];
+                var monthList = listMap["dataGroupByMonth"];
+
+
+                var dayTotal = [];
+                var yearTotal = [];
+                var monthTotal = [];
+
+
+                for (var i = 0; i < dayList.length; i++) {
+                    groupByDay.push(dayList[i].groupByDay);
+                    dayTotal.push(dayList[i].dayTotal);
+                }
+                for (var i = 0; i < yearList.length; i++) {
+                    groupByYear.push(yearList[i].groupByYear);
+                    yearTotal.push(yearList[i].yearTotal);
+                }
+                for (var i = 0; i < monthList.length; i++) {
+                    groupByMonth.push(monthList[i].groupByMonth);
+                    monthTotal.push(monthList[i].monthTotal);
+                }
+
+                var option = drawBar1(groupByDay, dayTotal, yearTotal, monthTotal);
+                if (option && typeof option === "object") {
+                    borrowChart.setOption(option,true);
+                    window.onresize = borrowChart.resize;
+
+                }
+            }
+        })
+
+    }
+
+    function getReturnData(params) {
+        $.ajax({
+            url: prefix + "/guiHuan",
+            type: 'post',
+            data: params,
+            dataType: "JSON",
+            success: function (data) {
+                var listMap = data;
+
+                var dayList = listMap["dataGroupByDay"];
+                var yearList = listMap["dataGroupByYear"];
+                var monthList = listMap["dataGroupByMonth"];
+
+
+                var dayTotal = [];
+                var yearTotal = [];
+                var monthTotal = [];
+
+
+                for (var i = 0; i < dayList.length; i++) {
+                    groupByDay2.push(dayList[i].groupByDay);
+                    dayTotal.push(dayList[i].dayTotal);
+                }
+                for (var i = 0; i < yearList.length; i++) {
+                    groupByYear2.push(yearList[i].groupByYear);
+                    yearTotal.push(yearList[i].yearTotal);
+                }
+                for (var i = 0; i < monthList.length; i++) {
+                    groupByMonth2.push(monthList[i].groupByMonth);
+                    monthTotal.push(monthList[i].monthTotal);
+                }
+
+                var option = drawBar2(groupByDay2, dayTotal, yearTotal, monthTotal);
+                if (option && typeof option === "object") {
+                    returnChart.setOption(option,true);
+                    window.onresize = returnChart.resize;
+                }
+            }
+        })
+
+    }
+
+    function drawBar1(groupByDay, dayTotal, yearTotal, monthTotal) {
+
+        var baroption = {
+            title: {
+                text: '借用报表'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            //显示工具栏
+            toolbox: {
+                show: true,
+                showTitle: true,
+                top: 'auto',
+                feature: {
+                    dataView: {//数据视图
+                        show: true
+                    },
+                    dataZoom: {
+                        show: true
+                    },
+                    restore: {
+                        show: true
+                    },
+                    magicType: {
+                        type: ['line', 'bar']
+                    },
+                    saveAsImage: {
+                        show: true
+                    }
+
+                }
+            },
+            legend: {
+                data: ['日借用量', '月借用量', '年借用量'],
+                selectedMode: 'single'
+            },
+            grid: {
+                x: 48,
+                x2: 48
+            },
+            calculable: true,
+            xAxis: [
+
+                {
+                    name: '日借用量',
+                    type: 'category',
+                    data: groupByDay,
+                    axisLabel: {
+                        interval: 0,
+                        rotate: 20
+                    },
+                }
+
+            ],
+
+            yAxis: [
+                {
+                    type: 'value',
+                    axisLabel: {
+                        show: true,
+                        interval: 0
+                    },
+                }
+            ],
+            series: [
+                {
+                    name: '日借用量',
+                    type: 'bar',
+                    data: dayTotal,
+                    markPoint: {
+                        data: [
+                            {type: 'max', name: '最大值'},
+                            {type: 'min', name: '最小值'}
+                        ]
+                    },
+                    markLine: {
+                        data: [
+                            {type: 'average', name: '平均值'}
+                        ]
+                    }
+                },
+                {
+                    name: '月借用量',
+                    type: 'bar',
+                    data: monthTotal,
+                    markPoint: {
+                        data: [
+                            {type: 'max', name: '最大值'},
+                            {type: 'min', name: '最小值'}
+                        ]
+                    },
+                    markLine: {
+                        data: [
+                            {type: 'average', name: '平均值'}
+                        ]
+                    }
+                },
+                {
+                    name: '年借用量',
+                    type: 'bar',
+                    data: yearTotal,
+                    markPoint: {
+                        data: [
+                            {type: 'max', name: '最大值'},
+                            {type: 'min', name: '最小值'}
+                        ]
+                    },
+                    markLine: {
+                        data: [
+                            {type: 'average', name: '平均值'}
+                        ]
+                    }
+                }
+            ]
+        };
+        return baroption;
+
+    }
+
+    function drawBar2(groupByDay, dayTotal, yearTotal, monthTotal) {
+
+        var baroption = {
+            title: {
+                text: '归还报表'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            //显示工具栏
+            toolbox: {
+                show: true,
+                showTitle: true,
+                top: 'auto',
+                feature: {
+                    dataView: {//数据视图
+                        show: true
+                    },
+                    dataZoom: {
+                        show: true
+                    },
+                    restore: {
+                        show: true
+                    },
+                    magicType: {
+                        type: ['line', 'bar']
+                    },
+                    saveAsImage: {
+                        show: true
+                    }
+
+                }
+            },
+            legend: {
+                data: ['日归还量', '月归还量', '年归还量'],
+                selectedMode: 'single'
+            },
+            grid: {
+                x: 48,
+                x2: 48
+            },
+            calculable: true,
+            xAxis: [
+
+                {
+                    name: '日归还量',
+                    type: 'category',
+                    data: groupByDay,
+                    axisLabel: {
+                        interval: 0,
+                        rotate: 20
+                    },
+                }
+
+            ],
+
+            yAxis: [
+                {
+                    type: 'value',
+                    axisLabel: {
+                        show: true,
+                        interval: 0
+                    },
+                }
+            ],
+            series: [
+                {
+                    name: '日归还量',
+                    type: 'bar',
+                    data: dayTotal,
+                    markPoint: {
+                        data: [
+                            {type: 'max', name: '最大值'},
+                            {type: 'min', name: '最小值'}
+                        ]
+                    },
+                    markLine: {
+                        data: [
+                            {type: 'average', name: '平均值'}
+                        ]
+                    }
+                },
+                {
+                    name: '月归还量',
+                    type: 'bar',
+                    data: monthTotal,
+                    markPoint: {
+                        data: [
+                            {type: 'max', name: '最大值'},
+                            {type: 'min', name: '最小值'}
+                        ]
+                    },
+                    markLine: {
+                        data: [
+                            {type: 'average', name: '平均值'}
+                        ]
+                    }
+                },
+                {
+                    name: '年归还量',
+                    type: 'bar',
+                    data: yearTotal,
+                    markPoint: {
+                        data: [
+                            {type: 'max', name: '最大值'},
+                            {type: 'min', name: '最小值'}
+                        ]
+                    },
+                    markLine: {
+                        data: [
+                            {type: 'average', name: '平均值'}
+                        ]
+                    }
+                }
+            ]
+        };
+        return baroption;
+
+    }
+
+    borrowChart.on('legendselectchanged', function (obj) {
+        var name = obj.name;
+        var option = borrowChart.getOption();
+        if (name == '日借用量') {
+            option.xAxis[0].data = groupByDay;
+            option.xAxis[0].name = "日借用量";
+        }
+        if (name == '年借用量') {
+            option.xAxis[0].data = groupByYear;
+            option.xAxis[0].name = "年借用量";
+
+        }
+        if (name == '月借用量') {
+            option.xAxis[0].data = groupByMonth;
+            option.xAxis[0].name = "月借用量";
+
+        }
+
+        borrowChart.setOption(option, true);
+    })
+
+    returnChart.on('legendselectchanged', function (obj) {
+        var name = obj.name;
+        var option = returnChart.getOption();
+        if (name == '日归还量') {
+            option.xAxis[0].data = groupByDay2;
+            option.xAxis[0].name = "日归还量";
+        }
+        if (name == '年归还量') {
+            option.xAxis[0].data = groupByYear2;
+            option.xAxis[0].name = "年归还量";
+
+        }
+        if (name == '月归还量') {
+            option.xAxis[0].data = groupByMonth2;
+            option.xAxis[0].name = "月归还量";
+
+        }
+
+        returnChart.setOption(option, true);
+    })
+
+
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (obj) {
+        switch ((obj.target.toString().split("#")[1])) {
+            case 'tab-1':
+                groupByDay = [];
+                groupByMonth = [];
+                groupByYear = [];
+                getBorrowData(query_params);
+                break;
+            case 'tab-2':
+                groupByDay2 = [];
+                groupByMonth2 = [];
+                groupByYear2 = [];
+                getReturnData(query_params);
+                break;
+            default:
+                break;
+        }
+
+    });
+
+
+</script>
+</body>

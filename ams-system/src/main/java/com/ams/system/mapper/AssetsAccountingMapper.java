@@ -2,6 +2,7 @@ package com.ams.system.mapper;
 
 import com.ams.system.domain.Assets;
 import com.ams.system.domain.RuKu;
+import com.ams.system.domain.ZiChan;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -117,5 +118,12 @@ public interface AssetsAccountingMapper {
      * @return
      */
     List<RuKu> getCountGroupByName(@Param("startTime") String startTime, @Param("endTime") String endTime);
+
+    /**
+     * 统计库存资产的使用状态
+     *
+     * @return
+     */
+    List<ZiChan> getCountByUseStatus();
 
 }

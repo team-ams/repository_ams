@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('资产Charts')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+
+        <div class="col-sm-12 select-table table-striped">
+            <div class="ibox-content">
+                <div class="echarts" style="height: 450px" id="echarts-pie-chart"></div>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: echarts-js"/>
+<script type="text/javascript">
+    var prefix = ctx + "assets/chart";
+    var pieChart = echarts.init(document.getElementById("echarts-pie-chart"));
+    var query_params = {};
+
+    getData(query_params);
+
+
+    function getData(params) {
+        $.ajax({
+            url: prefix + "/ziChan",
+            type: 'post',
+            data: params,
+            dataType: "JSON",
+            success: function (data) {
+                var list = data;
+                var normalCount = 0;
+                var examineCount = 0;
+                var usingCount = 0;
+                var repairingCount = 0;
+                var scrappedCount = 0;
+                var disableCount = 0;
+
+                for (var i = 0; i < list.length; i++) {
+                    switch (list[i].useStatus) {
+                        case "0":
+                            normalCount = list[i].totalNum;
+                            break;
+                        case "1":
+                            examineCount = list[i].totalNum;
+                            break;
+                        case "2":
+                            usingCount = list[i].totalNum;
+                            break;
+                        case "3":
+                            repairingCount = list[i].totalNum;
+                            break;
+                        case "4":
+                            scrappedCount = list[i].totalNum;
+                            break;
+                        case "5":
+                            disableCount = list[i].totalNum;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                var option = drawPie(normalCount, examineCount, usingCount, repairingCount, scrappedCount, disableCount);
+                if (option && typeof option === "object") {
+                    pieChart.setOption(option);
+                    $(window).resize(pieChart.resize);
+
+                }
+            }
+        })
+
+    }
+
+    function drawPie(normalCount, examineCount, usingCount, repairingCount, scrappedCount, disableCount) {
+
+        var pieoption = {
+            title: {
+                text: '库存资产状态统计',
+                x: 'center'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            legend: {
+                orient: 'vertical',
+                x: 'left',
+                data: ['闲置', '审核中', '在用', '维修中', '待报废','停用']
+            },
+            calculable: true,
+            series: [
+                {
+                    name: '资产状态',
+                    type: 'pie',
+                    radius: '55%',
+                    center: ['50%', '60%'],
+                    data: [
+                        {value: normalCount, name: '闲置'},
+                        {value: examineCount, name: '审核中'},
+                        {value: usingCount, name: '在用'},
+                        {value: repairingCount, name: '维修中'},
+                        {value: scrappedCount, name: '待报废'},
+                        {value: disableCount, name: '停用'}
+                    ]
+                }
+            ]
+        };
+
+        return pieoption;
+
+    }
+
+</script>
+</body>

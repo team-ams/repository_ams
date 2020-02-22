@@ -2,6 +2,7 @@ package com.ams.system.mapper;
 
 import com.ams.system.domain.AssetsBorrow;
 import com.ams.system.domain.AssetsReturn;
+import com.ams.system.domain.GuiHuan;
 
 import java.util.List;
 
@@ -84,4 +85,25 @@ public interface AssetsReturnMapper {
      * @return
      */
     int deleteReturnByOrderNum(String orderNum);
+
+    /**
+     * 根据天统计
+     *
+     * @return
+     */
+    List<GuiHuan> getDataGroupByDay();
+
+    /**
+     * 根据周统计
+     *
+     * @return
+     */
+    List<GuiHuan> getDataGroupByYear();
+
+    /**
+     * 根据月统计
+     *
+     * @return
+     */
+    List<GuiHuan> getDataGroupByMonth();
 }

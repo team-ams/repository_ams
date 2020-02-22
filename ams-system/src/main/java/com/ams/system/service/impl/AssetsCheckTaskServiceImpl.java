@@ -28,6 +28,11 @@ public class AssetsCheckTaskServiceImpl implements IAssetsCheckTaskService {
     }
 
     @Override
+    public List<AssetsCheckTask> staticCheckTaskByDate(String startTime, String endTime) {
+        return checkTaskMapper.staticCheckTaskByDate(startTime,endTime);
+    }
+
+    @Override
     public List<AssetsCheckTask> getCheckedAll() {
         return checkTaskMapper.getCheckedAll();
     }

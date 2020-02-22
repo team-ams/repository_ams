@@ -179,6 +179,17 @@
         <include refid="selectAssetsCheckTaskVo"/>
     </select>
 
+    <select id="staticCheckTaskByDate" resultMap="AssetsCheckTaskResult">
+        <include refid="selectAssetsCheckTaskVo"/>
+        where a.is_check = 1
+            <if test="startTime != null and startTime != ''">
+                AND create_time &gt;= #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND create_time &lt;= #{endTime}
+            </if>
+    </select>
+
     <select id="getCheckedAll" resultMap="AssetsCheckTaskResult">
         <include refid="selectAssetsCheckTaskVo"/>
         where a.is_check = 1 and a.check_status = 1;

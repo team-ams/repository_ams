@@ -41,6 +41,11 @@
         <result property="assetsCount" column="assetsCount"/>
     </resultMap>
 
+    <resultMap id="ziChanMap" type="com.ams.system.domain.ZiChan">
+        <id property="useStatus" column="use_status"/>
+        <result property="totalNum" column="total"/>
+    </resultMap>
+
 
     <sql id="selectAssetsVo">
         select a.assets_id,
@@ -72,7 +77,6 @@
                a.update_time
         from assets_accounting a
     </sql>
-
 
 
     <select id="getAssetsByAssetsNumber" parameterType="String" resultMap="AssetsResult">
@@ -148,30 +152,41 @@
         <foreach collection="list" item="item" separator=";">
             update assets_accounting
             <set>
-                <if test="item.assetsNumber != null and item.assetsNumber != ''">assets_number=#{item.assetsNumber},</if>
+                <if test="item.assetsNumber != null and item.assetsNumber != ''">assets_number=#{item.assetsNumber},
+                </if>
                 <if test="item.assetsName != null and item.assetsName!= ''">assets_name=#{item.assetsName},</if>
-                <if test="item.assetsNature != null and item.assetsNature != ''">assets_nature=#{item.assetsNature},</if>
+                <if test="item.assetsNature != null and item.assetsNature != ''">assets_nature=#{item.assetsNature},
+                </if>
                 <if test="item.assetsType != null and item.assetsType != ''">assets_type=#{item.assetsType},</if>
                 <if test="item.assetsAmount != null and item.assetsAmount != 0">assets_amount=#{item.assetsAmount},</if>
-                <if test="item.measuringUnit != null and item.measuringUnit != ''">measuring_unit=#{item.measuringUnit},</if>
+                <if test="item.measuringUnit != null and item.measuringUnit != ''">
+                    measuring_unit=#{item.measuringUnit},
+                </if>
                 <if test="item.assetsPrice != null and item.assetsPrice != ''">assets_price=#{item.assetsPrice},</if>
                 <if test="item.storageUnit != null and item.storageUnit != ''">storage_unit=#{item.storageUnit},</if>
-                <if test="item.storageDepartment != null and item.storageDepartment != ''">storage_department=#{item.storageDepartment},
+                <if test="item.storageDepartment != null and item.storageDepartment != ''">
+                    storage_department=#{item.storageDepartment},
                 </if>
                 <if test="item.custodian != null and item.custodian != ''">custodian=#{item.custodian},</if>
                 <if test="item.user != null">user=#{item.user},</if>
                 <if test="item.storageAddr != null and item.storageAddr != ''">storage_addr=#{item.storageAddr},</if>
                 <if test="item.useStatus != null and item.useStatus != ''">use_status=#{item.useStatus},</if>
-                <if test="item.assetsSource != null and item.assetsSource != ''">assets_source=#{item.assetsSource},</if>
+                <if test="item.assetsSource != null and item.assetsSource != ''">assets_source=#{item.assetsSource},
+                </if>
                 <if test="item.usefulLife != null and item.usefulLife != ''">useful_life=#{item.usefulLife},</if>
                 <if test="item.residualRate != null and item.residualRate != 0">residual_rate=#{item.residualRate},</if>
                 <if test="item.checkStatus != null and item.checkStatus != ''">check_status=#{item.checkStatus},</if>
-                <if test="item.assetsFormat != null and item.assetsFormat != ''">assets_format=#{item.assetsFormat},</if>
+                <if test="item.assetsFormat != null and item.assetsFormat != ''">assets_format=#{item.assetsFormat},
+                </if>
                 <if test="item.assetsModel != null and item.assetsModel != ''">assets_model=#{item.assetsModel},</if>
                 <if test="item.assetsBrand != null and item.assetsBrand != ''">assets_brand=#{item.assetsBrand},</if>
-                <if test="item.purchaseDate != null and item.purchaseDate != ''">purchase_date=#{item.purchaseDate},</if>
-                <if test="item.manufactureDate != null and item.manufactureDate != ''">manufacture_date=#{item.manufactureDate},</if>
-                <if test="item.warrantyDate != null and item.warrantyDate != ''">warranty_date=#{item.warrantyDate},</if>
+                <if test="item.purchaseDate != null and item.purchaseDate != ''">purchase_date=#{item.purchaseDate},
+                </if>
+                <if test="item.manufactureDate != null and item.manufactureDate != ''">
+                    manufacture_date=#{item.manufactureDate},
+                </if>
+                <if test="item.warrantyDate != null and item.warrantyDate != ''">warranty_date=#{item.warrantyDate},
+                </if>
                 <if test="item.delFlag != null and item.delFlag != ''">del_flag=#{item.delFlag},</if>
                 <if test="item.mark != null and item.mark != ''">mark=#{item.mark},</if>
                 <if test="item.updateBy != null and item.updateBy != ''">update_by=#{updateBy}</if>
@@ -276,6 +291,10 @@
             AND create_time &lt;= #{endTime}
         </if>
         GROUP BY assets_name
+    </select>
+
+    <select id="getCountByUseStatus" resultMap="ziChanMap">
+        SELECT use_status, count(use_status) as total FROM assets_accounting GROUP BY use_status
     </select>
 
 </mapper>

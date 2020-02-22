@@ -2,6 +2,7 @@ package com.ams.system.service.impl;
 
 import com.ams.system.domain.AssetsBorrow;
 import com.ams.system.domain.AssetsReturn;
+import com.ams.system.domain.GuiHuan;
 import com.ams.system.mapper.AssetsBorrowMapper;
 import com.ams.system.mapper.AssetsReturnMapper;
 import com.ams.system.service.IAssetsBorrowService;
@@ -66,5 +67,20 @@ public class AssetsReturnServiceImpl implements IAssetsReturnService {
     @Override
     public int deleteReturnByOrderNum(String orderNum) {
         return returnMapper.deleteReturnByOrderNum(orderNum);
+    }
+
+    @Override
+    public List<GuiHuan> getDataGroupByDay() {
+        return returnMapper.getDataGroupByDay();
+    }
+
+    @Override
+    public List<GuiHuan> getDataGroupByYear() {
+        return returnMapper.getDataGroupByYear();
+    }
+
+    @Override
+    public List<GuiHuan> getDataGroupByMonth() {
+        return returnMapper.getDataGroupByMonth();
     }
 }

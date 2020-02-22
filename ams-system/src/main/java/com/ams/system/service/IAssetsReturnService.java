@@ -2,6 +2,8 @@ package com.ams.system.service;
 
 import com.ams.system.domain.AssetsBorrow;
 import com.ams.system.domain.AssetsReturn;
+import com.ams.system.domain.GuiHuan;
+import com.ams.system.domain.JieYong;
 
 import java.util.List;
 
@@ -85,4 +87,25 @@ public interface IAssetsReturnService {
      * @return
      */
     int deleteReturnByOrderNum(String orderNum);
+
+    /**
+     * 根据天统计
+     *
+     * @return
+     */
+    List<GuiHuan> getDataGroupByDay();
+
+    /**
+     * 根据周统计
+     *
+     * @return
+     */
+    List<GuiHuan> getDataGroupByYear();
+
+    /**
+     * 根据月统计
+     *
+     * @return
+     */
+    List<GuiHuan> getDataGroupByMonth();
 }

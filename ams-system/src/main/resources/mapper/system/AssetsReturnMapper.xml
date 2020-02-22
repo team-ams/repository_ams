@@ -87,6 +87,16 @@
         <result property="parentName" column="parent_name"/>
     </resultMap>
 
+    <resultMap id="GuiHuanMap" type="com.ams.system.domain.GuiHuan">
+        <id property="returnId" column="return_id"/>
+        <result property="dayTotal" column="dayCount"/>
+        <result property="yearTotal" column="yearCount"/>
+        <result property="monthTotal" column="monthCount"/>
+        <result property="groupByDay" column="days"/>
+        <result property="groupByYear" column="years"/>
+        <result property="groupByMonth" column="months"/>
+    </resultMap>
+    
     <sql id="selectAssetsReturnVo">
         select a.return_id,
                a.return_orderNum,
@@ -246,4 +256,14 @@
     <delete id="deleteReturnByOrderNum" parameterType="String">
         delete from assets_return where return_orderNum = #{orderNum}
     </delete>
+
+    <select id="getDataGroupByDay" resultMap="GuiHuanMap">
+        select return_id, DATE_FORMAT(return_time,'%Y%m%d')days,count(return_id)dayCount from assets_return group by days;
+    </select>
+    <select id="getDataGroupByYear" resultMap="GuiHuanMap">
+        select return_id, DATE_FORMAT(return_time,'%Y')years,count(return_id)yearCount from assets_return group by years;
+    </select>
+    <select id="getDataGroupByMonth" resultMap="GuiHuanMap">
+        select return_id, DATE_FORMAT(return_time,'%Y%m')months,count(return_id)monthCount from assets_return group by months;
+    </select>
 </mapper> 

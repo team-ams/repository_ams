@@ -89,6 +89,16 @@
         <result property="parentName" column="parent_name"/>
     </resultMap>
 
+    <resultMap id="JieYongMap" type="com.ams.system.domain.JieYong">
+        <id property="borrowId" column="borrow_id"/>
+        <result property="dayTotal" column="dayCount"/>
+        <result property="yearTotal" column="yearCount"/>
+        <result property="monthTotal" column="monthCount"/>
+        <result property="groupByDay" column="days"/>
+        <result property="groupByYear" column="years"/>
+        <result property="groupByMonth" column="months"/>
+    </resultMap>
+
     <sql id="selectAssetsBorrowVo">
         select a.borrow_id,
                a.borrow_orderNum,
@@ -266,4 +276,14 @@
     <delete id="deleteBorrowByOrderNum" parameterType="String">
         delete from assets_borrow where borrow_orderNum = #{orderNum}
     </delete>
+
+    <select id="getDataGroupByDay" resultMap="JieYongMap">
+        select borrow_id, DATE_FORMAT(borrow_time,'%Y%m%d')days,count(borrow_id)dayCount from assets_borrow group by days;
+    </select>
+    <select id="getDataGroupByYear" resultMap="JieYongMap">
+        select borrow_id, DATE_FORMAT(borrow_time,'%Y')years,count(borrow_id)yearCount from assets_borrow group by years;
+    </select>
+    <select id="getDataGroupByMonth" resultMap="JieYongMap">
+        select borrow_id, DATE_FORMAT(borrow_time,'%Y%m')months,count(borrow_id)monthCount from assets_borrow group by months;
+    </select>
 </mapper> 

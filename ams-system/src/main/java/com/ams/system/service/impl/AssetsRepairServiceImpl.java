@@ -1,6 +1,7 @@
 package com.ams.system.service.impl;
 
 import com.ams.system.domain.AssetsRepair;
+import com.ams.system.domain.WeiXiu;
 import com.ams.system.mapper.AssetsRepairMapper;
 import com.ams.system.service.IAssetsRepairService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,5 +67,10 @@ public class AssetsRepairServiceImpl implements IAssetsRepairService {
     @Override
     public int deleteRepairByOrderNum(String orderNum) {
         return repairMapper.deleteRepairByOrderNum(orderNum);
+    }
+
+    @Override
+    public List<WeiXiu> getCountAndFeesGroupByDate() {
+        return repairMapper.getCountAndFeesGroupByDate();
     }
 }

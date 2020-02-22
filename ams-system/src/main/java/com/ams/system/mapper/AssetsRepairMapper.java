@@ -2,6 +2,9 @@ package com.ams.system.mapper;
 
 import com.ams.system.domain.AssetsMaintain;
 import com.ams.system.domain.AssetsRepair;
+import com.ams.system.domain.RuKu;
+import com.ams.system.domain.WeiXiu;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -39,7 +42,6 @@ public interface AssetsRepairMapper {
     int insertRepairList(List<AssetsRepair> repairList);
 
 
-
     /**
      * 更新资产维修信息
      *
@@ -66,6 +68,7 @@ public interface AssetsRepairMapper {
 
     /**
      * 根据单号查找
+     *
      * @param orderNum
      * @return
      */
@@ -85,4 +88,11 @@ public interface AssetsRepairMapper {
      * @return
      */
     int deleteRepairByOrderNum(String orderNum);
+
+    /**
+     * 按月份统计维修金额和维修数量
+     *
+     * @return
+     */
+    List<WeiXiu> getCountAndFeesGroupByDate();
 }

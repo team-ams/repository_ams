@@ -7,6 +7,7 @@ import com.ams.common.exception.BusinessException;
 import com.ams.common.utils.StringUtils;
 import com.ams.system.domain.Assets;
 import com.ams.system.domain.RuKu;
+import com.ams.system.domain.ZiChan;
 import com.ams.system.mapper.AssetsAccountingMapper;
 import com.ams.system.service.IAssetsAccountingService;
 import org.slf4j.Logger;
@@ -178,6 +179,11 @@ public class AssetsAccountingServiceImpl implements IAssetsAccountingService {
     @Override
     public List<RuKu> getCountGroupByName(String startTime,String endTime) {
         return assetsAccountingMapper.getCountGroupByName(startTime,endTime);
+    }
+
+    @Override
+    public List<ZiChan> getCountByUseStatus() {
+        return assetsAccountingMapper.getCountByUseStatus();
     }
 
 }

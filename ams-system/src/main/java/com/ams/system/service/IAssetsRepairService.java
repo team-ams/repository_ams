@@ -2,6 +2,7 @@ package com.ams.system.service;
 
 import com.ams.system.domain.AssetsMaintain;
 import com.ams.system.domain.AssetsRepair;
+import com.ams.system.domain.WeiXiu;
 
 import java.util.List;
 
@@ -83,4 +84,11 @@ public interface IAssetsRepairService {
      * @return
      */
     int deleteRepairByOrderNum(String orderNum);
+
+    /**
+     * 按月份统计维修金额和维修数量
+     *
+     * @return
+     */
+    List<WeiXiu> getCountAndFeesGroupByDate();
 }
