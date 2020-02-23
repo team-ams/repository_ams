@@ -19,7 +19,7 @@ public class Assets extends BaseEntity {
     private Long assetsId;
 
     /**资产编号*/
-    @Excel(name = "资产编号",cellType = Excel.ColumnType.NUMERIC)
+    @Excel(name = "资产编号",cellType = Excel.ColumnType.STRING)
     private String assetsNumber;
 
     /**资产名称*/
@@ -66,8 +66,8 @@ public class Assets extends BaseEntity {
     @Excel(name = "存放地点")
     private String storageAddr;
 
-    /**'资产状态(0：闲置 1：预约  2：在用 3：维修中 4；待报废 5：停用)'*/
-    @Excel(name = "使用情况",type = Excel.Type.EXPORT,readConverterExp = "0=闲置,1=预约,2=在用,3=维修中,4=待报废,5=停用")
+    /**'资产状态(0：闲置 1：审核中  2：在用 3：维修中 4；待报废 5：停用)'*/
+    @Excel(name = "使用情况",type = Excel.Type.EXPORT,readConverterExp = "0=闲置,1=审核中,2=在用,3=维修中,4=待报废,5=停用")
     private String useStatus;
 
     /**资产来源(0：购置  1：赠送  3：未知)*/
@@ -83,7 +83,7 @@ public class Assets extends BaseEntity {
     private float residualRate;
 
     /**是否盘点(0：是  1：否)*/
-    @Excel(name = "是否盘点")
+    @Excel(name = "是否盘点",readConverterExp = "0=是,1=否")
     private String checkStatus;
 
     /**规格*/

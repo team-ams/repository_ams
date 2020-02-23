@@ -282,7 +282,7 @@
     </select>
 
     <select id="getCountGroupByName" parameterType="String" resultMap="ruKuMap">
-        SELECT assets_name,sum(assets_price) as total, count(assets_number) AS assetsCount FROM assets_accounting
+        SELECT assets_type as assets_name,sum(assets_price) as total, count(assets_number) AS assetsCount FROM assets_accounting
         WHERE del_flag = 0
         <if test="startTime != null and startTime != ''">
             AND create_time &gt;= #{startTime}
@@ -290,7 +290,7 @@
         <if test="endTime != null and endTime != ''">
             AND create_time &lt;= #{endTime}
         </if>
-        GROUP BY assets_name
+        GROUP BY assets_type
     </select>
 
     <select id="getCountByUseStatus" resultMap="ziChanMap">

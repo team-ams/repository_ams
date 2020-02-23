@@ -4,8 +4,9 @@ import lombok.Data;
 
 @Data
 public class RuKu {
+
     /**
-     * 资产名称
+     * 资产名称---->改成资产类别assetsType
      */
     private String assetsName;
     /**
