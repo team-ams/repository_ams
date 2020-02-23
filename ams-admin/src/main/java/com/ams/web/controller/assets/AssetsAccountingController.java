@@ -49,8 +49,8 @@ public class AssetsAccountingController extends BaseController {
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(Assets assets) {
-        startPage();
         List<Assets> assetsList = accountingService.getAssetsList(assets);
+        startPage();
         return getDataTable(assetsList);
     }
 

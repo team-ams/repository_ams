@@ -33,8 +33,8 @@ public class AssetsAllocateServiceImpl implements IAssetsAllocateService {
     }
 
     @Override
-    public List<AssetsAllocate> getAllocateAdminList() {
-        List<AssetsAllocate> allocateAdminList = allocateMapper.getAllocateAdminList();
+    public List<AssetsAllocate> getAllocateAdminList(AssetsAllocate assetsAllocate) {
+        List<AssetsAllocate> allocateAdminList = allocateMapper.getAllocateAdminList(assetsAllocate);
         for (AssetsAllocate allocate : allocateAdminList) {
             //映射 资产 使用状态
             allocate.getAssets().setUseStatus(AssetsStatus.getStatusByCode(allocate.getAssets().getUseStatus()).getInfo());

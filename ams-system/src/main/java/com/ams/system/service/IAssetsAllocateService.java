@@ -32,7 +32,7 @@ public interface IAssetsAllocateService {
      *
      * @return
      */
-    List<AssetsAllocate> getAllocateAdminList();
+    List<AssetsAllocate> getAllocateAdminList(AssetsAllocate allocate);
 
     /**
      * 查询管理员资产审批记录

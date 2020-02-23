@@ -223,9 +223,18 @@
         </foreach>
     </insert>
 
-    <select id="getAllocateAdminList" resultMap="AssetsAllocateResult">
+    <select id="getAllocateAdminList" parameterType="com.ams.system.domain.AssetsAllocate" resultMap="AssetsAllocateResult">
         <include refid="selectAssetsAllocateVo"/>
         where a.status = 0
+        <if test="allocateOrderNum != null and allocateOrderNum != ''">
+            AND a.allocate_orderNum like concat('%', #{allocateOrderNum}, '%')
+        </if>
+        <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+            AND date_format(a.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+        </if>
+        <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+            AND date_format(a.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+        </if>
     </select>
 
     <select id="getMyAllocateExamineList" resultMap="AssetsAllocateResult">

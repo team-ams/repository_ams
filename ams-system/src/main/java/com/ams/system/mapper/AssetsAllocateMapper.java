@@ -34,7 +34,7 @@ public interface AssetsAllocateMapper {
      *
      * @return
      */
-    List<AssetsAllocate> getAllocateAdminList();
+    List<AssetsAllocate> getAllocateAdminList(AssetsAllocate allocate);
 
     /**
      * 查询管理员审批记录信息

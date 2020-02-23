@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('冻结列')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table"></table>
+			</div>
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var prefix = "/system/mainTable";
+        var datas = [[${@dict.getType('sys_normal_disable')}]];
+
+        $(function() {
+            var options = {
+                url: prefix + "/adminListAll",
+		        showSearch: false,
+		        showRefresh: false,
+		        showToggle: false,
+		        showColumns: false,
+		        fixedColumns: true,
+    		    fixedNumber: 2,
+                columns: [{
+		            checkbox: true
+		        },
+					{
+						field: 'seqNo',
+						title: '序号'
+					},
+					{
+						field: 'type',
+						title: '类型',
+						align: 'center'
+					},
+					{
+						field: 'orderNum',
+						title: '单号',
+						sortable: true,
+						align: 'center'
+					},
+					{
+						field: 'userName',
+						title: '操作人',
+						align: 'center'
+					},
+					{
+						field: 'userId',
+						title: '申请人Id',
+						visible: false
+					},
+					{
+						field: 'parentName',
+						title: '所在学院',
+						align: 'center'
+					},
+					{
+						field: 'date',
+						title: '操作时间',
+						align: 'center'
+					},
+					{
+						title: '操作',
+						align: 'center',
+						formatter: function (value, row, index) {
+							var actions = [];
+							actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.examineOK(\'' + row.orderNum + '\',\'' + row.userId + '\')"><i class="fa fa-check"></i>同意</a> ');
+							actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.examineReject(\'' + row.orderNum + '\',\'' + row.userId + '\')"><i class="fa fa-close"></i>驳回</a> ');
+							return actions.join('');
+						}
+					}]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

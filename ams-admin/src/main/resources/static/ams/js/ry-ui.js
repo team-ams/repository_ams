@@ -952,21 +952,21 @@ var table = {
                 });
             },
             //审批信息 同意（管理员）
-            examineOK: function (orderNum,userId) {
+            examineOK: function (orderNum, userId) {
                 table.set();
                 $.modal.confirm("同意该项" + table.options.modalName + "？", function () {
-                    var url = $.common.isEmpty(orderNum) ? table.options.approveUrl : table.options.approveUrl.replace("{orderNum}", orderNum).replace("{userId}",userId);
-                    var data = {"orderNum": orderNum,"userId":userId};
+                    var url = $.common.isEmpty(orderNum) ? table.options.approveUrl : table.options.approveUrl.replace("{orderNum}", orderNum).replace("{userId}", userId);
+                    var data = {"orderNum": orderNum, "userId": userId};
                     $.operate.submit(url, "post", "json", data)
                 });
 
             },
             //审批信息 驳回（管理员）
-            examineReject: function (orderNum,userId) {
+            examineReject: function (orderNum, userId) {
                 table.set();
                 $.modal.confirm("驳回该项" + table.options.modalName + "？", function () {
-                    var url = $.common.isEmpty(orderNum) ? table.options.rejectUrl : table.options.rejectUrl.replace("{orderNum}", orderNum).replace("{userId}",userId);
-                    var data = {"orderNum": orderNum,"userId":userId};
+                    var url = $.common.isEmpty(orderNum) ? table.options.rejectUrl : table.options.rejectUrl.replace("{orderNum}", orderNum).replace("{userId}", userId);
+                    var data = {"orderNum": orderNum, "userId": userId};
                     $.operate.submit(url, "post", "json", data)
                 });
 
@@ -1039,6 +1039,7 @@ var table = {
                 var url = $.common.isEmpty(id) ? table.options.myExamineUrl : table.options.myExamineUrl.replace("{id}", id);
                 $.modal.openTab("我的" + table.options.modalName, url)
             },
+
             // 修改信息
             edit: function (id) {
                 table.set();
