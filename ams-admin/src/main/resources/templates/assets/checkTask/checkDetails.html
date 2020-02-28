@@ -9,7 +9,11 @@
 <div class="ui-layout-center">
     <div class="container-div">
         <div class="row">
-
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-sm btn-danger" onclick="closeItem()">
+                    <i class="fa fa-reply-all"></i> 关闭
+                </a>
+            </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
             </div>
@@ -50,6 +54,9 @@
             sortName: "updateTime",
             sortOrder: "desc",
             showSearch: false,
+            showRefresh:false,
+            showColumns:false,
+            showToggle:false,
             showFooter: false,
             pagination: false,
             modalName: "盘点详情",

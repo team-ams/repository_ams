@@ -27,6 +27,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 public class SysIndexController extends BaseController {
+
+    @Autowired
+    private IAssetsAccountingService accountingService;
     @Autowired
     private ISysMenuService menuService;
     @Autowired
@@ -71,6 +74,23 @@ public class SysIndexController extends BaseController {
     // 系统介绍
     @GetMapping("/system/main")
     public String main(ModelMap mmap) {
+        AssetsInfo assetsInfo = new AssetsInfo();
+        AssetsInfo zongZiChanInfo = accountingService.getZongZiChanInfo();
+        AssetsInfo xianZhiInfo = accountingService.getXianZhiInfo();
+        AssetsInfo shiYongInfo = accountingService.getShiYongInfo();
+        AssetsInfo daiBaoFeiInfo = accountingService.getDaiBaoFeiInfo();
+        AssetsInfo chuZhiInfo = accountingService.getChuZhiInfo();
+        assetsInfo.setZongzichanCount(zongZiChanInfo.getZongzichanCount());
+        assetsInfo.setZongzichanSum(zongZiChanInfo.getZongzichanSum());
+        assetsInfo.setXianzhiCount(xianZhiInfo.getXianzhiCount());
+        assetsInfo.setXianzhiSum(xianZhiInfo.getXianzhiSum());
+        assetsInfo.setShiyongCount(shiYongInfo.getShiyongCount());
+        assetsInfo.setShiyongSum(shiYongInfo.getShiyongSum());
+        assetsInfo.setDaibaofeiCount(daiBaoFeiInfo.getDaibaofeiCount());
+        assetsInfo.setDaibaofeiSum(daiBaoFeiInfo.getDaibaofeiSum());
+        assetsInfo.setChuzhiCount(chuZhiInfo.getChuzhiCount());
+        assetsInfo.setChuzhiSum(chuZhiInfo.getChuzhiSum());
+        mmap.put("assetsInfo", assetsInfo);
         mmap.put("version", Global.getVersion());
         return "main_v2";
     }
@@ -92,9 +112,9 @@ public class SysIndexController extends BaseController {
 
         SysUser sysUser = ShiroUtils.getSysUser();
         //不是管理员
-        if(!sysUser.isAdmin()){
-            if(checkedAll.size()>0){
-                for (AssetsCheckTask checkTask :checkedAll) {
+        if (!sysUser.isAdmin()) {
+            if (checkedAll.size() > 0) {
+                for (AssetsCheckTask checkTask : checkedAll) {
                     Task task = new Task();
                     task.setSeqNo(++seq);
                     task.setType("资产盘点");
@@ -272,7 +292,7 @@ public class SysIndexController extends BaseController {
         }
         SysUser sysUser = ShiroUtils.getSysUser();
         //不是管理员
-        if(!sysUser.isAdmin()){
+        if (!sysUser.isAdmin()) {
             startPage();
             return getDataTable(taskList);
         }

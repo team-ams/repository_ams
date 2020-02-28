@@ -23,7 +23,7 @@ public interface AssetsAccidentMapper {
     AssetsAccident getAccidentById(String accidentId);
 
     /**
-     * 查找所有资产维修信息
+     * 查找所有资产事故信息
      *
      * @return
      */

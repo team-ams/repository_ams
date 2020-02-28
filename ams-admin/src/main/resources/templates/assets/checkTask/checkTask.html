@@ -14,17 +14,10 @@
                     <div class="select-list">
                         <ul>
                             <li>
-                                资产编号：<input type="text" name="assetsNumber"/>
+                                盘点单号：<input type="text" name="checkNumber"/>
                             </li>
                             <li>
-                                存放地点：<input type="text" name="storageAddr"/>
-                            </li>
-                            <li>
-                                资产状态：<select name="useStatus" th:with="type=${@dict.getType('assets_status')}">
-                                <option value="">所有</option>
-                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                                        th:value="${dict.dictLabel}"></option>
-                            </select>
+                                盘点地址：<input type="text" name="checkAddr"/>
                             </li>
                             <li class="select-time">
                                 <label>创建时间： </label>
@@ -56,14 +49,6 @@
                 <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
                    shiro:hasPermission="assets:checkTask:remove">
                     <i class="fa fa-remove"></i> 删除
-                </a>
-                <a class="btn btn-info" onclick="$.table.importExcel()"
-                   shiro:hasPermission="assets:checkTask:import">
-                    <i class="fa fa-upload"></i> 导入
-                </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()"
-                   shiro:hasPermission="assets:checkTask:export">
-                    <i class="fa fa-download"></i> 导出
                 </a>
                 <a class="btn btn-primary" onclick="checkExamine()"
                    shiro:hasPermission="assets:checkTask:export">
@@ -128,7 +113,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary" onclick="submitCheckTask()">保存</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="submitCheckTask()">保存</button>
             </div>
         </div>
     </div>
@@ -296,12 +281,10 @@
         var url = prefix + "/checkTaskConfirm";
         //ajax异步调用后台接口，完成新增资产领用
         $.operate.submit(url, "post", "json", data);
-        //延时2秒关闭，等待submit的ajax异步方法回调后执行关闭模态框
+        //延时0.5秒关闭，等待submit的ajax异步方法回调后执行关闭模态框
         setTimeout(function () {
             $.modal.close();
         }, 500);
-        $.modal.msgReload("操作成功,正在刷新数据请稍后……", modal_status.SUCCESS);
-
     }
 </script>
 </body>

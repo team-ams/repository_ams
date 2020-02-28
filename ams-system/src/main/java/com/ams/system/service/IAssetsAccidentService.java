@@ -25,7 +25,7 @@ public interface IAssetsAccidentService {
     AssetsAccident getAccidentById(String accidentId);
 
     /**
-     * 查找所有资产保养信息（管理员级别）
+     * 查找所有资产事故信息（管理员级别）
      *
      * @return
      */

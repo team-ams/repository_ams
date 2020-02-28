@@ -6,6 +6,7 @@ import com.ams.common.enums.AssetsStatus;
 import com.ams.common.exception.BusinessException;
 import com.ams.common.utils.StringUtils;
 import com.ams.system.domain.Assets;
+import com.ams.system.domain.AssetsInfo;
 import com.ams.system.domain.RuKu;
 import com.ams.system.domain.ZiChan;
 import com.ams.system.mapper.AssetsAccountingMapper;
@@ -123,6 +124,33 @@ public class AssetsAccountingServiceImpl implements IAssetsAccountingService {
         return assetsList0;
     }
 
+    @Override
+    public List<Assets> getAssetsList01() {
+        List<Assets> assetsList01 = assetsAccountingMapper.getAssetsList01();
+        for (Assets item : assetsList01) {
+            item.setUseStatus(AssetsStatus.getStatusByCode(item.getUseStatus()).getInfo());
+        }
+        return assetsList01;
+    }
+
+    @Override
+    public List<Assets> getScrappedStatusAssetsList() {
+        List<Assets> scrappedList = assetsAccountingMapper.getScrappedStatusAssetsList();
+        for (Assets item : scrappedList) {
+            item.setUseStatus(AssetsStatus.getStatusByCode(item.getUseStatus()).getInfo());
+        }
+        return scrappedList;
+    }
+
+    @Override
+    public List<Assets> getDisableStatusAssetsList() {
+        List<Assets> disableList = assetsAccountingMapper.getDisableStatusAssetsList();
+        for (Assets item : disableList) {
+            item.setUseStatus(AssetsStatus.getStatusByCode(item.getUseStatus()).getInfo());
+        }
+        return disableList;
+    }
+
     /**
      * 根据资产编号查找资产信息（可批量查询）
      *
@@ -177,13 +205,38 @@ public class AssetsAccountingServiceImpl implements IAssetsAccountingService {
     }
 
     @Override
-    public List<RuKu> getCountGroupByName(String startTime,String endTime) {
-        return assetsAccountingMapper.getCountGroupByName(startTime,endTime);
+    public List<RuKu> getCountGroupByName(String startTime, String endTime) {
+        return assetsAccountingMapper.getCountGroupByName(startTime, endTime);
     }
 
     @Override
     public List<ZiChan> getCountByUseStatus() {
         return assetsAccountingMapper.getCountByUseStatus();
+    }
+
+    @Override
+    public AssetsInfo getZongZiChanInfo() {
+        return assetsAccountingMapper.getZongZiChanInfo();
+    }
+
+    @Override
+    public AssetsInfo getXianZhiInfo() {
+        return assetsAccountingMapper.getXianZhiInfo();
+    }
+
+    @Override
+    public AssetsInfo getShiYongInfo() {
+        return assetsAccountingMapper.getShiYongInfo();
+    }
+
+    @Override
+    public AssetsInfo getDaiBaoFeiInfo() {
+        return assetsAccountingMapper.getDaiBaoFeiInfo();
+    }
+
+    @Override
+    public AssetsInfo getChuZhiInfo() {
+        return assetsAccountingMapper.getChuZhiInfo();
     }
 
 }

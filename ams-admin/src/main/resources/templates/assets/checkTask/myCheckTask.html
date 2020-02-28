@@ -14,17 +14,10 @@
                     <div class="select-list">
                         <ul>
                             <li>
-                                资产编号：<input type="text" name="assetsNumber"/>
+                                盘点单号：<input type="text" name="checkNumber"/>
                             </li>
                             <li>
-                                存放地点：<input type="text" name="storageAddr"/>
-                            </li>
-                            <li>
-                                资产状态：<select name="useStatus" th:with="type=${@dict.getType('assets_status')}">
-                                <option value="">所有</option>
-                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                                        th:value="${dict.dictLabel}"></option>
-                            </select>
+                                盘点地址：<input type="text" name="checkAddr"/>
                             </li>
                             <li class="select-time">
                                 <label>创建时间： </label>
@@ -45,7 +38,11 @@
                 </form>
             </div>
 
-
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-sm btn-danger" onclick="closeItem()">
+                    <i class="fa fa-reply-all"></i> 关闭
+                </a>
+            </div>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table"></table>
             </div>

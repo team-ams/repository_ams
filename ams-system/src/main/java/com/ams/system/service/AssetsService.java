@@ -10,8 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.Size;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -82,7 +84,7 @@ public class AssetsService {
         if (updateRows > 0 && insertRows > 0) {
             return updateRows + insertRows;
         }
-        throw new Exception("申请领用失败");
+        throw new RuntimeException("申请领用失败");
     }
 
     /**
@@ -153,7 +155,7 @@ public class AssetsService {
             }
             return 0;
         }
-        throw new Exception("审批失败！");
+        throw new RuntimeException("审批失败！");
     }
 
     /**
@@ -182,20 +184,24 @@ public class AssetsService {
         List<AssetsBorrow> insertLists = new ArrayList<>();
         //当有多个资产编号的时候，每次更新资产编号
         for (Assets assets : updateList) {
-            borrowData.setBorrowOrderNum(borrowOrderNumber);
-            borrowData.setBorrowUserId(borrowUserId);
-            borrowData.setCreateBy(createBy);
-            borrowData.setAssetsNumber(assets.getAssetsNumber());
-            insertLists.add(borrowData);
+            AssetsBorrow borrow = new AssetsBorrow();
+            borrow.setBorrowOrderNum(borrowOrderNumber);
+            borrow.setBorrowUserId(borrowUserId);
+            borrow.setBorrowTime(borrowData.getBorrowTime());
+            borrow.setReturnTime(borrowData.getReturnTime());
+            borrow.setRemark(borrowData.getRemark());
+            borrow.setCreateBy(createBy);
+            borrow.setAssetsNumber(assets.getAssetsNumber());
+            insertLists.add(borrow);
         }
 
         int updateRows = accountingService.updateAssetsLists(updateList);
         int insertRows = borrowService.insertBorrowList(insertLists);
         //成功才返回大于0的数
-        if (updateRows == updateList.size() && insertRows == updateList.size()) {
+        if (updateRows > 0 && insertRows > 0) {
             return updateRows + insertRows;
         }
-        throw new Exception("申请借用失败");
+        throw new RuntimeException("申请借用失败");
     }
 
     /**
@@ -267,7 +273,7 @@ public class AssetsService {
             }
             return 0;
         }
-        throw new Exception("审批失败！");
+        throw new RuntimeException("审批失败！");
     }
 
     /**
@@ -304,7 +310,7 @@ public class AssetsService {
         if (updateAssetsRows > 0 && deleteBorrowRows > 0) {
             return updateAssetsRows + deleteBorrowRows;
         }
-        throw new Exception("删除失败！");
+        throw new RuntimeException("删除失败！");
     }
 
     /**
@@ -352,7 +358,7 @@ public class AssetsService {
         if (updateBorrowRows > 0 && updateRows > 0 && insertRows == updateList.size()) {
             return updateBorrowRows + insertRows + updateRows;
         }
-        throw new Exception("申请归还失败");
+        throw new RuntimeException("申请归还失败");
     }
 
     /**
@@ -434,7 +440,7 @@ public class AssetsService {
             }
             return 0;
         }
-        throw new Exception("审批失败！");
+        throw new RuntimeException("审批失败！");
     }
 
     /**
@@ -477,7 +483,7 @@ public class AssetsService {
         if (updateRows == updateList.size() && insertRows == updateList.size()) {
             return updateRows + insertRows;
         }
-        throw new Exception("保养失败");
+        throw new RuntimeException("保养失败");
     }
 
     /**
@@ -500,17 +506,25 @@ public class AssetsService {
             //根据订单号查找
             List<AssetsMaintain> maintainUpdateList = maintainService.getMaintainListByOrderNum(orderNum);
 
-            //资产领用表更新数
+            //资产保养表更新数
             int updateAssetsMaintainRows = 0;
-
+            List<Assets> updateAssetsLists = new ArrayList<>();
             //审核用过
             if (AssetsExamineStatus.AGREE.getCode().equals(examineResult)) {
                 for (AssetsMaintain update : maintainUpdateList) {
-                    //更新资产领用状态为“审核通过”
+                    String assetsNumber = update.getAssetsNumber();
+                    Assets asset = accountingService.getAssetsByNumber(assetsNumber);
+                    //获取保养时间
+                    String maintainTime = update.getMaintainTime();
+                    //更新资产的上次保养时间
+                    asset.setMaintainDate(maintainTime);
+                    updateAssetsLists.add(asset);
+
+                    //更新资产保养状态为“审核通过”
                     update.setStatus(AssetsExamineStatus.AGREE.getCode());
                     //增加处理人信息
                     update.setAuditorId(String.valueOf(auditorId));
-                    //更新资产领用表
+                    //更新资产保养表
                     updateAssetsMaintainRows = maintainService.updateMaintainInfo(update);
                 }
             }
@@ -524,13 +538,14 @@ public class AssetsService {
                     updateAssetsMaintainRows = maintainService.updateMaintainInfo(update);
                 }
             }
+            int assetsUpdateRows = accountingService.updateAssetsLists(updateAssetsLists);
             //成功才返回大于0的数
-            if (updateAssetsMaintainRows > 0) {
-                return updateAssetsMaintainRows;
+            if (updateAssetsMaintainRows > 0 && assetsUpdateRows > 0 && assetsUpdateRows == maintainUpdateList.size()) {
+                return updateAssetsMaintainRows + assetsUpdateRows;
             }
             return 0;
         }
-        throw new Exception("审批失败！");
+        throw new RuntimeException("审批失败！");
     }
 
     /**
@@ -576,7 +591,7 @@ public class AssetsService {
         if (insertRows == updateList.size() && updateAssetsRows > 0) {
             return insertRows + updateAssetsRows;
         }
-        throw new Exception("维修登记失败");
+        throw new RuntimeException("维修登记失败");
     }
 
     /**
@@ -613,7 +628,7 @@ public class AssetsService {
         if (updateAssetsRows > 0 && deleteRepairRows > 0) {
             return updateAssetsRows + deleteRepairRows;
         }
-        throw new Exception("删除失败！");
+        throw new RuntimeException("删除失败！");
     }
 
     /**
@@ -692,7 +707,7 @@ public class AssetsService {
             }
             return 0;
         }
-        throw new Exception("审批失败！");
+        throw new RuntimeException("审批失败！");
     }
 
     /**
@@ -734,7 +749,7 @@ public class AssetsService {
         if (updateAssetsRows > 0 && insertRows == updateList.size()) {
             return insertRows + updateAssetsRows;
         }
-        throw new Exception("事故登记失败");
+        throw new RuntimeException("事故登记失败");
     }
 
 
@@ -771,8 +786,8 @@ public class AssetsService {
                     //根据资产编号查找到资产并更新状态
                     String assetsNumber = update.getAssetsNumber();
                     Assets assetsUpdate = accountingService.getAssetsByNumber(assetsNumber);
-                    //更新资产状态为“停用”
-                    assetsUpdate.setUseStatus(AssetsStatus.DISABLE.getCode());
+                    //更新资产状态为“待报废”
+                    assetsUpdate.setUseStatus(AssetsStatus.TOSCRAPPED.getCode());
                     //清空资产的使用人
                     assetsUpdate.setUser("");
                     assetsUpdate.setUpdateBy(userName);
@@ -780,7 +795,7 @@ public class AssetsService {
                     updateList.add(assetsUpdate);
                     //增加处理人信息
                     update.setAuditorId(String.valueOf(auditorId));
-                    //更新资产领用表
+                    //更新资产事故表
                     updateAssetsAccidentRows = accidentService.updateAccidentInfo(update);
                 }
             }
@@ -808,7 +823,7 @@ public class AssetsService {
             }
             return 0;
         }
-        throw new Exception("审批失败！");
+        throw new RuntimeException("审批失败！");
     }
 
     /**
@@ -852,7 +867,7 @@ public class AssetsService {
         if (updateAssetsRows > 0 && insertRows == updateList.size()) {
             return insertRows + updateAssetsRows;
         }
-        throw new Exception("转移失败");
+        throw new RuntimeException("转移失败");
     }
 
     /**
@@ -933,7 +948,7 @@ public class AssetsService {
 
             return 0;
         }
-        throw new Exception("审批失败！");
+        throw new RuntimeException("审批失败！");
     }
 
     /**
@@ -950,7 +965,7 @@ public class AssetsService {
             return 0;
         }
         //盘点单号
-        String checkNumber = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        String checkNumber = "PD" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
 
         //根据存放地址查询得到的资产编号集合
         List<String> assetsNumberList = accountingService.getAssetsNumberListByStorageAddr(checkAddr);
@@ -988,7 +1003,7 @@ public class AssetsService {
         if (insertCheckItemRows == assetsNumberList.size() && insertCheckTaskRows > 0) {
             return insertCheckItemRows + insertCheckTaskRows;
         }
-        throw new Exception("添加盘点任务失败");
+        throw new RuntimeException("添加盘点任务失败");
     }
 
     /**
@@ -1068,7 +1083,7 @@ public class AssetsService {
         if (updateCheckTaskRows > 0) {
             return updateCheckTaskRows;
         }
-        throw new Exception("盘点失败！");
+        throw new RuntimeException("盘点失败！");
     }
 
     /**
@@ -1090,7 +1105,7 @@ public class AssetsService {
         if (updateCheckTaskRows > 0) {
             return updateCheckTaskRows;
         }
-        throw new Exception("审核失败！");
+        throw new RuntimeException("审核失败！");
     }
 
 
@@ -1113,6 +1128,51 @@ public class AssetsService {
         if (updateCheckTaskRows > 0) {
             return updateCheckTaskRows;
         }
-        throw new Exception("审核失败！");
+        throw new RuntimeException("审核失败！");
+    }
+
+    public List<Assets> needMaintainList(List<Assets> assetsList) throws ParseException {
+        List<Assets> needMaintainList = new ArrayList<>();
+        for (Assets asset : assetsList) {
+            //获取上次保养时间
+            String maintainDate = asset.getMaintainDate();
+            //实例化日期对象
+            Calendar calendar = Calendar.getInstance();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            //上次保养日期为空，根据购入时间，计算保养时间，加入待保养列表
+            if (StringUtils.isEmpty(asset.getMaintainDate())) {
+                String purchaseDate = asset.getPurchaseDate();
+                calendar.setTime(simpleDateFormat.parse(purchaseDate));
+                //购入时间的毫秒数
+                long purchaseMillis = calendar.getTimeInMillis();
+                //获取保养周期的毫秒数
+                int maintainCycle = Integer.parseInt(asset.getMaintainCycle());
+                int maintainCycleMillis = maintainCycle * 24 * 60 * 60 * 1000;
+                //计算下次应该保养的时间毫秒数
+                long next = purchaseMillis + maintainCycleMillis;
+                //获取当前的时间毫秒数
+                long currentMillis = new Date().getTime();
+                //判断是否需要保养
+                if (currentMillis >= next) {
+                    needMaintainList.add(asset);
+                }
+                continue;
+            }
+            calendar.setTime(simpleDateFormat.parse(maintainDate));
+            //上次保养时间的毫秒数
+            long last = calendar.getTimeInMillis();
+            //获取保养周期的毫秒数
+            int maintainCycle = Integer.parseInt(asset.getMaintainCycle());
+            int maintainCycleMillis = maintainCycle * 24 * 60 * 60 * 1000;
+            //下次保养时间毫秒数
+            long next = last + maintainCycleMillis;
+            //当前时间毫秒数
+            long currentMillis = new Date().getTime();
+            //判断是否需要保养
+            if (currentMillis >= next) {
+                needMaintainList.add(asset);
+            }
+        }
+        return needMaintainList;
     }
 }

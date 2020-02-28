@@ -29,6 +29,8 @@
         <result property="purchaseDate" column="purchase_date"/>
         <result property="manufactureDate" column="manufacture_date"/>
         <result property="warrantyDate" column="warranty_date"/>
+        <result property="maintainCycle" column="maintain_cycle"/>
+        <result property="maintainDate" column="maintain_date"/>
         <result property="delFlag" column="del_flag"/>
         <result property="mark" column="mark"/>
         <result property="createTime" column="create_time"/>
@@ -44,6 +46,20 @@
     <resultMap id="ziChanMap" type="com.ams.system.domain.ZiChan">
         <id property="useStatus" column="use_status"/>
         <result property="totalNum" column="total"/>
+    </resultMap>
+
+    <resultMap id="AssetsInfoMap" type="com.ams.system.domain.AssetsInfo">
+        <id property="assetsNumber" column="assets_number"/>
+        <result property="zongzichanCount" column="zongzichanCount"/>
+        <result property="zongzichanSum" column="zongzichanSum"/>
+        <result property="xianzhiCount" column="xianzhiCount"/>
+        <result property="xianzhiSum" column="xianzhiSum"/>
+        <result property="shiyongCount" column="shiyongCount"/>
+        <result property="shiyongSum" column="shiyongSum"/>
+        <result property="daibaofeiCount" column="daibaofeiCount"/>
+        <result property="daibaofeiSum" column="daibaofeiSum"/>
+        <result property="chuzhiCount" column="chuzhiCount"/>
+        <result property="chuzhiSum" column="chuzhiSum"/>
     </resultMap>
 
 
@@ -72,6 +88,8 @@
                a.purchase_date,
                a.manufacture_date,
                a.warranty_date,
+               a.maintain_cycle,
+               a.maintain_date,
                a.del_flag,
                a.create_time,
                a.update_time
@@ -111,6 +129,8 @@
         <if test="purchaseDate != null and purchaseDate != ''">purchase_date,</if>
         <if test="manufactureDate != null and manufactureDate != ''">manufacture_date,</if>
         <if test="warrantyDate != null and warrantyDate != ''">warranty_date,</if>
+        <if test="maintainCycle != null and maintainCycle != ''">maintain_cycle,</if>
+        <if test="maintainDate != null and maintainDate != ''">maintain_date,</if>
         <if test="delFlag != null and delFlag != ''">del_flag,</if>
         <if test="mark != null and mark != ''">mark,</if>
         <if test="createBy != null and createBy != ''">create_by,</if>
@@ -140,6 +160,8 @@
         <if test="purchaseDate != null and purchaseDate != ''">#{purchaseDate},</if>
         <if test="manufactureDate != null and manufactureDate != ''">#{manufactureDate},</if>
         <if test="warrantyDate != null and warrantyDate != ''">#{warrantyDate},</if>
+        <if test="maintainCycle != null and maintainCycle != ''">#{maintainCycle},</if>
+        <if test="maintainDate != null and maintainDate != ''">#{maintainDate},</if>
         <if test="delFlag != null and delFlag != ''">#{delFlag},</if>
         <if test="mark != null and mark != ''">#{mark},</if>
         <if test="createBy != null and createBy != ''">#{createBy},</if>
@@ -187,9 +209,11 @@
                 </if>
                 <if test="item.warrantyDate != null and item.warrantyDate != ''">warranty_date=#{item.warrantyDate},
                 </if>
+                <if test="item.maintainCycle != null and item.maintainCycle != ''">maintain_cycle=#{item.maintainCycle},</if>
+                <if test="item.maintainDate != null and item.maintainDate != ''">maintain_date=#{item.maintainDate},</if>
                 <if test="item.delFlag != null and item.delFlag != ''">del_flag=#{item.delFlag},</if>
                 <if test="item.mark != null and item.mark != ''">mark=#{item.mark},</if>
-                <if test="item.updateBy != null and item.updateBy != ''">update_by=#{updateBy}</if>
+                <if test="item.updateBy != null and item.updateBy != ''">update_by=#{item.updateBy},</if>
                 update_time = sysdate()
             </set>
             where assets_id = #{item.assetsId}
@@ -238,6 +262,21 @@
             AND date_format(a.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
         </if>
 
+    </select>
+
+    <select id="getAssetsList01" parameterType="com.ams.system.domain.Assets" resultMap="AssetsResult">
+        <include refid="selectAssetsVo"/>
+        where a.del_flag = 0 and a.use_status &lt;2
+    </select>
+
+    <select id="getDisableStatusAssetsList" parameterType="com.ams.system.domain.Assets" resultMap="AssetsResult">
+        <include refid="selectAssetsVo"/>
+        where a.del_flag = 0 and a.use_status = 5
+    </select>
+
+    <select id="getScrappedStatusAssetsList" parameterType="com.ams.system.domain.Assets" resultMap="AssetsResult">
+        <include refid="selectAssetsVo"/>
+        where a.del_flag = 0 and a.use_status = 4
     </select>
 
     <select id="checkAssetsNumberUnique" parameterType="String" resultType="int">
@@ -297,4 +336,23 @@
         SELECT use_status, count(use_status) as total FROM assets_accounting GROUP BY use_status
     </select>
 
+    <select id="getZongZiChanInfo" resultMap="AssetsInfoMap">
+        SELECT count(1)zongzichanCount,sum(assets_price)zongzichanSum FROM assets_accounting
+    </select>
+
+    <select id="getXianZhiInfo" resultMap="AssetsInfoMap">
+        SELECT count(1)xianzhiCount,sum(assets_price)xianzhiSum FROM assets_accounting where use_status = 0
+    </select>
+
+    <select id="getShiYongInfo" resultMap="AssetsInfoMap">
+        SELECT count(1)shiyongCount,sum(assets_price)shiyongSum FROM assets_accounting where use_status = 2
+    </select>
+
+    <select id="getDaiBaoFeiInfo" resultMap="AssetsInfoMap">
+        SELECT count(1)daibaofeiCount,sum(assets_price)daibaofeiSum FROM assets_accounting where use_status = 4
+    </select>
+
+    <select id="getChuZhiInfo" resultMap="AssetsInfoMap">
+        SELECT count(1)chuzhiCount,sum(assets_price)chuzhiSum FROM assets_accounting where use_status = 5
+    </select>
 </mapper>

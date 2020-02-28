@@ -254,7 +254,7 @@
             <if test="userId != null">user_id=#{userId},</if>
             <if test="auditorId != null">auditor_id=#{auditorId},</if>
             <if test="status != null and status != ''">status=#{status},</if>
-            <if test="updateBy != null and update_by != ''">update_by=#{updateBy}</if>
+            <if test="updateBy != null and update_by != ''">update_by=#{updateBy},</if>
             update_time = sysdate()
         </set>
         where allocate_id = #{allocateId}

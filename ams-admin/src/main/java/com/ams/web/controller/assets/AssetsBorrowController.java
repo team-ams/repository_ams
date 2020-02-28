@@ -81,13 +81,13 @@ public class AssetsBorrowController extends BaseController {
         if (currentSysUser != null) {
             //当前系统用户不是管理员，可借用的资产信息
             if (!currentSysUser.isAdmin()) {
-                List<Assets> assetsList0 = accountingService.getAssetsList0(assets);
                 startPage();
+                List<Assets> assetsList0 = accountingService.getAssetsList0(assets);
                 return getDataTable(assetsList0);
             }
             //当前系统用户是管理员，待审批信息
-            List<AssetsBorrow> borrowListAll = borrowService.getBorrowListAll();
             startPage();
+            List<AssetsBorrow> borrowListAll = borrowService.getBorrowListAll();
             return getDataTable(borrowListAll);
         }
         return getDataTable(new ArrayList<>());
@@ -218,16 +218,18 @@ public class AssetsBorrowController extends BaseController {
      */
     @RequestMapping("/getMsg")
     @ResponseBody
-    public String getMsg(HttpServletRequest request, ModelMap mmap) {
+    public AjaxResult getMsg(HttpServletRequest request, ModelMap mmap) {
         Map<String, String> parameterMap = getParameterMap();
         String assetsNumber = parameterMap.get("assetsNumber");
+        String assetsNumber1 = request.getParameter("assetsNumber");
         assetsNumbers.add(assetsNumber);
         System.out.println(parameterMap);
 
         //通知前端页面有新数据
         pushToWeb(FID, MSG);
         mmap.put("content", "传过来的：" + assetsNumber);
-        return prefix + "/borrowAssets";
+        return AjaxResult.error("Success",prefix + "/borrowAssets");
+
     }
 
 

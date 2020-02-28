@@ -177,6 +177,7 @@
 
     <select id="getAccidentListAll" resultMap="AssetsAccidentResult">
         <include refid="selectAssetsAccidentVo"/>
+        where a.status = 0
     </select>
 
     <insert id="insertAccidentList" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="accident_id">
@@ -220,7 +221,7 @@
             <if test="summary != null and summary != ''">summary=#{summary},</if>
             <if test="remark != null and remark != ''">remark=#{remark},</if>
             <if test="auditorId != null and auditorId != 0">auditor_id=#{auditorId},</if>
-            <if test="remark != null and remark != ''">remark=#{remark},</if>
+            <if test="status != null and status != ''">status=#{status},</if>
             <if test="accidentTime != null and accidentTime != ''">accident_time=#{accidentTime},</if>
             <if test="updateBy != null and updateBy != ''">update_by=#{updateBy},</if>
             update_time = sysdate()

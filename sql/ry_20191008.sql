@@ -256,7 +256,7 @@ insert into sys_menu values('119',  '保养管理', '4', '5', '/assets/maintain'
 insert into sys_menu values('120',  '转移管理', '4', '6', '/assets/transfer',                      '', 'C', '0', 'assets:move:view',         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '转移管理菜单');
 insert into sys_menu values('121',  '维修管理', '4', '7', '/assets/repair',                      '', 'C', '0', 'assets:repair:view',         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '保修管理菜单');
 insert into sys_menu values('122',  '事故管理', '4', '8', '/assets/accident',                      '', 'C', '0', 'assets:accident:view',       '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '报废管理菜单');
-insert into sys_menu values('123',  '报警管理', '4', '9', '/assets/alarm',                      '', 'C', '0', 'assets:alarm:view',       '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '报警管理菜单');
+insert into sys_menu values('123',  '报废管理', '4', '9', '/assets/alarm',                      '', 'C', '0', 'assets:alarm:view',       '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '报警管理菜单');
 insert into sys_menu values('124',  '盘点管理', '4', '10', '/assets/checkTask',                     '', 'C', '0', 'assets:checkTask:view',                         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '盘点管理菜单');
 insert into sys_menu values('125',  '报表管理', '4', '11','#',                                     '', 'M', '0', '',                         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '报表管理菜单');
 insert into sys_menu values('126',  '归还管理', '4', '3', '/assets/return',                      '', 'C', '0', 'assets:return:view',         '#', 'admin', '2018-03-16 11-33-00', 'zengchao', '2019-12-31 17-48-11', '归还管理菜单');
@@ -266,11 +266,10 @@ insert into sys_menu values('500',  '操作日志', '108', '1', '/monitor/operlo
 insert into sys_menu values('501',  '登录日志', '108', '2', '/monitor/logininfor', '', 'C', '0', 'monitor:logininfor:view',  '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '登录日志菜单');
 insert into sys_menu values('600',  '入库报表', '125', '1', '/assets/chart/ruKu',    '', 'C', '0', 'chart:ruKu:view',     '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '入库报表菜单');
 insert into sys_menu values('601',  '领用报表', '125', '2', '/assets/chart/lingYong', '', 'C', '0', 'chart:lingYong:view',  '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '领用报表菜单');
-insert into sys_menu values('602',  '库存报表', '125', '3', '/assets/chart/kuCun',    '', 'C', '0', 'chart:kuCun:view',     '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '库存报表菜单');
-insert into sys_menu values('603',  '资产报表', '125', '4', '/assets/chart/ziChan', '', 'C', '0', 'chart:ziChan:view',  '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '资产报表菜单');
-insert into sys_menu values('604',  '借还报表', '125', '5', '/assets/chart/jieHuan',    '', 'C', '0', 'chart:jieHuan:view',     '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '借还报表菜单');
-insert into sys_menu values('605',  '维修报表', '125', '6', '/assets/chart/weiXiu', '', 'C', '0', 'chart:weiXiu:view',  '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '维修报表菜单');
-insert into sys_menu values('606',  '盘点报表', '125', '7', '/assets/chart/panDian', '', 'C', '0', 'chart:panDian:view',  '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '盘点报表菜单');
+insert into sys_menu values('603',  '资产报表', '125', '3', '/assets/chart/ziChan', '', 'C', '0', 'chart:ziChan:view',  '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '资产报表菜单');
+insert into sys_menu values('604',  '借还报表', '125', '4', '/assets/chart/jieHuan',    '', 'C', '0', 'chart:jieHuan:view',     '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '借还报表菜单');
+insert into sys_menu values('605',  '维修报表', '125', '5', '/assets/chart/weiXiu', '', 'C', '0', 'chart:weiXiu:view',  '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '维修报表菜单');
+insert into sys_menu values('606',  '盘点报表', '125', '6', '/assets/chart/panDian', '', 'C', '0', 'chart:panDian:view',  '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '盘点报表菜单');
 
 -- 用户管理按钮
 insert into sys_menu values('1000', '用户查询', '100', '1',  '#', '',  'F', '0', 'system:user:list',        '#', 'admin', '2018-03-16 11-33-00', 'ry', '2018-03-16 11-33-00', '');
@@ -456,7 +455,6 @@ insert into sys_role_menu values ('2', '119');
 insert into sys_role_menu values ('2', '120');
 insert into sys_role_menu values ('2', '121');
 insert into sys_role_menu values ('2', '122');
-insert into sys_role_menu values ('2', '123');
 insert into sys_role_menu values ('2', '124');
 insert into sys_role_menu values ('2', '126');
 
@@ -953,6 +951,8 @@ create table assets_accounting(
     purchase_date           varchar(10)         default ''          comment '购入日期',
     manufacture_date        varchar(10)         default ''          comment '出厂日期',
     warranty_date           varchar(10)         default ''          comment '保修日期',
+    maintain_cycle          varchar(15)         default ''          comment '保养周期(单位天)',
+    maintain_date           varchar(20)         default ''          comment '上次保养日期',
     del_flag                char(1)             default '0'         comment '删除标志（0：正常  2：已删除）',
     mark                    text                                    comment '备注' ,
     create_by               varchar(64)         default ''          comment '创建者',
@@ -1282,7 +1282,7 @@ insert into assets_check_item values (12,'PD20200211154100','5e6a1b','0','admin'
 insert into assets_check_item values (13,'PD20200212111100','a9b7e8','0','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
 insert into assets_check_item values (14,'PD20200212111100','c377d8','0','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
 insert into assets_check_item values (15,'PD20200212111100','e6f4d2','0','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
-insert into assets_check_item values (16,'20200212111100','5e6a1b','0','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_check_item values (16,'PD20200212111100','5e6a1b','0','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
 
 insert into assets_check_item values (17,'PD20200213113100','a9b7e8','0','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
 insert into assets_check_item values (18,'PD20200213113100','c377d8','0','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
@@ -1319,6 +1319,25 @@ insert into assets_storage_addr values (10,10009,'实验大楼305室','admin','2
 insert into assets_storage_addr values (11,10010,'实验大楼306室','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
 insert into assets_storage_addr values (12,10011,'实验大楼411室','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
 
-
-
+-- ----------------------------
+-- 33、资产待报废表
+-- ----------------------------
+drop table if exists assets_alarm;
+create table assets_alarm(
+     alarm_id          int                 not null auto_increment    comment '报废id',
+     assets_number           varchar(15)         not null default ''         comment '资产编号',
+     reason                  char(1)         not null default ''         comment '待报废原因（1：事故 2：维修无效）',
+     create_by         varchar(64)          default '' comment '创建者',
+     create_time       timestamp   not null default current_timestamp comment '创建时间/登记时间',
+     update_by         varchar(64)          default '' comment '更新者',
+     update_time       timestamp   not null default current_timestamp on update current_timestamp comment '更新时间',
+     primary key (alarm_id)
+)engine = innodb default charset utf8 comment '资产待报废表';
+-- ----------------------------
+-- 初始化-资产存放地址表
+-- ----------------------------
+insert into assets_alarm values (1,'5e6a1b','1','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_alarm values (2,'oodsaf23','2','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_alarm values (3,'dd78aa7','1','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
+insert into assets_alarm values (4,'ccvdaa6','2','admin','2020-01-14 11:50:06','','2020-01-14 11:50:08');
 

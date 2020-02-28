@@ -24,10 +24,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * 用户信息
@@ -70,14 +69,15 @@ public class AssetsMaintainController extends BaseController {
     @RequiresPermissions("assets:maintain:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(Assets assets) {
+    public TableDataInfo list(Assets assets) throws ParseException {
         SysUser currentSysUser = ShiroUtils.getSysUser();
         if (currentSysUser != null) {
             //当前系统用户不是管理员，个人保养信息
             if (!currentSysUser.isAdmin()) {
-                List<Assets> assetsList0 = accountingService.getAssetsList0(assets);
+                List<Assets> assetsList01 = accountingService.getAssetsList01();
                 startPage();
-                return getDataTable(assetsList0);
+                List<Assets> needMaintainList = assetsService.needMaintainList(assetsList01);
+                return getDataTable(needMaintainList);
             }
             //当前系统用户是管理员，全部信息
             List<AssetsMaintain> maintainListAll = maintainService.getMaintainListAll();

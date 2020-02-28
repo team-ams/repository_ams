@@ -13,7 +13,7 @@
 
 <body class="gray-bg">
 <div class="wrapper wrapper-content">
-    <div class="row">
+    <div class="row" th:object="${assetsInfo}">
         <div class="col-md-1-5">
             <div class="ibox float-e-margins">
                 <div class="col-md-4" style="background-color:#fff;padding-left: 5px;">
@@ -22,8 +22,8 @@
                     </div>
                 </div>
                 <div class="col-md-8" style="background-color:#fff;height: 135px;">
-                    <h1 style="color: #0e9aef;">1200件</h1>
-                    <h1 class="no-margins" style="padding-bottom: 10px;">&yen;7,254,203</h1>
+                    <h1 style="color: #0e9aef;" th:utext="''+*{zongzichanCount}+'件'"></h1>
+                    <h1 class="no-margins" id="zongzichan" style="padding-bottom: 10px;">&yen;*{zongzichanSum}</h1>
                     <small>总资产数量</small>
                 </div>
             </div>
@@ -36,8 +36,8 @@
                     </div>
                 </div>
                 <div class="col-md-8" style="background-color:#fff;height: 135px;">
-                    <h1 style="color: #0e9aef;">2200件</h1>
-                    <h1 class="no-margins" style="padding-bottom: 10px;">&yen;254,203</h1>
+                    <h1 style="color: #0e9aef;" th:utext="''+*{xianzhiCount}+'件'"></h1>
+                    <h1 class="no-margins" id="xianzhi" style="padding-bottom: 10px;">&yen;*{xianzhiSum}</h1>
                     <small>闲置资产数量</small>
                 </div>
             </div>
@@ -50,8 +50,8 @@
                     </div>
                 </div>
                 <div class="col-md-8" style="background-color:#fff;height: 135px;">
-                    <h1 style="color: #0e9aef;">1200件</h1>
-                    <h1 class="no-margins" style="padding-bottom: 10px;">&yen;554,203</h1>
+                    <h1 style="color: #0e9aef;" th:utext="''+*{shiyongCount}+'件'"></h1>
+                    <h1 class="no-margins" id="shiyong" style="padding-bottom: 10px;">&yen;*{shiyongSum}</h1>
                     <small>使用资产数量</small>
                 </div>
             </div>
@@ -64,8 +64,8 @@
                     </div>
                 </div>
                 <div class="col-md-8" style="background-color:#fff;height: 135px;">
-                    <h1 style="color: #0e9aef;">1200件</h1>
-                    <h1 class="no-margins" style="padding-bottom: 10px;">&yen;254,203</h1>
+                    <h1 style="color: #0e9aef;" th:utext="''+*{daibaofeiCount}+'件'"></h1>
+                    <h1 class="no-margins" id="daibaofei" style="padding-bottom: 10px;">&yen;*{daibaofeiSum}</h1>
                     <small>待报废资产数量</small>
                 </div>
             </div>
@@ -78,8 +78,8 @@
                     </div>
                 </div>
                 <div class="col-md-8" style="background-color:#fff;height: 135px;">
-                    <h1 style="color: #0e9aef;">1200件</h1>
-                    <h1 class="no-margins" style="padding-bottom: 10px;">&yen;7,254,203</h1>
+                    <h1 style="color: #0e9aef;" th:utext="''+*{chuzhiCount}+'件'"></h1>
+                    <h1 class="no-margins" id="chuzhi" style="padding-bottom: 10px;">&yen;*{chuzhiSum}</h1>
                     <small>处置资产数量</small>
                 </div>
             </div>
@@ -90,7 +90,7 @@
         <div class="col-sm-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>待办列表</h5>
+                    <h5 style="color: red">待办列表</h5>
                     <div class="pull-right">
                         <div class="btn-group">
                             <button type="button" class="btn btn-xs btn-white" onclick="moreTask()">更多
@@ -143,6 +143,21 @@
     var prefix2 = "/system/mainTable";
 
     $(function () {
+        var zongzichanSum = [[${assetsInfo.zongzichanSum}]];
+        var xianzhiSum = [[${assetsInfo.xianzhiSum}]];
+        var shiyongSum = [[${assetsInfo.shiyongSum}]];
+        var daibaofeiSum = [[${assetsInfo.daibaofeiSum}]];
+        var chuzhiSum = [[${assetsInfo.chuzhiSum}]];
+        zongzichanSum = Number(zongzichanSum).toLocaleString('en-US');
+        xianzhiSum = Number(xianzhiSum).toLocaleString('en-US');
+        shiyongSum = Number(shiyongSum).toLocaleString('en-US');
+        daibaofeiSum = Number(daibaofeiSum).toLocaleString('en-US');
+        chuzhiSum = Number(chuzhiSum).toLocaleString('en-US');
+        $("#zongzichan").html("&yen;" + zongzichanSum);
+        $("#xianzhi").html("&yen;" + xianzhiSum);
+        $("#shiyong").html("&yen;" + shiyongSum);
+        $("#daibaofei").html("&yen;" + daibaofeiSum);
+        $("#chuzhi").html("&yen;" + chuzhiSum);
         queryUserList();
     });
 

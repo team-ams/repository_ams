@@ -110,6 +110,12 @@ public class Assets extends BaseEntity {
     @Excel(name = "保修日期")
     private String warrantyDate;
 
+    @Excel(name = "保养周期（单位天）")
+    private String maintainCycle;
+
+    @Excel(name = "上次保养时间")
+    private String maintainDate;
+
     /**删除标志（0：正常  2：已删除）*/
     private String delFlag;
 

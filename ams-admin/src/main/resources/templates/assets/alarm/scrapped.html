@@ -9,39 +9,9 @@
 <div class="ui-layout-center">
     <div class="container-div">
         <div class="row">
-            <div class="col-sm-12 search-collapse">
-                <form id="user-form">
-                    <input type="hidden" id="deptId" name="deptId">
-                    <input type="hidden" id="parentId" name="parentId">
-                    <div class="select-list">
-                        <ul>
-                            <li>
-                                资产编号：<input type="text" name="assetsNumber"/>
-                            </li>
-                            <li>
-                                资产名称：<input type="text" name="assetsName"/>
-                            </li>
-                            <li class="select-time">
-                                <label>创建时间： </label>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间"
-                                       name="params[beginTime]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间"
-                                       name="params[endTime]"/>
-                            </li>
-                            <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
-                                        class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
-                                        class="fa fa-refresh"></i>&nbsp;重置</a>
-                            </li>
-                        </ul>
-                    </div>
-                </form>
-            </div>
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="scrapped()">
-                    <i class="fa fa-user-md"></i> 已报废
+                <a class="btn btn-sm btn-danger" onclick="closeItem()">
+                    <i class="fa fa-reply-all"></i> 关闭
                 </a>
             </div>
             <div class="col-sm-12 select-table table-striped">
@@ -55,9 +25,6 @@
 <th:block th:include="include :: layout-latest-js"/>
 <script th:inline="javascript">
     var prefix = ctx + "assets/alarm";
-    var scrappedUrl = prefix + "/scrapped";
-    var removeUrl = prefix + "/remove/{assetsNumber}";
-    var disableUrl = prefix+"/disable/{assetsNumber}";
 
     $(function () {
         var panehHidden = false;
@@ -70,11 +37,10 @@
 
     function queryUserList() {
         var options = {
-            url: prefix + "/list",
-            allocateUrl: prefix + "/allocate/{id}",
+            url: prefix + "/scrappedList",
             sortName: "createTime",
             sortOrder: "desc",
-            modalName: "待报废",
+            modalName: "已停用",
             columns: [{
                 checkbox: true
             },
@@ -155,44 +121,9 @@
                     title: '创建时间',
                     visible: false,
                     align: 'center'
-                },
-                {
-                    title: '操作',
-                    align: 'center',
-                    formatter: function (value, row, index) {
-                        var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="disableAssets(\'' + row.assetsNumber + '\')"><i class="fa fa-edit"></i>停用</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="deleteInfo(\'' + row.assetsNumber + '\')"><i class="fa fa-remove"></i>删除</a> ');
-                        return actions.join('');
-                    }
                 }]
         };
         $.table.init(options);
-    }
-
-
-    function scrapped() {
-        table.set();
-        $.modal.openTab("已报废资产", scrappedUrl);
-    }
-
-    function deleteInfo(assetsNumber) {
-        table.set();
-        $.modal.confirm("确定删除该条待报废信息吗？可能会导致资产状态异常！", function () {
-            var url = $.common.isEmpty(assetsNumber) ? removeUrl : removeUrl.replace("{assetsNumber}", assetsNumber);
-            var data = {"assetsNumber": assetsNumber};
-            $.operate.submit(url, "post", "json", data);
-        });
-
-    }
-
-    function disableAssets(assetsNumber) {
-        table.set();
-        $.modal.confirm("确定停用该项资产吗？", function () {
-            var url = $.common.isEmpty(assetsNumber) ? disableUrl : disableUrl.replace("{assetsNumber}", assetsNumber);
-            var data = {"assetsNumber": assetsNumber};
-            $.operate.submit(url, "post", "json", data);
-        });
     }
 
 </script>

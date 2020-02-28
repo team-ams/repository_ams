@@ -34,7 +34,7 @@
             	</a>
             	<li>
             		<div class="user-panel">
-            			<a class="menuItem" title="个人中心" th:href="@{/system/user/profile}"> 
+            			<a class="menuItem" title="个人中心" th:href="@{/system/user/profile}">
             				<div class="hide" th:text="个人中心"></div>
 					        <div class="pull-left image">
 		                    	<img th:src="(${user.avatar} == '') ? @{/img/profile.jpg} : @{${user.avatar}}" class="img-circle" alt="User Image">
@@ -56,7 +56,7 @@
                 <li th:each="menu : ${menus}">
                 	<a th:class="@{${menu.url != '' && menu.url != '#'} ? ${menu.target}}" th:href="@{${menu.url == ''} ? |#| : ${menu.url}}">
                 		<i class="fa fa-bar-chart-o" th:class="${menu.icon}"></i>
-                    	<span class="nav-label" th:text="${menu.menuName}">一级菜单</span> 
+                    	<span class="nav-label" th:text="${menu.menuName}">一级菜单</span>
                     	<span th:class="${menu.url == '' || menu.url == '#'} ? |fa arrow|"></span>
                 	</a>
                     <ul class="nav nav-second-level collapse">
@@ -164,7 +164,7 @@
         </div>
     </nav>
     <!--左侧导航结束-->
-    
+
     <!--右侧部分开始-->
     <div id="page-wrapper" class="gray-bg dashbard-1">
         <div class="row border-bottom">
@@ -220,9 +220,9 @@
             </button>
             <a href="javascript:void(0);" class="roll-nav roll-right tabReload"><i class="fa fa-refresh"></i> 刷新</a>
         </div>
-        
+
         <a id="ax_close_max" class="ax_close_max" href="#" title="关闭全屏"> <i class="fa fa-times-circle-o"></i> </a>
-                    
+
         <div class="row mainContent" id="content-main">
             <iframe class="ams_iframe" name="iframe0" width="100%" height="100%" data-id="/system/main"
                     th:src="@{/system/main}" frameborder="0" seamless></iframe>
@@ -277,6 +277,8 @@ function switchSkin() {
 
 // 排除非左侧菜单链接
 var excludesUrl = ["/system/user/profile"];
+var needMaintainCount = [[${@Tips.getNeedMaintainCount()}]];
+var scrappedCount = [[${@Tips.getScrappedCount()}]];
 
 $(function() {
     var hash = location.hash;
@@ -287,6 +289,20 @@ $(function() {
             $('a[href$="' + url + '"]').parent("li").addClass("selected").parents("li").addClass("active").end().parents("ul").addClass("in");
         }
     }
+    var content = "";
+    if(needMaintainCount > 0){
+		content += "当前有" + needMaintainCount + "项待保养，请及时处理！";
+	}
+    if(scrappedCount > 0){
+    	if(needMaintainCount >0){
+    		content += "<br>"
+		}
+    	content += "当前有" + scrappedCount + "项待报废，请及时处理！";
+	}
+
+    if(needMaintainCount > 0 || scrappedCount > 0){
+    	$.modal.alertWarning(content);
+	}
 });
 </script>
 </body>

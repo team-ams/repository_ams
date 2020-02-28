@@ -79,13 +79,13 @@ public class AssetsReturnController extends BaseController {
         if (currentSysUser != null) {
             //当前系统用户不是管理员
             if (!currentSysUser.isAdmin()) {
-                List<AssetsBorrow> returnListFromBorrow = borrowService.getNeedReturnByUserId(currentSysUser.getUserId().toString());
                 startPage();
+                List<AssetsBorrow> returnListFromBorrow = borrowService.getNeedReturnByUserId(currentSysUser.getUserId().toString());
                 return getDataTable(returnListFromBorrow);
             }
             //当前系统用户是管理员，待审批信息
-            List<AssetsReturn> returnListAll = returnService.getReturnListAll();
             startPage();
+            List<AssetsReturn> returnListAll = returnService.getReturnListAll();
             return getDataTable(returnListAll);
         }
         return getDataTable(new ArrayList<>());

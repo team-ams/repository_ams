@@ -1,6 +1,7 @@
 package com.ams.system.mapper;
 
 import com.ams.system.domain.Assets;
+import com.ams.system.domain.AssetsInfo;
 import com.ams.system.domain.RuKu;
 import com.ams.system.domain.ZiChan;
 import org.apache.ibatis.annotations.Param;
@@ -56,6 +57,27 @@ public interface AssetsAccountingMapper {
      * @return
      */
     public List<Assets> getAssetsList0(Assets assets);
+
+    /**
+     * 获取状态为闲置和审核中的资产信息（状态为正常的资产）
+     *
+     * @return
+     */
+    List<Assets> getAssetsList01();
+
+    /**
+     * 获取状态为停用的资产信息
+     *
+     * @return
+     */
+    List<Assets> getDisableStatusAssetsList();
+
+    /**
+     * 获取状态为待报废的资产信息
+     *
+     * @return
+     */
+    List<Assets> getScrappedStatusAssetsList();
 
     /**
      * 检查资产编号是否唯一
@@ -125,5 +147,31 @@ public interface AssetsAccountingMapper {
      * @return
      */
     List<ZiChan> getCountByUseStatus();
+
+    /**
+     * 总资产信息
+     * @return
+     */
+    AssetsInfo getZongZiChanInfo();
+    /**
+     * 闲置资产信息
+     * @return
+     */
+    AssetsInfo getXianZhiInfo();
+    /**
+     * 使用资产信息
+     * @return
+     */
+    AssetsInfo getShiYongInfo();
+    /**
+     * 待报废资产信息
+     * @return
+     */
+    AssetsInfo getDaiBaoFeiInfo();
+    /**
+     * 处置资产信息
+     * @return
+     */
+    AssetsInfo getChuZhiInfo();
 
 }

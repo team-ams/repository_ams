@@ -75,13 +75,13 @@ public class AssetsAccidentController extends BaseController {
         if (currentSysUser != null) {
             //当前系统用户不是管理员，个人保养信息
             if (!currentSysUser.isAdmin()) {
-                List<Assets> assetsList0 = accountingService.getAssetsList0(assets);
                 startPage();
+                List<Assets> assetsList0 = accountingService.getAssetsList0(assets);
                 return getDataTable(assetsList0);
             }
             //当前系统用户是管理员，全部信息
-            List<AssetsAccident> accidentListAll = accidentService.getAccidentListAll();
             startPage();
+            List<AssetsAccident> accidentListAll = accidentService.getAccidentListAll();
             return getDataTable(accidentListAll);
         }
         return getDataTable(new ArrayList<>());

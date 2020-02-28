@@ -1,9 +1,6 @@
 package com.ams.system.service;
 
-import com.ams.system.domain.Assets;
-import com.ams.system.domain.AssetsAllocate;
-import com.ams.system.domain.RuKu;
-import com.ams.system.domain.ZiChan;
+import com.ams.system.domain.*;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -63,6 +60,28 @@ public interface IAssetsAccountingService {
      * @return
      */
     public List<Assets> getAssetsList0(Assets assets);
+
+    /**
+     * 获取状态为闲置和审核中的资产信息（状态为正常的资产）
+     *
+     * @return
+     */
+    List<Assets> getAssetsList01();
+
+    /**
+     * 获取状态为待报废的资产信息
+     *
+     * @return
+     */
+    List<Assets> getScrappedStatusAssetsList();
+
+    /**
+     * 获取状态为停用的资产信息
+     *
+     * @return
+     */
+    List<Assets> getDisableStatusAssetsList();
+
 
     /**
      * 根据资产编号查找资产（可批量查询）
@@ -133,4 +152,30 @@ public interface IAssetsAccountingService {
      * @return
      */
     List<ZiChan> getCountByUseStatus();
+
+    /**
+     * 总资产信息
+     * @return
+     */
+    AssetsInfo getZongZiChanInfo();
+    /**
+     * 闲置资产信息
+     * @return
+     */
+    AssetsInfo getXianZhiInfo();
+    /**
+     * 使用资产信息
+     * @return
+     */
+    AssetsInfo getShiYongInfo();
+    /**
+     * 待报废资产信息
+     * @return
+     */
+    AssetsInfo getDaiBaoFeiInfo();
+    /**
+     * 处置资产信息
+     * @return
+     */
+    AssetsInfo getChuZhiInfo();
 }

@@ -173,6 +173,7 @@
 
     <select id="getMaintainListAll" resultMap="AssetsMaintainResult">
         <include refid="selectAssetsMaintainVo"/>
+        where a.status = 0
     </select>
 
     <insert id="insertMaintainList" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="maintain_id">
