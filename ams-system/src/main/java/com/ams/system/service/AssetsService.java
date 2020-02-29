@@ -340,22 +340,23 @@ public class AssetsService {
         int updateBorrowRows = 0;
         //当有多个资产编号的时候，每次更新资产编号
         for (Assets assets : updateList) {
+            AssetsReturn assetsReturn = new AssetsReturn();
             AssetsBorrow borrowUpdate = borrowService.getBorrowByAssetsNumberAndIsNotReturn(assets.getAssetsNumber());
             //更新借用表的归还信息---->1为归还审批中
             borrowUpdate.setIsReturn("1");
             //更新借用表的是否归还信息 ---->  归还审批中(目的是点击归还按钮后，该借用信息暂时不显示，归还审核驳回则变回未归还状态)
             updateBorrowRows = borrowService.updateBorrowInfo(borrowUpdate);
-            returnData.setReturnOrderNum(returnOrderNumber);
-            returnData.setReturnUserId(returnUserId);
-            returnData.setCreateBy(createBy);
-            returnData.setAssetsNumber(assets.getAssetsNumber());
-            insertLists.add(returnData);
+            assetsReturn.setReturnOrderNum(returnOrderNumber);
+            assetsReturn.setReturnUserId(returnUserId);
+            assetsReturn.setCreateBy(createBy);
+            assetsReturn.setAssetsNumber(assets.getAssetsNumber());
+            insertLists.add(assetsReturn);
         }
 
         int updateRows = accountingService.updateAssetsLists(updateList);
         int insertRows = returnService.insertReturnList(insertLists);
         //成功才返回大于0的数
-        if (updateBorrowRows > 0 && updateRows > 0 && insertRows == updateList.size()) {
+        if (updateBorrowRows > 0 && updateRows > 0) {
             return updateBorrowRows + insertRows + updateRows;
         }
         throw new RuntimeException("申请归还失败");
@@ -470,17 +471,18 @@ public class AssetsService {
         List<AssetsMaintain> insertLists = new ArrayList<>();
         //当有多个资产编号的时候，每次更新资产编号
         for (Assets assets : updateList) {
-            maintainData.setMaintainOrderNum(maintainOrderNumber);
-            maintainData.setMaintainUserId(maintainUserId);
-            maintainData.setCreateBy(createBy);
-            maintainData.setAssetsNumber(assets.getAssetsNumber());
-            insertLists.add(maintainData);
+            AssetsMaintain assetsMaintain = new AssetsMaintain();
+            assetsMaintain.setMaintainOrderNum(maintainOrderNumber);
+            assetsMaintain.setMaintainUserId(maintainUserId);
+            assetsMaintain.setCreateBy(createBy);
+            assetsMaintain.setAssetsNumber(assets.getAssetsNumber());
+            insertLists.add(assetsMaintain);
         }
 
         int updateRows = accountingService.updateAssetsLists(updateList);
         int insertRows = maintainService.insertMaintainList(insertLists);
         //成功才返回大于0的数
-        if (updateRows == updateList.size() && insertRows == updateList.size()) {
+        if (updateRows > 0 && insertRows > 0) {
             return updateRows + insertRows;
         }
         throw new RuntimeException("保养失败");
@@ -551,12 +553,12 @@ public class AssetsService {
     /**
      * 维修事务（Transactional注解在class类上）
      *
-     * @param maintainUserId
+     * @param repairUserId
      * @param repairData
      * @return
      * @throws Exception
      */
-    public int repairAssets(int maintainUserId, String createBy, AssetsRepair repairData) throws Exception {
+    public int repairAssets(int repairUserId, String createBy, AssetsRepair repairData) throws Exception {
         //生成事故单号WX****
         String repairOrderNumber = "WX" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
         if (repairData == null) {
@@ -574,11 +576,13 @@ public class AssetsService {
         List<AssetsRepair> insertLists = new ArrayList<>();
         //当有多个资产编号的时候，每次更新资产编号
         for (Assets assets : updateList) {
-            repairData.setRepairOrderNum(repairOrderNumber);
-            repairData.setRepairUserId(maintainUserId);
-            repairData.setCreateBy(createBy);
-            repairData.setAssetsNumber(assets.getAssetsNumber());
-            insertLists.add(repairData);
+            AssetsRepair repair = new AssetsRepair();
+            repair.setRepairOrderNum(repairOrderNumber);
+            repair.setRepairUserId(repairUserId);
+            repair.setCreateBy(createBy);
+            repair.setAssetsNumber(assets.getAssetsNumber());
+
+            insertLists.add(repair);
 
             //更新资产状态为"维修中"
             assets.setUseStatus(AssetsStatus.MAINTENANCING.getCode());
@@ -588,7 +592,7 @@ public class AssetsService {
         int updateAssetsRows = accountingService.updateAssetsLists(updateList);
         int insertRows = repairService.insertRepairList(insertLists);
         //成功才返回大于0的数
-        if (insertRows == updateList.size() && updateAssetsRows > 0) {
+        if (insertRows > 0 && updateAssetsRows > 0) {
             return insertRows + updateAssetsRows;
         }
         throw new RuntimeException("维修登记失败");
@@ -736,17 +740,18 @@ public class AssetsService {
         List<AssetsAccident> insertLists = new ArrayList<>();
         //当有多个资产编号的时候，每次更新资产编号
         for (Assets assets : updateList) {
-            //事故单号
-            accidentData.setAccidentOrderNum(accidentOrderNumber);
-            accidentData.setReportUserId(reportUserId);
-            accidentData.setCreateBy(createBy);
-            accidentData.setAssetsNumber(assets.getAssetsNumber());
-            insertLists.add(accidentData);
+            AssetsAccident assetsAccident = new AssetsAccident();
+            assetsAccident.setAccidentOrderNum(accidentOrderNumber);
+            assetsAccident.setReportUserId(reportUserId);
+            assetsAccident.setCreateBy(createBy);
+            assetsAccident.setAssetsNumber(assets.getAssetsNumber());
+
+            insertLists.add(assetsAccident);
         }
         int updateAssetsRows = accountingService.updateAssetsLists(updateList);
         int insertRows = accidentService.insertAccidentList(insertLists);
         //成功才返回大于0的数
-        if (updateAssetsRows > 0 && insertRows == updateList.size()) {
+        if (updateAssetsRows > 0 && insertRows > 0) {
             return insertRows + updateAssetsRows;
         }
         throw new RuntimeException("事故登记失败");
@@ -854,17 +859,19 @@ public class AssetsService {
         List<AssetsTransfer> insertLists = new ArrayList<>();
         //当有多个资产编号的时候，每次更新资产编号
         for (Assets assets : updateList) {
-            transferData.setTransferOrderNum(transferOrderNumber);
-            transferData.setTransferUserId(transferUserId);
-            transferData.setCreateBy(createBy);
-            transferData.setAssetsNumber(assets.getAssetsNumber());
+            AssetsTransfer transfer = new AssetsTransfer();
+            transfer.setTransferOrderNum(transferOrderNumber);
+            transfer.setTransferUserId(transferUserId);
+            transfer.setCreateBy(createBy);
+            transfer.setAssetsNumber(assets.getAssetsNumber());
+
             insertLists.add(transferData);
         }
 
         int updateAssetsRows = accountingService.updateAssetsLists(updateList);
         int insertRows = transferService.insertTransferList(insertLists);
         //成功才返回大于0的数
-        if (updateAssetsRows > 0 && insertRows == updateList.size()) {
+        if (updateAssetsRows > 0 && insertRows > 0) {
             return insertRows + updateAssetsRows;
         }
         throw new RuntimeException("转移失败");

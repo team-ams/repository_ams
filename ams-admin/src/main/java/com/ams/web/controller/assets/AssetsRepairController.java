@@ -244,10 +244,10 @@ public class AssetsRepairController extends BaseController {
         }
         SysUser currentSysUser = ShiroUtils.getSysUser();
         if (currentSysUser != null) {
-            int allocateUserId = currentSysUser.getUserId().intValue();
+            int repairUserId = currentSysUser.getUserId().intValue();
             String createBy = currentSysUser.getLoginName();
             try {
-                return toAjax(assetsService.repairAssets(allocateUserId, createBy, repairData));
+                return toAjax(assetsService.repairAssets(repairUserId, createBy, repairData));
             } catch (Exception e) {
                 e.printStackTrace();
                 return error();
