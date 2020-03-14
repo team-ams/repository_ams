@@ -577,9 +577,9 @@ public class AssetsService {
         //当有多个资产编号的时候，每次更新资产编号
         for (Assets assets : updateList) {
             AssetsRepair repair = new AssetsRepair();
+            repair = repairData;
             repair.setRepairOrderNum(repairOrderNumber);
             repair.setRepairUserId(repairUserId);
-            repair.setCreateBy(createBy);
             repair.setAssetsNumber(assets.getAssetsNumber());
 
             insertLists.add(repair);
