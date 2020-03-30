@@ -62,7 +62,10 @@ public class AssetsService {
             return 0;
         }
         for (Assets update : updateList) {
-
+            //资产状态不是“闲置”则退出
+            if (!update.getUseStatus().equals(AssetsStatus.NORMAL.getCode())) {
+                return 0;
+            }
             //更新 资产 状态为“审核中”
             update.setUseStatus(AssetsStatus.RESERVE.getCode());
         }
@@ -177,7 +180,12 @@ public class AssetsService {
         if (updateList == null || updateList.size() == 0) {
             return 0;
         }
+
         for (Assets update : updateList) {
+            //资产状态不是“闲置”则退出
+            if (!update.getUseStatus().equals(AssetsStatus.NORMAL.getCode())) {
+                return 0;
+            }
             //更新 资产 状态为“审核中”
             update.setUseStatus(AssetsStatus.RESERVE.getCode());
         }
@@ -783,7 +791,7 @@ public class AssetsService {
             //资产领用表更新数
             int updateAssetsAccidentRows = 0;
 
-            //审核用过
+            //审核通过
             if (AssetsExamineStatus.AGREE.getCode().equals(examineResult)) {
                 for (AssetsAccident update : accidentUpdateList) {
                     //更新资产领用状态为“审核通过”
