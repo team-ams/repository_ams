@@ -74,7 +74,7 @@ public class AssetsMaintainController extends BaseController {
         if (currentSysUser != null) {
             //当前系统用户不是管理员，个人保养信息
             if (!currentSysUser.isAdmin()) {
-                List<Assets> assetsList01 = accountingService.getAssetsList01();
+                List<Assets> assetsList01 = accountingService.getAssetsList01(assets);
                 startPage();
                 List<Assets> needMaintainList = assetsService.needMaintainList(assetsList01);
                 return getDataTable(needMaintainList);

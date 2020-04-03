@@ -66,7 +66,7 @@ public interface IAssetsAccountingService {
      *
      * @return
      */
-    List<Assets> getAssetsList01();
+    List<Assets> getAssetsList01(Assets assets);
 
     /**
      * 获取状态为待报废的资产信息

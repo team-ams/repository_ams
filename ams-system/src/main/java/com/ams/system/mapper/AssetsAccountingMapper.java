@@ -63,7 +63,7 @@ public interface AssetsAccountingMapper {
      *
      * @return
      */
-    List<Assets> getAssetsList01();
+    List<Assets> getAssetsList01(Assets assets);
 
     /**
      * 获取状态为停用的资产信息

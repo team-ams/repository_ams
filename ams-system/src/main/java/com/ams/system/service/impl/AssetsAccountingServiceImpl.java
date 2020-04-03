@@ -125,8 +125,8 @@ public class AssetsAccountingServiceImpl implements IAssetsAccountingService {
     }
 
     @Override
-    public List<Assets> getAssetsList01() {
-        List<Assets> assetsList01 = assetsAccountingMapper.getAssetsList01();
+    public List<Assets> getAssetsList01(Assets assets) {
+        List<Assets> assetsList01 = assetsAccountingMapper.getAssetsList01(assets);
         for (Assets item : assetsList01) {
             item.setUseStatus(AssetsStatus.getStatusByCode(item.getUseStatus()).getInfo());
         }

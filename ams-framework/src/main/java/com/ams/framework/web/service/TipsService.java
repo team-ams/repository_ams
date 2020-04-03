@@ -18,7 +18,7 @@ public class TipsService {
     private AssetsService assetsService;
 
     public int getNeedMaintainCount() throws ParseException {
-        List<Assets> assetsList = accountingService.getAssetsList01();
+        List<Assets> assetsList = accountingService.getAssetsList01(new Assets());
         List<Assets> needMaintainList = assetsService.needMaintainList(assetsList);
         return needMaintainList.size();
     }
