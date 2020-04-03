@@ -184,9 +184,18 @@
         where a.return_id = #{returnId}
     </select>
 
-    <select id="getReturnListAll" resultMap="AssetsReturnResult">
+    <select id="getReturnListAll" parameterType="com.ams.system.domain.AssetsReturn" resultMap="AssetsReturnResult">
         <include refid="selectAssetsReturnVo"/>
         where a.status = 0
+        <if test="returnOrderNum != null and returnOrderNum != ''">
+            AND a.return_orderNum like concat('%', #{returnOrderNum}, '%')
+        </if>
+        <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+            AND date_format(a.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+        </if>
+        <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+            AND date_format(a.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+        </if>
     </select>
 
     <insert id="insertReturnList" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="return_id">

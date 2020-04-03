@@ -70,7 +70,7 @@ public class AssetsAccidentController extends BaseController {
     @RequiresPermissions("assets:accident:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(Assets assets) {
+    public TableDataInfo list(AssetsAccident accident, Assets assets) {
         SysUser currentSysUser = ShiroUtils.getSysUser();
         if (currentSysUser != null) {
             //当前系统用户不是管理员，个人保养信息
@@ -81,7 +81,7 @@ public class AssetsAccidentController extends BaseController {
             }
             //当前系统用户是管理员，全部信息
             startPage();
-            List<AssetsAccident> accidentListAll = accidentService.getAccidentListAll();
+            List<AssetsAccident> accidentListAll = accidentService.getAccidentListAll(accident);
             return getDataTable(accidentListAll);
         }
         return getDataTable(new ArrayList<>());

@@ -67,7 +67,7 @@ public class AssetsTransferController extends BaseController {
 
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(Assets assets) {
+    public TableDataInfo list(AssetsTransfer transfer, Assets assets) {
         SysUser currentSysUser = ShiroUtils.getSysUser();
         if (currentSysUser != null) {
             //当前系统用户不是管理员，个人保养信息
@@ -78,7 +78,7 @@ public class AssetsTransferController extends BaseController {
             }
             //当前系统用户是管理员，全部信息
             startPage();
-            List<AssetsTransfer> transferListAll = transferService.getTransferListAll();
+            List<AssetsTransfer> transferListAll = transferService.getTransferListAll(transfer);
             return getDataTable(transferListAll);
         }
         return getDataTable(new ArrayList<>());

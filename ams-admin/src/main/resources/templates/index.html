@@ -294,19 +294,23 @@ $(function() {
         }
     }
     var content = "";
-    if(needMaintainCount > 0){
-		content += "当前有" + needMaintainCount + "项待保养，请及时处理！";
-	}
-    if(scrappedCount > 0){
-    	if(needMaintainCount >0){
-    		content += "<br>"
+    var sysUserName = [[${user.loginName}]];
+    if(sysUserName == "admin"){
+    	if(needMaintainCount > 0){
+			content += "当前有" + needMaintainCount + "项待保养，请及时处理！";
 		}
-    	content += "当前有" + scrappedCount + "项待报废，请及时处理！";
-	}
+		if(scrappedCount > 0){
+			if(needMaintainCount >0){
+				content += "<br>"
+			}
+			content += "当前有" + scrappedCount + "项待报废，请及时处理！";
+		}
 
-    if(needMaintainCount > 0 || scrappedCount > 0){
-    	$.modal.alertWarning(content);
-	}
+		if(needMaintainCount > 0 || scrappedCount > 0){
+			$.modal.alertWarning(content);
+		}
+    }
+
 });
 </script>
 </body>

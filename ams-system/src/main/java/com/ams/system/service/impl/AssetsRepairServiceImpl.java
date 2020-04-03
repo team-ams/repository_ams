@@ -29,8 +29,8 @@ public class AssetsRepairServiceImpl implements IAssetsRepairService {
     }
 
     @Override
-    public List<AssetsRepair> getRepairListAll() {
-        List<AssetsRepair> repairListAll = repairMapper.getRepairListAll();
+    public List<AssetsRepair> getRepairListAll(AssetsRepair repair) {
+        List<AssetsRepair> repairListAll = repairMapper.getRepairListAll(repair);
         return repairListAll;
     }
 

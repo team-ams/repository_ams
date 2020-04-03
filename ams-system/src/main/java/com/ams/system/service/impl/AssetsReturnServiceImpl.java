@@ -35,8 +35,8 @@ public class AssetsReturnServiceImpl implements IAssetsReturnService {
     }
 
     @Override
-    public List<AssetsReturn> getReturnListAll() {
-        return returnMapper.getReturnListAll();
+    public List<AssetsReturn> getReturnListAll(AssetsReturn assetsReturn) {
+        return returnMapper.getReturnListAll(assetsReturn);
     }
 
     @Override

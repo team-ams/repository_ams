@@ -29,7 +29,7 @@ public interface IAssetsAccidentService {
      *
      * @return
      */
-    List<AssetsAccident> getAccidentListAll();
+    List<AssetsAccident> getAccidentListAll(AssetsAccident accident);
 
     /**
      * 批量插入资产保养信息

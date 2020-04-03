@@ -29,7 +29,7 @@ public interface IAssetsRepairService {
      *
      * @return
      */
-    List<AssetsRepair> getRepairListAll();
+    List<AssetsRepair> getRepairListAll(AssetsRepair repair);
 
     /**
      * 批量插入资产保养信息

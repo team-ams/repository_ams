@@ -23,8 +23,8 @@ public class AssetsCheckTaskServiceImpl implements IAssetsCheckTaskService {
 
 
     @Override
-    public List<AssetsCheckTask> getCheckTaskAll() {
-        return checkTaskMapper.getCheckTaskAll();
+    public List<AssetsCheckTask> getCheckTaskAll(AssetsCheckTask checkTask) {
+        return checkTaskMapper.getCheckTaskAll(checkTask);
     }
 
     @Override

@@ -83,7 +83,7 @@ public class AssetsCheckTaskController extends BaseController {
     @RequiresPermissions("assets:checkTask:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list() {
+    public TableDataInfo list(AssetsCheckTask checkTask) {
         SysUser currentSysUser = ShiroUtils.getSysUser();
         if (currentSysUser != null) {
             //当前系统用户不是管理员，个人保养信息
@@ -95,7 +95,7 @@ public class AssetsCheckTaskController extends BaseController {
             }
             //当前系统用户是管理员，全部信息
             //注意这步一定要在startPage()前面执行
-            List<AssetsCheckTask> checkTaskListAll = checkTaskService.getCheckTaskAll();
+            List<AssetsCheckTask> checkTaskListAll = checkTaskService.getCheckTaskAll(checkTask);
             startPage();
             return getDataTable(checkTaskListAll);
 

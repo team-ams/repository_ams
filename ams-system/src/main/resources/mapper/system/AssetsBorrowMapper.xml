@@ -198,9 +198,19 @@
         where a.assets_number = #{assetsNumber} and a.is_return != 2;
     </select>
 
-    <select id="getBorrowListAll" resultMap="AssetsBorrowResult">
+    <select id="getBorrowListAll" parameterType="com.ams.system.domain.AssetsBorrow" resultMap="AssetsBorrowResult">
         <include refid="selectAssetsBorrowVo"/>
         where a.status = 0
+        <if test="borrowOrderNum != null and borrowOrderNum != ''">
+            AND a.borrow_orderNum like concat('%', #{borrowOrderNum}, '%')
+        </if>
+        <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+            AND date_format(a.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+        </if>
+        <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+            AND date_format(a.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+        </if>
+        group by a.borrow_orderNum
     </select>
 
     <insert id="insertBorrowList" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="borrow_id">

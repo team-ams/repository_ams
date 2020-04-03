@@ -13,7 +13,7 @@ public interface IAssetsCheckTaskService {
      *
      * @return
      */
-    List<AssetsCheckTask> getCheckTaskAll();
+    List<AssetsCheckTask> getCheckTaskAll(AssetsCheckTask checkTask);
     /**
      * 统计盘点详情
      *

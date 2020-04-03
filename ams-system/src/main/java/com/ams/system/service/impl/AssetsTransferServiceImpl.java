@@ -28,8 +28,8 @@ public class AssetsTransferServiceImpl implements IAssetsTransferService {
     }
 
     @Override
-    public List<AssetsTransfer> getTransferListAll() {
-        List<AssetsTransfer> transferListAll = transferMapper.getTransferListAll();
+    public List<AssetsTransfer> getTransferListAll(AssetsTransfer transfer) {
+        List<AssetsTransfer> transferListAll = transferMapper.getTransferListAll(transfer);
         return transferListAll;
     }
 

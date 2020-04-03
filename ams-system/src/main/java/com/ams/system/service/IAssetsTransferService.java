@@ -29,7 +29,7 @@ public interface IAssetsTransferService {
      *
      * @return
      */
-    List<AssetsTransfer> getTransferListAll();
+    List<AssetsTransfer> getTransferListAll(AssetsTransfer transfer);
 
     /**
      * 批量插入资产转移信息

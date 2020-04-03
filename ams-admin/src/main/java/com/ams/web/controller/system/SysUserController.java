@@ -53,6 +53,10 @@ public class SysUserController extends BaseController
     @GetMapping()
     public String user()
     {
+        SysUser sysUser = ShiroUtils.getSysUser();
+        if(!sysUser.isAdmin()){
+            return prefix + "/user2";
+        }
         return prefix + "/user";
     }
 

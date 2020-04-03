@@ -28,8 +28,8 @@ public class AssetsAccidentServiceImpl implements IAssetsAccidentService {
     }
 
     @Override
-    public List<AssetsAccident> getAccidentListAll() {
-        List<AssetsAccident> accidentListAll = accidentMapper.getAccidentListAll();
+    public List<AssetsAccident> getAccidentListAll(AssetsAccident accident) {
+        List<AssetsAccident> accidentListAll = accidentMapper.getAccidentListAll(accident);
         return accidentListAll;
     }
 

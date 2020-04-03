@@ -171,9 +171,18 @@
         where a.maintain_id = #{maintainId}
     </select>
 
-    <select id="getMaintainListAll" resultMap="AssetsMaintainResult">
+    <select id="getMaintainListAll" parameterType="com.ams.system.domain.AssetsMaintain" resultMap="AssetsMaintainResult">
         <include refid="selectAssetsMaintainVo"/>
         where a.status = 0
+        <if test="maintainOrderNum != null and maintainOrderNum != ''">
+            AND a.maintain_orderNum like concat('%', #{maintainOrderNum}, '%')
+        </if>
+        <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+            AND date_format(a.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+        </if>
+        <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+            AND date_format(a.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+        </if>
     </select>
 
     <insert id="insertMaintainList" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="maintain_id">

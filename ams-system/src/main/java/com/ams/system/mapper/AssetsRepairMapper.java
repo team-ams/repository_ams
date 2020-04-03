@@ -31,7 +31,7 @@ public interface AssetsRepairMapper {
      *
      * @return
      */
-    List<AssetsRepair> getRepairListAll();
+    List<AssetsRepair> getRepairListAll(AssetsRepair repair);
 
     /**
      * 批量插入资产维修信息

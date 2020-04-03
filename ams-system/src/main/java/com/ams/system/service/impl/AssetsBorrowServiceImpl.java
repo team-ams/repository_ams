@@ -44,8 +44,8 @@ public class AssetsBorrowServiceImpl implements IAssetsBorrowService {
     }
 
     @Override
-    public List<AssetsBorrow> getBorrowListAll() {
-        List<AssetsBorrow> borrowListAll = borrowMapper.getBorrowListAll();
+    public List<AssetsBorrow> getBorrowListAll(AssetsBorrow borrow) {
+        List<AssetsBorrow> borrowListAll = borrowMapper.getBorrowListAll(borrow);
         return borrowListAll;
     }
 

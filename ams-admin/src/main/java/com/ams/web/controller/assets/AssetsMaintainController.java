@@ -69,7 +69,7 @@ public class AssetsMaintainController extends BaseController {
     @RequiresPermissions("assets:maintain:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(Assets assets) throws ParseException {
+    public TableDataInfo list(AssetsMaintain maintain, Assets assets) throws ParseException {
         SysUser currentSysUser = ShiroUtils.getSysUser();
         if (currentSysUser != null) {
             //当前系统用户不是管理员，个人保养信息
@@ -80,7 +80,7 @@ public class AssetsMaintainController extends BaseController {
                 return getDataTable(needMaintainList);
             }
             //当前系统用户是管理员，全部信息
-            List<AssetsMaintain> maintainListAll = maintainService.getMaintainListAll();
+            List<AssetsMaintain> maintainListAll = maintainService.getMaintainListAll(maintain);
             startPage();
             return getDataTable(maintainListAll);
         }

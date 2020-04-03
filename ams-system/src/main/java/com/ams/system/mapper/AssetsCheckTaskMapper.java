@@ -12,7 +12,7 @@ public interface AssetsCheckTaskMapper {
      *
      * @return
      */
-    List<AssetsCheckTask> getCheckTaskAll();
+    List<AssetsCheckTask> getCheckTaskAll(AssetsCheckTask checkTask);
 
     /**
      * 统计盘点详情

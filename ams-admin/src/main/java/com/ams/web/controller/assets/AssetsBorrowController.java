@@ -76,7 +76,7 @@ public class AssetsBorrowController extends BaseController {
     @RequiresPermissions("assets:borrow:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(Assets assets) {
+    public TableDataInfo list(AssetsBorrow borrow,Assets assets) {
         SysUser currentSysUser = ShiroUtils.getSysUser();
         if (currentSysUser != null) {
             //当前系统用户不是管理员，可借用的资产信息
@@ -87,7 +87,7 @@ public class AssetsBorrowController extends BaseController {
             }
             //当前系统用户是管理员，待审批信息
             startPage();
-            List<AssetsBorrow> borrowListAll = borrowService.getBorrowListAll();
+            List<AssetsBorrow> borrowListAll = borrowService.getBorrowListAll(borrow);
             return getDataTable(borrowListAll);
         }
         return getDataTable(new ArrayList<>());

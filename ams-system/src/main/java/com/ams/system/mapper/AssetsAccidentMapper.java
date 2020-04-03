@@ -27,7 +27,7 @@ public interface AssetsAccidentMapper {
      *
      * @return
      */
-    List<AssetsAccident> getAccidentListAll();
+    List<AssetsAccident> getAccidentListAll(AssetsAccident accident);
 
     /**
      * 批量插入资产维修信息

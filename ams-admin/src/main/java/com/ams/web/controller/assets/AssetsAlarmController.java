@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 报表
+ * 报废
  *
  * @author zengchao
  */

@@ -181,9 +181,18 @@
         where a.repair_id = #{repairId}
     </select>
 
-    <select id="getRepairListAll" resultMap="AssetsRepairResult">
+    <select id="getRepairListAll" parameterType="com.ams.system.domain.AssetsRepair" resultMap="AssetsRepairResult">
         <include refid="selectAssetsRepairVo"/>
         where a.status = 0
+        <if test="repairOrderNum != null and repairOrderNum != ''">
+            AND a.repair_orderNum like concat('%', #{repairOrderNum}, '%')
+        </if>
+        <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+            AND date_format(a.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+        </if>
+        <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+            AND date_format(a.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+        </if>
     </select>
 
     <insert id="insertRepairList" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="repair_id">

@@ -74,7 +74,7 @@ public class AssetsReturnController extends BaseController {
     @RequiresPermissions("assets:return:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(Assets assets) {
+    public TableDataInfo list(AssetsReturn assetsReturn,Assets assets) {
         SysUser currentSysUser = ShiroUtils.getSysUser();
         if (currentSysUser != null) {
             //当前系统用户不是管理员
@@ -85,7 +85,7 @@ public class AssetsReturnController extends BaseController {
             }
             //当前系统用户是管理员，待审批信息
             startPage();
-            List<AssetsReturn> returnListAll = returnService.getReturnListAll();
+            List<AssetsReturn> returnListAll = returnService.getReturnListAll(assetsReturn);
             return getDataTable(returnListAll);
         }
         return getDataTable(new ArrayList<>());

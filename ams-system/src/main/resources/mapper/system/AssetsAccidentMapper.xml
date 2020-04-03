@@ -175,9 +175,18 @@
         where a.accident_id = #{accidentId}
     </select>
 
-    <select id="getAccidentListAll" resultMap="AssetsAccidentResult">
+    <select id="getAccidentListAll" parameterType="com.ams.system.domain.AssetsAccident" resultMap="AssetsAccidentResult">
         <include refid="selectAssetsAccidentVo"/>
         where a.status = 0
+        <if test="accidentOrderNum != null and accidentOrderNum != ''">
+            AND a.accident_orderNum like concat('%', #{accidentOrderNum}, '%')
+        </if>
+        <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+            AND date_format(a.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+        </if>
+        <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+            AND date_format(a.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+        </if>
     </select>
 
     <insert id="insertAccidentList" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="accident_id">

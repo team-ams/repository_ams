@@ -52,7 +52,7 @@ public interface IAssetsBorrowService {
      *
      * @return
      */
-    List<AssetsBorrow> getBorrowListAll();
+    List<AssetsBorrow> getBorrowListAll(AssetsBorrow borrow);
 
     /**
      * 批量插入资产借用信息

@@ -74,6 +74,11 @@ public class SysIndexController extends BaseController {
     // 系统介绍
     @GetMapping("/system/main")
     public String main(ModelMap mmap) {
+        SysUser sysUser = ShiroUtils.getSysUser();
+        //不是系统管理员
+        if(!sysUser.isAdmin()){
+            return "userMain";
+        }
         AssetsInfo assetsInfo = new AssetsInfo();
         AssetsInfo zongZiChanInfo = accountingService.getZongZiChanInfo();
         AssetsInfo xianZhiInfo = accountingService.getXianZhiInfo();
@@ -100,35 +105,15 @@ public class SysIndexController extends BaseController {
     public TableDataInfo todoList() {
 
         List<AssetsAllocate> allocateAdminList = allocateService.getAllocateAdminList(new AssetsAllocate());
-        List<AssetsBorrow> borrowListAll = borrowService.getBorrowListAll();
-        List<AssetsReturn> returnListAll = returnService.getReturnListAll();
-        List<AssetsMaintain> maintainListAll = maintainService.getMaintainListAll();
-        List<AssetsRepair> repairListAll = repairService.getRepairListAll();
-        List<AssetsTransfer> transferListAll = transferService.getTransferListAll();
-        List<AssetsAccident> accidentListAll = accidentService.getAccidentListAll();
+        List<AssetsBorrow> borrowListAll = borrowService.getBorrowListAll(new AssetsBorrow());
+        List<AssetsReturn> returnListAll = returnService.getReturnListAll(new AssetsReturn());
+        List<AssetsMaintain> maintainListAll = maintainService.getMaintainListAll(new AssetsMaintain());
+        List<AssetsRepair> repairListAll = repairService.getRepairListAll(new AssetsRepair());
+        List<AssetsTransfer> transferListAll = transferService.getTransferListAll(new AssetsTransfer());
+        List<AssetsAccident> accidentListAll = accidentService.getAccidentListAll(new AssetsAccident());
         List<AssetsCheckTask> checkedAll = checkTaskService.getCheckedAll();
         List<Task> taskList = new ArrayList<>();
         int seq = 0;
-
-        SysUser sysUser = ShiroUtils.getSysUser();
-        //不是管理员
-        if (!sysUser.isAdmin()) {
-            if (checkedAll.size() > 0) {
-                for (AssetsCheckTask checkTask : checkedAll) {
-                    Task task = new Task();
-                    task.setSeqNo(++seq);
-                    task.setType("资产盘点");
-                    task.setOrderNum(checkTask.getCheckNumber());
-                    task.setUserName(checkTask.getUser().getUserName());
-                    task.setUserId(checkTask.getUser().getUserId().intValue());
-                    task.setParentName(checkTask.getUser().getDept().getParentName());
-                    task.setDate(new SimpleDateFormat("yyyy-MM-dd").format(checkTask.getCreateTime()));
-                    taskList.add(task);
-                }
-            }
-            startPage();
-            return getDataTable(taskList);
-        }
 
         if (checkedAll.size() > 0) {
             Task task = new Task();
@@ -266,12 +251,12 @@ public class SysIndexController extends BaseController {
     @ResponseBody
     public TableDataInfo adminListAll() {
         List<AssetsAllocate> allocateAdminList = allocateService.getAllocateAdminList(new AssetsAllocate());
-        List<AssetsBorrow> borrowListAll = borrowService.getBorrowListAll();
-        List<AssetsReturn> returnListAll = returnService.getReturnListAll();
-        List<AssetsMaintain> maintainListAll = maintainService.getMaintainListAll();
-        List<AssetsRepair> repairListAll = repairService.getRepairListAll();
-        List<AssetsTransfer> transferListAll = transferService.getTransferListAll();
-        List<AssetsAccident> accidentListAll = accidentService.getAccidentListAll();
+        List<AssetsBorrow> borrowListAll = borrowService.getBorrowListAll(new AssetsBorrow());
+        List<AssetsReturn> returnListAll = returnService.getReturnListAll(new AssetsReturn());
+        List<AssetsMaintain> maintainListAll = maintainService.getMaintainListAll(new AssetsMaintain());
+        List<AssetsRepair> repairListAll = repairService.getRepairListAll(new AssetsRepair());
+        List<AssetsTransfer> transferListAll = transferService.getTransferListAll(new AssetsTransfer());
+        List<AssetsAccident> accidentListAll = accidentService.getAccidentListAll(new AssetsAccident());
         List<AssetsCheckTask> checkTaskAll = checkTaskService.getCheckedAll();
         List<Task> taskList = new ArrayList<>();
         int seq = 0;

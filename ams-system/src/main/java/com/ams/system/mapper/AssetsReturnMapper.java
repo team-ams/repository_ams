@@ -37,7 +37,7 @@ public interface AssetsReturnMapper {
      *
      * @return
      */
-    List<AssetsReturn> getReturnListAll();
+    List<AssetsReturn> getReturnListAll(AssetsReturn assetsReturn);
 
     /**
      * 批量插入资产归还信息

@@ -29,7 +29,7 @@ public interface AssetsMaintainMapper {
      *
      * @return
      */
-    List<AssetsMaintain> getMaintainListAll();
+    List<AssetsMaintain> getMaintainListAll(AssetsMaintain maintain);
 
     /**
      * 批量插入资产保养信息

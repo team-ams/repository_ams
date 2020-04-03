@@ -28,8 +28,8 @@ public class AssetsMaintainServiceImpl implements IAssetsMaintainService {
     }
 
     @Override
-    public List<AssetsMaintain> getMaintainListAll() {
-        List<AssetsMaintain> maintainListAll = maintainMapper.getMaintainListAll();
+    public List<AssetsMaintain> getMaintainListAll(AssetsMaintain maintain) {
+        List<AssetsMaintain> maintainListAll = maintainMapper.getMaintainListAll(maintain);
         return maintainListAll;
     }
 

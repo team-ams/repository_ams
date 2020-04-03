@@ -247,7 +247,7 @@
         <include refid="selectAssetsVo"/>
         where a.del_flag = 0 and a.use_status = 0
         <if test="assetsNumber != null and assetsNumber != ''">
-            AND a.assets_number = #{assetsNumber}
+            AND a.assets_number like concat('%', #{assetsNumber}, '%')
         </if>
         <if test="useStatus != null and useStatus != ''">
             AND a.use_status = #{useStatus}
@@ -266,7 +266,7 @@
 
     <select id="getAssetsList01" parameterType="com.ams.system.domain.Assets" resultMap="AssetsResult">
         <include refid="selectAssetsVo"/>
-        where a.del_flag = 0 and a.use_status &lt;2
+        where a.del_flag = 0 and a.use_status &lt; 2
     </select>
 
     <select id="getDisableStatusAssetsList" parameterType="com.ams.system.domain.Assets" resultMap="AssetsResult">

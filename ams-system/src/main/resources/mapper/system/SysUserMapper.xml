@@ -56,6 +56,7 @@
                u.avatar,
                u.phonenumber,
                u.sex,
+               u.card_number,
                u.password,
                u.salt,
                u.status,
@@ -209,6 +210,7 @@
             <if test="email != null and email != ''">email = #{email},</if>
             <if test="phonenumber != null and phonenumber != ''">phonenumber = #{phonenumber},</if>
             <if test="sex != null and sex != ''">sex = #{sex},</if>
+            <if test="cardNumber != null and cardNumber != ''">card_number = #{cardNumber},</if>
             <if test="avatar != null and avatar != ''">avatar = #{avatar},</if>
             <if test="password != null and password != ''">password = #{password},</if>
             <if test="salt != null and salt != ''">salt = #{salt},</if>
@@ -232,6 +234,7 @@
         <if test="avatar != null and avatar != ''">avatar,</if>
         <if test="phonenumber != null and phonenumber != ''">phonenumber,</if>
         <if test="sex != null and sex != ''">sex,</if>
+        <if test="cardNumber != null and cardNumber != ''">card_number,</if>
         <if test="password != null and password != ''">password,</if>
         <if test="salt != null and salt != ''">salt,</if>
         <if test="status != null and status != ''">status,</if>
@@ -247,6 +250,7 @@
         <if test="avatar != null and avatar != ''">#{avatar},</if>
         <if test="phonenumber != null and phonenumber != ''">#{phonenumber},</if>
         <if test="sex != null and sex != ''">#{sex},</if>
+        <if test="cardNumber != null and cardNumber != ''">#{cardNumber},</if>
         <if test="password != null and password != ''">#{password},</if>
         <if test="salt != null and salt != ''">#{salt},</if>
         <if test="status != null and status != ''">#{status},</if>

@@ -59,13 +59,13 @@ public class AssetsAllocateController extends BaseController {
 
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(AssetsAllocate allocate) {
+    public TableDataInfo list(AssetsAllocate allocate,Assets assets) {
         SysUser currentSysUser = ShiroUtils.getSysUser();
         if (currentSysUser != null) {
             //当前系统用户不是管理员，资产领用信息
             if (!currentSysUser.isAdmin()) {
                 startPage();
-                List<Assets> assetsList0 = accountingService.getAssetsList0(new Assets());
+                List<Assets> assetsList0 = accountingService.getAssetsList0(assets);
                 return getDataTable(assetsList0);
             }
             //当前系统用户是管理员，待审批信息
