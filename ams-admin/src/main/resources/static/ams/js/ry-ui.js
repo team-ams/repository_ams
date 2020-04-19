@@ -1037,7 +1037,7 @@ var table = {
             myExamineTab: function (id) {
                 table.set();
                 var url = $.common.isEmpty(id) ? table.options.myExamineUrl : table.options.myExamineUrl.replace("{id}", id);
-                $.modal.openTab("我的" + table.options.modalName, url)
+                $.modal.openTab(table.options.modalName, url)
             },
 
             // 修改信息

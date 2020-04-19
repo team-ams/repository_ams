@@ -54,7 +54,7 @@
 <th:block th:include="include :: footer"/>
 <th:block th:include="include :: layout-latest-js"/>
 <script th:inline="javascript">
-    var prefix = ctx + "assets/repair";
+    var prefix = ctx + "assets/transfer";
     var examineStatus = [[${@dict.getType('examine_status')}]];
 
     $(function () {
@@ -75,7 +75,7 @@
             },
             sortName: "createTime",
             sortOrder: "desc",
-            modalName: "我的资产审批记录",
+            modalName: "资产转移审批记录",
             columns: [{
                 field: 'transferOrderNum',
                 title: '转移单号',

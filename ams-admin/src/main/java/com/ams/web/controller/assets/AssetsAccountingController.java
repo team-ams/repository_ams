@@ -20,8 +20,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户信息
@@ -31,6 +33,9 @@ import java.util.List;
 @Controller
 @RequestMapping("/assets/accounting")
 public class AssetsAccountingController extends BaseController {
+    private static List<String> assetsNumbers = new ArrayList<>();
+    private static final String FID = "9";
+    private static final String MSG = "I'm from Server---accounting";
     private String prefix = "/assets/accounting";
 
     @Autowired
@@ -88,8 +93,10 @@ public class AssetsAccountingController extends BaseController {
      * 新增资产
      */
     @GetMapping("/add")
-    public String add(ModelMap mmap) {
+    public String add(ModelMap mmap,HttpServletRequest request) {
         mmap.put("sources", sourceService.getAssetsSourceAll());
+        mmap.put("basePath", request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/");
+        mmap.put("fid", FID);
         return prefix + "/add";
     }
 
@@ -143,5 +150,30 @@ public class AssetsAccountingController extends BaseController {
             return error(e.getMessage());
         }
     }
+
+    /**
+     * MFRC522通过ESP8266将ID卡号发送过来，提供给esp8266调用的接口
+     *
+     * @param request
+     */
+    @RequestMapping("/getMsg")
+    @ResponseBody
+    public String getMsg(HttpServletRequest request) {
+        Map<String, String> parameterMap = getParameterMap();
+        String assetsNumber = parameterMap.get("assetsNumber");
+        String assetsNumber1 = request.getParameter("assetsNumber");
+
+        if(assetsNumber != null && !assetsNumber.isEmpty()){
+            //通知前端页面有新数据
+            pushToWeb(FID, assetsNumber);
+            System.out.println(parameterMap);
+            //return AjaxResult.success("Success",prefix + "/inputAssetsNumber");
+            return "input success!";
+        }
+        System.out.println("ERROR---:"+parameterMap);
+        //return AjaxResult.error("Error");
+        return "Error";
+    }
+
 
 }

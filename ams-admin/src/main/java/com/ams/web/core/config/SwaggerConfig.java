@@ -1,5 +1,6 @@
 package com.ams.web.core.config;
 
+import com.ams.web.controller.assets.AssetsAccountingController;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import com.ams.common.config.Global;

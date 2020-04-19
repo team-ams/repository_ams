@@ -101,7 +101,11 @@ public class AssetsAllocateController extends BaseController {
         if (currentSysUser != null) {
             int allocateUserId = currentSysUser.getUserId().intValue();
             try {
-                return toAjax(assetsService.allocateAssets(allocateUserId, assetsNumbers));
+                int res = assetsService.allocateAssets(allocateUserId, assetsNumbers);
+                if(res == -1){
+                    return AjaxResult.error("该设备状态异常，操作失败！");
+                }
+                return toAjax(res);
             } catch (Exception e) {
                 e.printStackTrace();
                 return error();

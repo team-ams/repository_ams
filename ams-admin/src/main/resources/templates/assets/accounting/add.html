@@ -22,7 +22,7 @@
                         <label class="col-sm-4 control-label"><span style="color: red; ">*</span>资产编号：</label>
                         <div class="col-sm-8">
                             <div class="input-group">
-                            	<input name="assetsNumber" onclick="selectDeptTree()" id="treeName" type="text" placeholder="请输入资产编号" class="form-control" required>
+                            	<input name="assetsNumber" id="assetsNumber" type="text" placeholder="请输入资产编号" class="form-control" required>
                                 <span class="input-group-addon"><i class="fa fa-search"></i></span>
                             </div>
                         </div>
@@ -165,7 +165,7 @@
     </div>
 	<th:block th:include="include :: footer" />
 	<th:block th:include="include :: select2-js" />
-	<script>
+	<script th:inline="javascript">
 	    var prefix = ctx + "assets/accounting";
         
         function submitHandler() {
@@ -174,6 +174,63 @@
 	        	$.operate.saveTab(prefix + "/add", data);
 	        }
 	    }
+
+
+        //websocket 客户端（前端页面）与服务器（后台）建立连接（tcp连接）
+        var socket;
+        if (typeof (WebSocket) == "undefined") {
+            console.log("您的浏览器不支持WebSocket");
+        } else {
+            console.log("您的浏览器支持WebSocket");
+            //实现化WebSocket对象，指定要连接的服务器地址与端口  建立连接
+            //webSocket = new WebSocket("ws://localhost:8080/websocket/20");
+            var basePath = [[${basePath}]];
+            var fid = [[${fid}]];
+            webSocket = new WebSocket((basePath + "websocket/" + fid).replace("http", "ws"));
+            //打开事件
+            webSocket.onopen = function () {
+                console.log("Socket 已打开");
+                //socket.send("这是来自客户端的消息" + location.href + new Date());
+            };
+            //获得消息事件
+            webSocket.onmessage = function (msg) {
+                //localeCompare相等返回0，大于返回大于0，小于返回小于0
+                if(!msg.data.localeCompare("连接成功")){
+                    console.log(msg.data.localeCompare("成功"));
+                    return ;
+                }
+                if(msg.data!=null){
+                    console.log(msg.data);
+                    <!-- 先清空输入框，再更新输入框-->
+                    $("#assetsNumber").val("");
+                    $("#assetsNumber").val(msg.data);
+                }
+                console.log("#######:"+assetsNumber);
+
+            };
+            //关闭事件
+            webSocket.onclose = function () {
+                console.log("Socket已关闭");
+            };
+            //发生了错误事件
+            webSocket.onerror = function () {
+                alert("Socket发生了错误");
+                //此时可以尝试刷新页面
+            }
+            //离开页面时，关闭socket
+            //jquery1.8中已经被废弃，3.0中已经移除
+            // $(window).unload(function(){
+            //     socket.close();
+            //});
+            // 往后台服务器发送消息.
+            function sendMessage() {
+                var sendmsg = document.getElementById("sendMsg").value;
+                console.log("发送的消息：" + sendmsg);
+                // 发送至后台服务器中.
+                webSocket.send(sendmsg);
+            }
+        }
     </script>
+
 </body>
 </html>

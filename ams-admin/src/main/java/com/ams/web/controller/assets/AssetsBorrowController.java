@@ -6,6 +6,7 @@ import com.ams.common.core.controller.BaseController;
 import com.ams.common.core.domain.AjaxResult;
 import com.ams.common.core.page.TableDataInfo;
 import com.ams.common.enums.AssetsExamineStatus;
+import com.ams.common.enums.AssetsStatus;
 import com.ams.common.enums.BusinessType;
 import com.ams.common.utils.StringUtils;
 import com.ams.common.utils.poi.ExcelUtil;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -228,9 +230,65 @@ public class AssetsBorrowController extends BaseController {
         //通知前端页面有新数据
         pushToWeb(FID, MSG);
         mmap.put("content", "传过来的：" + assetsNumber);
-        return AjaxResult.error("Success",prefix + "/borrowAssets");
+        return AjaxResult.success("Success",prefix + "/borrowAssets");
 
     }
+
+    @RequestMapping("/getInfo")
+    @ResponseBody
+    public String getInfo(HttpServletRequest request) throws UnsupportedEncodingException {
+        Map<String, String> parameterMap = getParameterMap();
+        String assetsNumber = parameterMap.get("assetsNumber");
+        String assetsNumber1 = request.getParameter("assetsNumber");
+        Assets assetsByNumber = accountingService.getAssetsByNumber(assetsNumber);
+        StringBuilder sb = new StringBuilder();
+        sb.append("##.");
+        String number = assetsByNumber.getAssetsNumber();
+        sb.append(string2HexString(number));
+        sb.append(".");
+        String assetsName = assetsByNumber.getAssetsName();
+        sb.append(string2HexString(assetsName));
+        sb.append(".");
+        String assetsType = assetsByNumber.getAssetsType();
+        sb.append(string2HexString(assetsType));
+        sb.append(".");
+        String storageUnit = assetsByNumber.getStorageUnit();
+        sb.append(string2HexString(storageUnit));
+        sb.append(".");
+        String storageAddr = assetsByNumber.getStorageAddr();
+        sb.append(string2HexString(storageAddr));
+        sb.append(".");
+        String assetsSource = assetsByNumber.getAssetsSource();
+        sb.append(string2HexString(assetsSource));
+        sb.append(".");
+        String useStatus = AssetsStatus.getStatusByCode(assetsByNumber.getUseStatus()).getInfo();
+        sb.append(string2HexString(useStatus));
+        sb.append(".");
+        String assetsBrand = assetsByNumber.getAssetsBrand();
+        sb.append(string2HexString(assetsBrand));
+        sb.append(".");
+        String purchaseDate = assetsByNumber.getPurchaseDate();
+        sb.append(string2HexString(purchaseDate));
+
+        assetsNumbers.add(assetsNumber);
+        System.out.println(parameterMap);
+        System.out.println("*******->"+sb);
+        return sb.toString();
+        //return "##借用,成功,！";
+    }
+    public String string2HexString(String str) throws UnsupportedEncodingException {
+        StringBuilder sb = new StringBuilder();
+        byte[] gbkBytes = str.getBytes("GBK");
+        for (int i=0;i<gbkBytes.length;i++){
+            sb.append("0x");
+            sb.append(String.format("%02X",gbkBytes[i]));
+            if(i<gbkBytes.length-1) {
+                sb.append(".");
+            }
+        }
+        return sb.toString();
+    }
+
 
 
     @PostMapping("/borrowList")
@@ -272,7 +330,11 @@ public class AssetsBorrowController extends BaseController {
             int borrowUserId = currentSysUser.getUserId().intValue();
             String createBy = currentSysUser.getLoginName();
             try {
-                return toAjax(assetsService.borrowAssets(borrowUserId, createBy, borrowData));
+                int res = assetsService.borrowAssets(borrowUserId, createBy, borrowData);
+                if(res == -1){
+                   return AjaxResult.error("该设备状态异常，操作失败！");
+                }
+                return toAjax(res);
             } catch (Exception e) {
                 e.printStackTrace();
                 return error();

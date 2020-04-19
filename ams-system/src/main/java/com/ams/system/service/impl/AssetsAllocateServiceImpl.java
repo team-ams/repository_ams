@@ -47,13 +47,13 @@ public class AssetsAllocateServiceImpl implements IAssetsAllocateService {
     @Override
     public List<AssetsAllocate> getMyAllocateExamineList() {
         List<AssetsAllocate> myAllocateExamineList = allocateMapper.getMyAllocateExamineList();
-        for (AssetsAllocate allocate : myAllocateExamineList) {
-            //映射 资产 使用状态
-            allocate.getAssets().setUseStatus(AssetsStatus.getStatusByCode(allocate.getAssets().getUseStatus()).getInfo());
-            //映射 资产领用 状态
-            allocate.setStatus(AssetsAllocate.getExamineStatusInfo(allocate.getStatus()));
-
-        }
+//        for (AssetsAllocate allocate : myAllocateExamineList) {
+//            //映射 资产 使用状态
+//            allocate.getAssets().setUseStatus(AssetsStatus.getStatusByCode(allocate.getAssets().getUseStatus()).getInfo());
+//            //映射 资产领用 状态
+//            allocate.setStatus(AssetsAllocate.getExamineStatusInfo(allocate.getStatus()));
+//
+//        }
         return myAllocateExamineList;
     }
 

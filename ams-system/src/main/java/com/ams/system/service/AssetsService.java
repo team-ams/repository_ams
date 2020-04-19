@@ -50,7 +50,7 @@ public class AssetsService {
      *
      * @param allocateUserId
      * @param assetsNumbers
-     * @return
+     * @return 0：程序异常报错 -1：业务异常，设备状态异常 >0正常
      * @throws Exception
      */
     public int allocateAssets(int allocateUserId, String[] assetsNumbers) throws Exception {
@@ -64,7 +64,7 @@ public class AssetsService {
         for (Assets update : updateList) {
             //资产状态不是“闲置”则退出
             if (!update.getUseStatus().equals(AssetsStatus.NORMAL.getCode())) {
-                return 0;
+                return -1;
             }
             //更新 资产 状态为“审核中”
             update.setUseStatus(AssetsStatus.RESERVE.getCode());
@@ -166,7 +166,7 @@ public class AssetsService {
      *
      * @param borrowUserId
      * @param borrowData
-     * @return
+     * @return 0：程序异常报错 -1：业务异常，设备状态异常 >0正常
      * @throws Exception
      */
     public int borrowAssets(int borrowUserId, String createBy, AssetsBorrow borrowData) throws Exception {
@@ -184,7 +184,7 @@ public class AssetsService {
         for (Assets update : updateList) {
             //资产状态不是“闲置”则退出
             if (!update.getUseStatus().equals(AssetsStatus.NORMAL.getCode())) {
-                return 0;
+                return -1;
             }
             //更新 资产 状态为“审核中”
             update.setUseStatus(AssetsStatus.RESERVE.getCode());
@@ -330,7 +330,7 @@ public class AssetsService {
      * @throws Exception
      */
     public int returnAssets(int returnUserId, String createBy, AssetsReturn returnData) throws Exception {
-        //生成借用单号JY****
+        //生成归还单号GH****
         String returnOrderNumber = "GH" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
         if (returnData == null) {
             return 0;
@@ -435,16 +435,22 @@ public class AssetsService {
                     update.setAuditorId(String.valueOf(auditorId));
                     //更新资产归还表
                     updateAssetsReturnRows = returnService.updateReturnInfo(update);
+                    Assets assetsUpdate = accountingService.getAssetsByNumber(update.getAssetsNumber());
                     AssetsBorrow borrowUpdate = borrowService.getBorrowByAssetsNumberAndIsNotReturn(update.getAssetsNumber());
-                    //更新借用表的归还信息---->0为未归还
-                    borrowUpdate.setIsReturn("0");
+                    //更新借用表的归还信息---->3为 归还被驳回
+                    borrowUpdate.setIsReturn("3");
                     //更新借用表的是否归还信息 ---->  未归还 驳回则是归还失败
                     updateBorrowRows = borrowService.updateBorrowInfo(borrowUpdate);
-
+                    //更新资产状态为“在用”
+                    assetsUpdate.setUseStatus(AssetsStatus.USING.getCode());
+                    //加入待更新列表
+                    updateList.add(assetsUpdate);
                 }
+                int updateLows = accountingService.updateAssetsLists(updateList);
+
                 //成功才返回大于0的数  归还审批驳回不更新资产信息
-                if (updateBorrowRows > 0 && updateAssetsReturnRows > 0) {
-                    return updateBorrowRows + updateAssetsReturnRows;
+                if (updateBorrowRows > 0 && updateAssetsReturnRows > 0 && updateLows > 0) {
+                    return updateBorrowRows + updateAssetsReturnRows + updateLows;
                 }
             }
             return 0;

@@ -55,6 +55,8 @@
 <th:block th:include="include :: layout-latest-js"/>
 <script th:inline="javascript">
     var prefix = ctx + "assets/repair";
+    var datas_grade = [[${@dict.getType('repair_grade')}]];
+    var datas_status = [[${@dict.getType('repair_status')}]]
     var examineStatus = [[${@dict.getType('examine_status')}]];
 
     $(function () {

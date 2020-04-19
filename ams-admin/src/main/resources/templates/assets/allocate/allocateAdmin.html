@@ -70,12 +70,12 @@
             onExpandRow: function (index, row, $detail) {
                 initChildTable(index, row, $detail);
             },
-            approveUrl: prefix + "/borrowExamineOK/{orderNum}/{userId}",
-            rejectUrl: prefix + "/borrowExamineReject/{orderNum}/{userId}",
-            myExamineUrl: prefix + "/myExamine",
+            approveUrl: prefix + "/allocateExamineOK/{orderNum}/{userId}",
+            rejectUrl: prefix + "/allocateExamineReject/{orderNum}/{userId}",
+            myExamineUrl: prefix + "/myAllocateExamine",
             sortName: "createTime",
             sortOrder: "desc",
-            modalName: "资产审批",
+            modalName: "资产领用审批",
             columns: [{
                 field: 'allocateOrderNum',
                 title: '领用单号',

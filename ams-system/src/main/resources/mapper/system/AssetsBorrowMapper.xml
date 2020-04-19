@@ -180,7 +180,7 @@
 
     <select id="getNeedReturnByUserId" parameterType="String" resultMap="AssetsBorrowResult">
         <include refid="selectAssetsBorrowVo"/>
-        where a.borrow_userId = #{userId} and a.status = 1 and a.is_return = 0 group by a.borrow_orderNum
+        where a.borrow_userId = #{userId} and a.status = 1 and a.is_return != 1 and a.is_return != 2 group by a.borrow_orderNum
     </select>
 
     <select id="getBorrowListByOrderNum" parameterType="String" resultMap="AssetsBorrowResult">
@@ -195,7 +195,7 @@
 
     <select id="getBorrowByAssetsNumberAndIsNotReturn" parameterType="String" resultMap="AssetsBorrowResult">
         <include refid="selectAssetsBorrowVo"/>
-        where a.assets_number = #{assetsNumber} and a.is_return != 2;
+        where a.assets_number = #{assetsNumber} and a.is_return != 2 and a.status = 1;
     </select>
 
     <select id="getBorrowListAll" parameterType="com.ams.system.domain.AssetsBorrow" resultMap="AssetsBorrowResult">
