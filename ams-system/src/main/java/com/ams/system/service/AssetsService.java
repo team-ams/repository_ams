@@ -490,6 +490,7 @@ public class AssetsService {
             assetsMaintain.setMaintainUserId(maintainUserId);
             assetsMaintain.setCreateBy(createBy);
             assetsMaintain.setAssetsNumber(assets.getAssetsNumber());
+            assetsMaintain.setMaintainName(maintainData.getMaintainName());
             insertLists.add(assetsMaintain);
         }
 

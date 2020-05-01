@@ -23,7 +23,7 @@
                                 资产状态：<select name="useStatus" th:with="type=${@dict.getType('assets_status')}">
                                 <option value="">所有</option>
                                 <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                                        th:value="${dict.dictLabel}"></option>
+                                        th:value="${dict.dictValue}"></option>
                             </select>
                             </li>
                             <li class="select-time">

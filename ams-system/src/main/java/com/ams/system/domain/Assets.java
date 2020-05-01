@@ -15,7 +15,7 @@ public class Assets extends BaseEntity {
 
 
     /**资产ID*/
-    @Excel(name = "资产序号",cellType = Excel.ColumnType.NUMERIC)
+    @Excel(name = "资产序号",cellType = Excel.ColumnType.NUMERIC,type = Excel.Type.EXPORT)
     private Long assetsId;
 
     /**资产编号*/

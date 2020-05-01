@@ -75,9 +75,9 @@ public class AssetsAccountingController extends BaseController {
     @ResponseBody
     public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception {
         ExcelUtil<Assets> util = new ExcelUtil<Assets>(Assets.class);
-        List<Assets> userList = util.importExcel(file.getInputStream());
+        List<Assets> assetsList = util.importExcel(file.getInputStream());
         String operName = ShiroUtils.getSysUser().getLoginName();
-        String message = accountingService.importAssets(userList, updateSupport, operName);
+        String message = accountingService.importAssets(assetsList, updateSupport, operName);
         return AjaxResult.success(message);
     }
 
